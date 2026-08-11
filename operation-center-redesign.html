@@ -1,0 +1,3193 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CEP · Operation Center</title>
+    <style>
+      :root {
+        --navy: #111a2e;
+        --navy-2: #18233c;
+        --canvas: #f3f6fb;
+        --surface: #fff;
+        --ink: #17233b;
+        --muted: #75819a;
+        --line: #e6ebf3;
+        --blue: #356dff;
+        --blue-soft: #eaf0ff;
+        --mint: #0cad76;
+        --mint-soft: #e5f7f0;
+        --amber: #eb9a16;
+        --amber-soft: #fff4de;
+        --red: #e94b61;
+        --red-soft: #ffebef;
+        --shadow: 0 12px 30px rgba(24, 39, 75, 0.07);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--canvas);
+        font-size: 14px;
+      }
+      .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 248px 1fr;
+      }
+      .sidebar {
+        background: var(--navy);
+        color: #d9e1f0;
+        padding: 18px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        align-self: start;
+        overflow-y: auto;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 5px 8px 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      }
+      .mark {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(145deg, #4378ff, #7256ed);
+        font-weight: 900;
+        color: white;
+        box-shadow: 0 8px 18px rgba(53, 109, 255, 0.34);
+      }
+      .brand b {
+        font-size: 17px;
+        letter-spacing: 0.02em;
+      }
+      .brand small {
+        display: block;
+        color: #8fa0bc;
+        font-size: 10px;
+        margin-top: 1px;
+      }
+      .nav-label {
+        padding: 0 10px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.11em;
+        color: #71819d;
+        margin-top: 5px;
+      }
+      .nav {
+        display: grid;
+        gap: 3px;
+      }
+      .nav button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #b8c4d9;
+        text-align: left;
+        padding: 10px 11px;
+        border-radius: 9px;
+        font: inherit;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .nav button:hover,
+      .nav button.active {
+        background: #23365e;
+        color: #fff;
+      }
+      .ico {
+        width: 18px;
+        text-align: center;
+        font-style: normal;
+        color: #90adff;
+      }
+      .nav button.active .ico {
+        color: #fff;
+      }
+      .nav .badge {
+        margin-left: auto;
+        background: #f2a522;
+        color: #302100;
+        border-radius: 999px;
+        padding: 1px 7px;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .side-foot {
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+        padding: 15px 7px 2px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .avatar {
+        width: 31px;
+        height: 31px;
+        border-radius: 50%;
+        background: #385085;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #fff;
+      }
+      .side-foot small {
+        display: block;
+        color: #90a0ba;
+        margin-top: 2px;
+      }
+      .main {
+        min-width: 0;
+      }
+      .topbar {
+        height: 72px;
+        background: rgba(255, 255, 255, 0.94);
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        gap: 20px;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+      .crumb {
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .crumb b {
+        color: var(--ink);
+      }
+      .search {
+        margin-left: auto;
+        width: min(300px, 28vw);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 11px;
+        background: #f5f7fb;
+        border: 1px solid #eaf0f7;
+        border-radius: 8px;
+        color: #9aa6ba;
+      }
+      .search input {
+        border: 0;
+        background: transparent;
+        outline: 0;
+        width: 100%;
+        font: inherit;
+      }
+      .live {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #4b607c;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mint);
+        box-shadow: 0 0 0 4px #dff7ed;
+      }
+      .notification-wrap {
+        position: relative;
+      }
+      .bell {
+        border: 1px solid var(--line);
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        background: #fff;
+        color: #40506a;
+        position: relative;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+      .bell:hover,
+      .bell[aria-expanded="true"] {
+        color: var(--blue);
+        border-color: #cbd8f5;
+        background: var(--blue-soft);
+      }
+      .bell svg {
+        width: 18px;
+        height: 18px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .bell:after {
+        content: "4";
+        position: absolute;
+        right: -6px;
+        top: -7px;
+        min-width: 18px;
+        height: 18px;
+        display: grid;
+        place-items: center;
+        font-size: 9px;
+        font-weight: 800;
+        background: var(--red);
+        color: white;
+        border: 2px solid #fff;
+        border-radius: 999px;
+      }
+      .notification-panel {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: min(360px, calc(100vw - 28px));
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: 0 18px 45px rgba(23, 35, 59, 0.18);
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px);
+        transition: 0.16s ease;
+        z-index: 10;
+      }
+      .notification-panel.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .notification-head {
+        padding: 13px 15px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .notification-head b {
+        font-size: 13px;
+      }
+      .notification-head span {
+        color: var(--blue);
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .notification-item {
+        display: grid;
+        grid-template-columns: 8px 1fr auto;
+        gap: 10px;
+        padding: 12px 15px;
+        border-bottom: 1px solid #eff2f6;
+      }
+      .notification-item:last-child {
+        border-bottom: 0;
+      }
+      .notification-item > i {
+        width: 8px;
+        height: 8px;
+        margin-top: 4px;
+        border-radius: 50%;
+        background: var(--blue);
+      }
+      .notification-item.warn > i {
+        background: var(--amber);
+      }
+      .notification-item.danger > i {
+        background: var(--red);
+      }
+      .notification-item b {
+        display: block;
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .notification-item p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.4;
+      }
+      .notification-item time {
+        color: #98a4b7;
+        font-size: 9px;
+        white-space: nowrap;
+      }
+      .user-wrap {
+        position: relative;
+      }
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        padding: 4px 2px;
+        font: 800 12px inherit;
+        cursor: pointer;
+      }
+      .user:after {
+        content: "⌄";
+        color: #8390a6;
+        font-size: 12px;
+      }
+      .user:hover,
+      .user[aria-expanded="true"] {
+        color: var(--blue);
+      }
+      .user .avatar {
+        width: 29px;
+        height: 29px;
+        background: linear-gradient(135deg, #6c4ce0, #8a5cf6);
+        color: #fff;
+      }
+      .user-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        width: 210px;
+        padding: 6px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        box-shadow: 0 16px 38px rgba(23, 35, 59, 0.16);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-5px);
+        transition: 0.15s ease;
+        z-index: 10;
+      }
+      .user-menu.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      .user-menu-head {
+        padding: 9px 10px 10px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 4px;
+      }
+      .user-menu-head b,
+      .user-menu-head small {
+        display: block;
+      }
+      .user-menu-head small {
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .user-menu button {
+        width: 100%;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: #4b5a72;
+        padding: 8px 10px;
+        text-align: left;
+        font: 400 11px inherit;
+        cursor: pointer;
+      }
+      .user-menu button:hover,
+      .user-menu button:focus {
+        outline: 0;
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .user-menu .logout {
+        color: var(--red);
+        border-top: 1px solid var(--line);
+        border-radius: 0 0 7px 7px;
+        margin-top: 4px;
+        padding-top: 10px;
+      }
+      .content {
+        padding: 27px 30px 42px;
+        max-width: 1660px;
+        margin: auto;
+      }
+      .intro {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 19px;
+      }
+      .eyebrow {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        color: var(--blue);
+        text-transform: uppercase;
+      }
+      .intro h1 {
+        font-size: 23px;
+        letter-spacing: -0.03em;
+        margin: 5px 0 3px;
+      }
+      .intro p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .date {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .date b {
+        color: var(--ink);
+      }
+      .kpis {
+        display: grid;
+        grid-template-columns: 1.25fr repeat(3, 1fr);
+        gap: 14px;
+        margin-bottom: 17px;
+      }
+      .kpi {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 15px 16px;
+        box-shadow: var(--shadow);
+        min-height: 104px;
+      }
+      .kpi.highlight {
+        background: linear-gradient(120deg, #283e7d, #356dff);
+        border: 0;
+        color: #fff;
+        position: relative;
+        overflow: hidden;
+      }
+      .kpi.highlight:after {
+        content: "";
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border: 30px solid rgba(255, 255, 255, 0.07);
+        border-radius: 50%;
+        right: -54px;
+        top: -73px;
+      }
+      .kpi-head {
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .highlight .kpi-head {
+        color: #cedaff;
+      }
+      .kpi .value {
+        font-size: 28px;
+        line-height: 1;
+        font-weight: 850;
+        margin: 13px 0 7px;
+        letter-spacing: -0.04em;
+      }
+      .kpi .note {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .highlight .note {
+        color: #dbe5ff;
+      }
+      .up {
+        color: var(--mint);
+        font-weight: 800;
+      }
+      .down {
+        color: var(--red);
+        font-weight: 800;
+      }
+      .workspace-primary {
+        display: grid;
+        grid-template-columns: minmax(510px, 1.15fr) minmax(420px, 0.85fr);
+        gap: 17px;
+        align-items: start;
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+      .card-hd {
+        padding: 16px 17px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .card-hd h2 {
+        font-size: 14px;
+        margin: 0;
+        letter-spacing: -0.01em;
+      }
+      .card-hd p {
+        font-size: 11px;
+        margin: 3px 0 0;
+        color: var(--muted);
+      }
+      .link {
+        color: var(--blue);
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .queue-search {
+        width: min(300px, 48%);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        background: #f5f7fb;
+        border: 1px solid #e4eaf3;
+        border-radius: 8px;
+        color: #8e9ab0;
+        flex: none;
+      }
+      .queue-search input {
+        border: 0;
+        background: transparent;
+        outline: 0;
+        width: 100%;
+        font: inherit;
+        color: var(--ink);
+      }
+      .filters {
+        display: flex;
+        gap: 7px;
+        padding: 0 17px 12px;
+        overflow: auto;
+      }
+      .chip {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 9px;
+        background: #fff;
+        color: #66748e;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .chip.on {
+        background: var(--blue-soft);
+        border-color: #cddaff;
+        color: #295ad7;
+      }
+      .queue {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .queue th {
+        text-align: left;
+        background: #f8faff;
+        color: #8490a6;
+        font-size: 10px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 10px 17px;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .queue td {
+        padding: 13px 17px;
+        border-bottom: 1px solid #eff2f6;
+        font-size: 12px;
+      }
+      .queue tr {
+        cursor: pointer;
+      }
+      .queue tbody tr:hover,
+      .queue tbody tr.selected {
+        background: #f4f7ff;
+      }
+      .queue tr.selected td:first-child {
+        box-shadow: inset 3px 0 var(--blue);
+      }
+      .case-id {
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: 11px;
+        color: var(--blue);
+        font-weight: 800;
+      }
+      .person {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .person-avatar {
+        width: 30px;
+        height: 30px;
+        flex: none;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .person-copy {
+        min-width: 0;
+      }
+      .customer {
+        display: block;
+        font-weight: 800;
+        color: var(--ink);
+        margin-bottom: 3px;
+        cursor: pointer;
+      }
+      .customer:hover,
+      .case-id:hover {
+        text-decoration: none;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .case-identity .person-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        font-size: 12px;
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .status:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+      .warn {
+        background: var(--amber-soft);
+        color: #af720d;
+      }
+      .danger {
+        background: var(--red-soft);
+        color: #cb3851;
+      }
+      .ok {
+        background: var(--mint-soft);
+        color: #07875d;
+      }
+      .info {
+        background: var(--blue-soft);
+        color: #315dce;
+      }
+      .sla {
+        font-weight: 800;
+      }
+      .sla.late {
+        color: var(--red);
+      }
+      .queue-foot {
+        padding: 12px 17px;
+        color: var(--muted);
+        font-size: 11px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .queue-pager {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .page-btn {
+        width: 27px;
+        height: 27px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--blue);
+        font-weight: 900;
+        cursor: pointer;
+      }
+      .page-btn:hover:not(:disabled) {
+        background: var(--blue-soft);
+      }
+      .page-btn:disabled {
+        color: #b8c1d0;
+        background: #f7f9fc;
+        cursor: not-allowed;
+      }
+      .case-panel {
+        padding: 0;
+        position: sticky;
+        top: 89px;
+        align-self: start;
+      }
+      .case-identity {
+        padding: 17px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+      }
+      .case-identity h2 {
+        font-size: 16px;
+        margin: 3px 0;
+      }
+      .case-identity p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .action {
+        border: 0;
+        background: var(--blue);
+        color: #fff;
+        font-weight: 800;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 9px 11px;
+        cursor: pointer;
+      }
+      .action:hover {
+        background: #255ae2;
+      }
+      .workflow {
+        padding: 16px 17px 11px;
+      }
+      .flow-title {
+        font-size: 11px;
+        font-weight: 800;
+        color: #586780;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 13px;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        position: relative;
+      }
+      .steps:before {
+        content: "";
+        height: 2px;
+        background: #dce4f1;
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        top: 10px;
+      }
+      .step {
+        position: relative;
+        text-align: center;
+        z-index: 1;
+        cursor: pointer;
+        border-radius: 7px;
+        padding: 1px 2px;
+      }
+      .step:hover {
+        background: #f3f6ff;
+      }
+      .step-dot {
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        background: #e1e7f1;
+        color: #8490a5;
+        margin: 0 auto 7px;
+        display: grid;
+        place-items: center;
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .step.done .step-dot {
+        background: var(--mint);
+        color: #fff;
+      }
+      .step.active .step-dot {
+        background: var(--blue);
+        color: #fff;
+        box-shadow: 0 0 0 3px #dbe5ff;
+      }
+      .step b {
+        font-size: 10px;
+        display: block;
+      }
+      .step span {
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .subtasks {
+        margin: 4px 17px 15px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        overflow: hidden;
+      }
+      .subtask-head {
+        padding: 9px 11px;
+        background: #f8faff;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .subtask-head b {
+        font-size: 11px;
+      }
+      .subtask-head span {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .subtask {
+        display: grid;
+        grid-template-columns: 20px 1fr auto;
+        gap: 8px;
+        align-items: center;
+        padding: 8px 10px;
+        border-bottom: 1px solid #eff2f7;
+      }
+      .subtask:last-child {
+        border-bottom: 0;
+      }
+      .subtask-toggle {
+        width: 100%;
+        border: 0;
+        border-top: 1px solid var(--line);
+        background: #f8faff;
+        color: var(--blue);
+        padding: 9px;
+        font: 800 10px inherit;
+        cursor: pointer;
+      }
+      .subtask-toggle:hover {
+        background: var(--blue-soft);
+      }
+      .sub-icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .subtask b {
+        display: block;
+        font-size: 11px;
+      }
+      .subtask small {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .subtask time {
+        font-size: 9px;
+        color: #8290a7;
+        white-space: nowrap;
+      }
+      .subtask.done .sub-icon {
+        background: var(--mint-soft);
+        color: var(--mint);
+      }
+      .subtask.active .sub-icon {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .subtask.warn .sub-icon {
+        background: var(--amber-soft);
+        color: var(--amber);
+      }
+      .subtask.blocked .sub-icon {
+        background: var(--red-soft);
+        color: var(--red);
+      }
+      .subtask.queued .sub-icon {
+        background: #eef2f7;
+        color: #8490a5;
+      }
+      .result-card {
+        margin: 0 17px 15px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .result-head {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .result-head b {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #586780;
+      }
+      .result-body {
+        padding: 12px;
+      }
+      .result-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .result-title i {
+        width: 25px;
+        height: 25px;
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        font-style: normal;
+        font-weight: 900;
+      }
+      .result-card.warn .result-title i {
+        background: var(--amber-soft);
+        color: #ae7008;
+      }
+      .result-card.danger .result-title i {
+        background: var(--red-soft);
+        color: var(--red);
+      }
+      .result-card.info .result-title i {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .result-card.ok .result-title i {
+        background: var(--mint-soft);
+        color: var(--mint);
+      }
+      .result-title strong {
+        font-size: 13px;
+      }
+      .result-row {
+        display: grid;
+        grid-template-columns: 58px 1fr;
+        gap: 8px;
+        padding: 8px 0;
+        border-top: 1px solid #eff2f7;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+      .result-row label {
+        color: #8b98ad;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .result-action {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        background: #f8faff;
+        border-top: 1px solid var(--line);
+      }
+      .result-action span {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .result-action button {
+        border: 0;
+        background: var(--blue);
+        color: #fff;
+        border-radius: 7px;
+        padding: 7px 10px;
+        font-family: inherit;
+        font-size: 10px;
+        font-weight: 400;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .meta-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border-top: 1px solid var(--line);
+      }
+      .meta {
+        padding: 12px 17px;
+        border-bottom: 1px solid var(--line);
+      }
+      .meta:nth-child(odd) {
+        border-right: 1px solid var(--line);
+      }
+      .meta label {
+        display: block;
+        text-transform: uppercase;
+        color: #99a4b6;
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        font-weight: 800;
+      }
+      .meta b {
+        display: block;
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .meta small {
+        color: var(--muted);
+      }
+      .health {
+        padding: 16px 17px;
+      }
+      .health h2 {
+        font-size: 14px;
+        margin: 0 0 14px;
+      }
+      .health-row {
+        display: grid;
+        grid-template-columns: 125px 1fr 35px;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eef2f7;
+        font-size: 12px;
+      }
+      .health-row:last-child {
+        border: 0;
+      }
+      .track {
+        height: 7px;
+        border-radius: 99px;
+        background: #edf1f7;
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        border-radius: 99px;
+      }
+      .insights {
+        display: grid;
+        grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.45fr) minmax(280px, 0.9fr);
+        gap: 17px;
+        margin-top: 17px;
+        align-items: stretch;
+      }
+      .insight-card {
+        padding: 16px 17px;
+        min-width: 0;
+      }
+      .insight-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .insight-head h2 {
+        font-size: 14px;
+        margin: 0;
+      }
+      .insight-head p {
+        color: var(--muted);
+        font-size: 10px;
+        margin: 3px 0 0;
+      }
+      .insight-value {
+        color: var(--mint);
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .sla-chart {
+        height: 145px;
+        position: relative;
+      }
+      .sla-chart svg {
+        display: block;
+        width: 100%;
+        height: 118px;
+        overflow: visible;
+      }
+      .chart-grid {
+        stroke: #e7ecf4;
+        stroke-width: 1;
+      }
+      .chart-target {
+        stroke: var(--amber);
+        stroke-width: 1.5;
+        stroke-dasharray: 5 5;
+      }
+      .chart-area {
+        fill: url(#slaArea);
+      }
+      .chart-line {
+        fill: none;
+        stroke: var(--blue);
+        stroke-width: 3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .chart-dot {
+        fill: #fff;
+        stroke: var(--blue);
+        stroke-width: 2;
+      }
+      .chart-labels {
+        display: flex;
+        justify-content: space-between;
+        color: #96a1b2;
+        font-size: 9px;
+        padding: 2px 2px 0;
+      }
+      .chart-legend {
+        display: flex;
+        gap: 15px;
+        color: var(--muted);
+        font-size: 9px;
+        margin-top: 5px;
+      }
+      .chart-legend span:before {
+        content: "";
+        display: inline-block;
+        width: 14px;
+        height: 2px;
+        margin-right: 5px;
+        vertical-align: middle;
+        background: var(--blue);
+      }
+      .chart-legend .target:before {
+        background: var(--amber);
+      }
+      .breakdown-list,
+      .capacity-list {
+        display: grid;
+        gap: 12px;
+      }
+      .breakdown-row,
+      .capacity-row {
+        display: grid;
+        grid-template-columns: minmax(105px, auto) 1fr 28px;
+        align-items: center;
+        gap: 9px;
+        font-size: 10px;
+      }
+      .breakdown-row b,
+      .capacity-row b {
+        text-align: right;
+        font-size: 10px;
+      }
+      .mini-track {
+        height: 6px;
+        border-radius: 99px;
+        background: #edf1f7;
+        overflow: hidden;
+      }
+      .mini-track i {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+      }
+      .capacity-row {
+        grid-template-columns: minmax(80px, auto) 1fr 38px;
+      }
+      .capacity-row small {
+        color: var(--muted);
+        text-align: right;
+        font-size: 9px;
+      }
+      .capacity-note {
+        border-top: 1px solid #eef2f7;
+        color: var(--muted);
+        font-size: 9px;
+        margin-top: 14px;
+        padding-top: 10px;
+      }
+      .drawer-back {
+        position: fixed;
+        inset: 0;
+        background: rgba(12, 20, 39, 0.42);
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.2s;
+        z-index: 20;
+      }
+      .drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(650px, 100vw);
+        height: 100vh;
+        background: #f7f9fd;
+        box-shadow: -18px 0 45px rgba(12, 20, 39, 0.2);
+        transform: translateX(102%);
+        transition: 0.26s ease;
+        z-index: 21;
+        display: flex;
+        flex-direction: column;
+      }
+      .drawer.open,
+      .drawer-back.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+      .drawer-hd {
+        background: #eef3ff;
+        color: var(--ink);
+        padding: 18px 23px 16px;
+        border-bottom: 1px solid #dce5f5;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+      }
+      .drawer-hd .case-id {
+        color: #356dff;
+      }
+      .drawer-hd h2 {
+        font-size: 18px;
+        margin: 4px 0;
+      }
+      .drawer-hd p {
+        margin: 0;
+        color: #5f6f8d;
+        font-size: 11px;
+      }
+      .drawer-x {
+        border: 1px solid #c8d4e8;
+        background: #fff;
+        color: #23365e;
+        border-radius: 7px;
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        font-size: 19px;
+        line-height: 1;
+        cursor: pointer;
+        outline: 0;
+      }
+      .drawer-x:hover {
+        border-color: #9fb0cc;
+        background: #f8faff;
+      }
+      .drawer-x:focus-visible {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(53, 109, 255, 0.16);
+      }
+      .drawer-body {
+        overflow: auto;
+        padding: 18px 22px 38px;
+      }
+      .df-workspace {
+        display: grid;
+        grid-template-columns: 155px minmax(0, 1fr);
+        gap: 14px;
+      }
+      .df-rail {
+        display: grid;
+        align-content: start;
+        gap: 4px;
+      }
+      .df-tab {
+        border: 0;
+        background: transparent;
+        text-align: left;
+        border-radius: 8px;
+        padding: 8px 7px;
+        color: #66748e;
+        font: 600 11px/1.25 inherit;
+        cursor: pointer;
+        display: flex;
+        gap: 7px;
+      }
+      .df-tab:hover,
+      .df-tab.on {
+        background: var(--blue-soft);
+        color: #275bd4;
+      }
+      .df-num {
+        width: 19px;
+        height: 19px;
+        flex: none;
+        border-radius: 6px;
+        display: grid;
+        place-items: center;
+        background: #edf1f7;
+        color: #8290a7;
+        font-size: 9px;
+        font-weight: 800;
+      }
+      .df-tab.on .df-num {
+        background: var(--blue);
+        color: #fff;
+      }
+      .df-content {
+        min-width: 0;
+      }
+      .df-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 9px;
+      }
+      .df-title h3 {
+        margin: 0;
+        font-size: 13px;
+      }
+      .df-title span {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .df-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+      }
+      .df-field {
+        position: relative;
+        padding: 10px 11px;
+        border-bottom: 1px solid var(--line);
+        min-height: 60px;
+      }
+      .df-field:has(.df-options.open) {
+        z-index: 11;
+      }
+      .df-field:nth-child(odd) {
+        border-right: 1px solid var(--line);
+      }
+      .df-field label {
+        display: block;
+        font-size: 9px;
+        color: #8b98ad;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+      }
+      .df-field b {
+        display: block;
+        margin-top: 5px;
+        font-size: 11px;
+        line-height: 1.3;
+      }
+      .df-field.empty b {
+        color: #aab4c5;
+      }
+      .df-field.good b {
+        color: #07875d;
+      }
+      .df-field.warn b {
+        color: #b87808;
+      }
+      .df-field.danger b {
+        color: #cb3851;
+      }
+      .df-input {
+        width: 100%;
+        margin-top: 5px;
+        border: 1px solid #dfe5f0;
+        border-radius: 6px;
+        background: #f9fbfe;
+        padding: 6px 7px;
+        color: var(--ink);
+        font: 600 11px inherit;
+        outline: 0;
+      }
+      .df-input:focus {
+        background: #fff;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px var(--blue-soft);
+      }
+      .df-input.required:invalid {
+        border-color: var(--amber);
+        background: #fff9ec;
+      }
+      .df-select {
+        appearance: auto;
+      }
+      .df-dropdown {
+        position: relative;
+        margin-top: 5px;
+      }
+      .df-drop-trigger {
+        width: 100%;
+        border: 1px solid #dfe5f0;
+        border-radius: 6px;
+        background: #f9fbfe;
+        padding: 6px 27px 6px 7px;
+        color: var(--ink);
+        font: 600 11px inherit;
+        text-align: left;
+        position: relative;
+        cursor: pointer;
+      }
+      .df-drop-trigger:after {
+        content: "⌄";
+        position: absolute;
+        right: 8px;
+        color: #6e7c94;
+        font-size: 14px;
+        top: 3px;
+      }
+      .df-drop-trigger:focus,
+      .df-drop-trigger.open {
+        outline: 0;
+        background: #fff;
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px var(--blue-soft);
+      }
+      .df-options {
+        position: fixed;
+        z-index: 30;
+        background: #fff;
+        border: 1px solid #dfe5f0;
+        border-radius: 8px;
+        padding: 4px;
+        box-shadow: 0 10px 24px rgba(23, 35, 59, 0.15);
+        display: none;
+      }
+      .df-options.open {
+        display: block;
+      }
+      .df-option {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #42516b;
+        text-align: left;
+        border-radius: 5px;
+        padding: 7px 8px;
+        font: 600 11px inherit;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+      }
+      .df-option:hover,
+      .df-option:focus {
+        outline: 0;
+        background: var(--blue-soft);
+        color: #2457cf;
+      }
+      .df-option.selected {
+        color: var(--blue);
+        font-weight: 600;
+      }
+      .df-option.selected:after {
+        content: "✓";
+      }
+      .drawer-body {
+        padding-bottom: 76px;
+      }
+      .df-save {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        padding: 11px 22px;
+        background: rgba(255, 255, 255, 0.97);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        z-index: 2;
+      }
+      .df-save small {
+        color: var(--muted);
+        font-size: 10px;
+        flex: 1;
+      }
+      .df-save small.changed {
+        color: #b87808;
+        font-weight: 800;
+      }
+      .df-save button {
+        border: 0;
+        border-radius: 7px;
+        background: var(--blue);
+        color: #fff;
+        padding: 7px 10px;
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .df-save button:disabled {
+        background: #d9e1ee;
+        color: #91a0b5;
+        cursor: not-allowed;
+      }
+      .save-spin {
+        display: inline-block;
+        animation: spin 0.7s linear infinite;
+        font-size: 14px;
+        line-height: 0;
+        vertical-align: -1px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .df-save button.saved {
+        background: var(--blue);
+      }
+      @media (max-width: 600px) {
+        .df-workspace {
+          grid-template-columns: 1fr;
+        }
+        .df-rail {
+          display: flex;
+          overflow: auto;
+          padding-bottom: 4px;
+        }
+        .df-tab {
+          min-width: 125px;
+        }
+        .df-fields {
+          grid-template-columns: 1fr;
+        }
+        .df-field:nth-child(odd) {
+          border-right: 0;
+        }
+      }
+      .record-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 15px;
+      }
+      .record-banner b {
+        font-size: 13px;
+      }
+      .record-banner small {
+        display: block;
+        color: var(--muted);
+        margin-top: 3px;
+        font-size: 10px;
+      }
+      .drawer-section {
+        margin: 18px 0;
+      }
+      .drawer-section h3 {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #61708b;
+        margin: 0 0 8px;
+      }
+      .field-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .field {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--line);
+      }
+      .field:nth-child(odd) {
+        border-right: 1px solid var(--line);
+      }
+      .field:nth-last-child(-n + 2) {
+        border-bottom: 0;
+      }
+      .field label {
+        display: block;
+        color: #94a0b3;
+        font-size: 9px;
+        text-transform: uppercase;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+      }
+      .field b {
+        font-size: 12px;
+        margin-top: 4px;
+        display: block;
+      }
+      .doc-list,
+      .trace-list,
+      .audit-list {
+        display: grid;
+        gap: 7px;
+      }
+      .doc {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        padding: 10px 11px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .doc-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        background: var(--blue-soft);
+        color: var(--blue);
+        font-size: 13px;
+      }
+      .doc div {
+        flex: 1;
+      }
+      .doc b {
+        font-size: 11px;
+      }
+      .doc small {
+        display: block;
+        color: var(--muted);
+        font-size: 10px;
+        margin-top: 2px;
+      }
+      .trace {
+        background: #fff;
+        border-left: 3px solid var(--blue);
+        padding: 10px 11px;
+        border-radius: 0 8px 8px 0;
+      }
+      .trace.warn-trace {
+        border-color: var(--amber);
+      }
+      .ticket-notifications {
+        display: grid;
+        gap: 8px;
+      }
+      .ticket-notification {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr) auto;
+        gap: 10px;
+        align-items: start;
+        padding: 11px;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+      }
+      .ticket-notification.unread {
+        border-color: #cbd8f5;
+        background: #f8faff;
+      }
+      .ticket-notification-icon {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: var(--blue-soft);
+        color: var(--blue);
+        font-size: 15px;
+      }
+      .ticket-notification.leader .ticket-notification-icon {
+        background: #fff3df;
+        color: #b87808;
+      }
+      .ticket-notification b {
+        display: block;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+      .ticket-notification p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.45;
+      }
+      .ticket-notification time {
+        color: #98a4b7;
+        font-size: 9px;
+        white-space: nowrap;
+      }
+      .ticket-notification-empty {
+        padding: 32px 18px;
+        text-align: center;
+        border: 1px dashed #d9e1ee;
+        border-radius: 10px;
+        background: #fff;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .ticket-notification-empty svg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin: 0 auto 8px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .trace b {
+        font-size: 11px;
+      }
+      .trace p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .audit {
+        display: grid;
+        grid-template-columns: 52px 12px 1fr;
+        gap: 9px;
+        align-items: start;
+        padding: 4px 0;
+      }
+      .audit time {
+        font-size: 10px;
+        color: #92a0b4;
+        text-align: right;
+      }
+      .audit i {
+        width: 10px;
+        height: 10px;
+        background: var(--mint);
+        border-radius: 50%;
+        margin-top: 2px;
+        position: relative;
+      }
+      .audit i:after {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 25px;
+        background: #dce4f0;
+        left: 4px;
+        top: 10px;
+      }
+      .audit:last-child i:after {
+        display: none;
+      }
+      .audit b {
+        font-size: 11px;
+      }
+      .audit p {
+        margin: 2px 0 0;
+        font-size: 10px;
+        color: var(--muted);
+      }
+      @media (min-width: 1800px) {
+        .content {
+          width: 100%;
+          max-width: none;
+          margin: 0;
+          padding-inline: 34px;
+        }
+        .workspace-primary {
+          grid-template-columns: minmax(700px, 1.45fr) minmax(520px, 0.95fr);
+        }
+        .health-row {
+          grid-template-columns: 105px minmax(80px, 1fr) 35px;
+        }
+        .drawer {
+          width: min(24vw, 860px);
+          min-width: 780px;
+        }
+      }
+      @media (max-width: 1400px) {
+        .insights {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .sla-trend {
+          grid-column: 1 / -1;
+          grid-row: 1;
+        }
+      }
+      @media (max-width: 1100px) {
+        .app {
+          grid-template-columns: 68px 1fr;
+        }
+        .sidebar {
+          padding: 18px 9px;
+        }
+        .brand b,
+        .brand small,
+        .nav-label,
+        .nav button span,
+        .side-foot div {
+          display: none;
+        }
+        .brand {
+          justify-content: center;
+        }
+        .nav button {
+          justify-content: center;
+        }
+        .nav .badge {
+          position: absolute;
+          margin-left: 22px;
+          margin-top: -18px;
+        }
+        .side-foot {
+          justify-content: center;
+        }
+        .workspace-primary {
+          grid-template-columns: 1fr;
+        }
+        .case-panel {
+          position: static;
+        }
+        .kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .kpi.highlight {
+          grid-column: span 2;
+        }
+      }
+      @media (max-width: 700px) {
+        .app {
+          display: block;
+        }
+        .sidebar {
+          display: none;
+        }
+        .topbar {
+          padding: 0 16px;
+        }
+        .crumb {
+          display: none;
+        }
+        .search {
+          width: 100%;
+          margin-left: 0;
+        }
+        .live {
+          display: none;
+        }
+        .content {
+          padding: 20px 14px;
+        }
+        .intro {
+          display: block;
+        }
+        .intro .date {
+          margin-top: 10px;
+        }
+        .kpis {
+          grid-template-columns: 1fr;
+        }
+        .kpi.highlight {
+          grid-column: auto;
+        }
+        .workspace-primary {
+          grid-template-columns: 1fr;
+        }
+        .insights {
+          grid-template-columns: 1fr;
+        }
+        .sla-trend {
+          grid-column: auto;
+        }
+        .queue th:nth-child(3),
+        .queue td:nth-child(3) {
+          display: none;
+        }
+        .steps {
+          overflow: auto;
+          min-width: 410px;
+        }
+        .workflow {
+          overflow: auto;
+        }
+        .card {
+          border-radius: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="mark">C</div>
+          <div><b>CEP</b><small>OPERATION CENTER</small></div>
+        </div>
+        <div>
+          <div class="nav-label">ĐIỀU HÀNH</div>
+          <nav class="nav">
+            <button class="active">
+              <i class="ico">▦</i><span>Tổng quan vận hành</span></button
+            ><button>
+              <i class="ico">◫</i><span>Hồ sơ cần xử lý</span
+              ><b class="badge">24</b></button
+            ><button><i class="ico">◷</i><span>SLA & ngoại lệ</span></button>
+          </nav>
+        </div>
+        <div>
+          <div class="nav-label">NGHIỆP VỤ</div>
+          <nav class="nav">
+            <button><i class="ico">⌘</i><span>Điều phối công việc</span></button
+            ><button><i class="ico">◎</i><span>Khách hàng</span></button
+            ><button><i class="ico">↗</i><span>Chiến dịch & kênh</span></button
+            ><button><i class="ico">▤</i><span>Báo cáo</span></button>
+          </nav>
+        </div>
+        <div>
+          <div class="nav-label">HỆ THỐNG</div>
+          <nav class="nav">
+            <button><i class="ico">⌁</i><span>Tích hợp API</span></button
+            ><button><i class="ico">⚙</i><span>Cấu hình</span></button>
+          </nav>
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div class="crumb">
+            Operation Center <span> / </span> <b>Tổng quan vận hành</b>
+          </div>
+          <div class="live"><i class="pulse"></i> Hệ thống ổn định</div>
+          <div class="notification-wrap">
+            <button
+              class="bell"
+              id="notificationBell"
+              type="button"
+              aria-label="Thông báo"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-controls="notificationPanel"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path d="M10 21h4"></path>
+              </svg>
+            </button>
+            <div
+              class="notification-panel"
+              id="notificationPanel"
+              role="region"
+              aria-label="Thông báo của bạn"
+            >
+              <div class="notification-head">
+                <b>Thông báo</b><span>4 chưa đọc</span>
+              </div>
+              <div class="notification-item danger">
+                <i></i>
+                <div>
+                  <b>Phiếu YC-240811-018 sắp trễ SLA</b>
+                  <p>Còn 18 phút để yêu cầu khách hàng bổ sung hồ sơ.</p>
+                </div>
+                <time>09:41</time>
+              </div>
+              <div class="notification-item warn">
+                <i></i>
+                <div>
+                  <b>Phiếu YC-240811-041 được giao cho bạn</b>
+                  <p>Kiểm tra lỗi đồng bộ từ API đối tác.</p>
+                </div>
+                <time>09:36</time>
+              </div>
+              <div class="notification-item">
+                <i></i>
+                <div>
+                  <b>Yêu cầu bổ sung đã được phản hồi</b>
+                  <p>Phiếu YC-240811-026 có dữ liệu mới.</p>
+                </div>
+                <time>09:22</time>
+              </div>
+              <div class="notification-item">
+                <i></i>
+                <div>
+                  <b>Phiếu YC-240811-012 đã hoàn tất</b>
+                  <p>Kết quả xử lý đã được gửi đến người yêu cầu.</p>
+                </div>
+                <time>09:12</time>
+              </div>
+            </div>
+          </div>
+          <div class="user-wrap">
+            <button
+              class="user"
+              id="userMenuButton"
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded="false"
+              aria-controls="userMenu"
+            >
+              <span class="avatar">A</span>
+              <span>admin-01</span>
+            </button>
+            <div class="user-menu" id="userMenu" role="menu">
+              <div class="user-menu-head">
+                <b>admin-01</b><small>Quản trị vận hành</small>
+              </div>
+              <button type="button" role="menuitem">Thông tin tài khoản</button>
+              <button type="button" role="menuitem">Cài đặt cá nhân</button>
+              <button type="button" role="menuitem">Đổi mật khẩu</button>
+              <button class="logout" type="button" role="menuitem">Đăng xuất</button>
+            </div>
+          </div>
+        </header>
+        <section class="content">
+          <div class="intro">
+            <div>
+              <div class="eyebrow">Trung tâm điều hành</div>
+            </div>
+            <div class="date">
+              Cập nhật lúc <b>09:42 · Thứ hai, 11 tháng 8</b>
+            </div>
+          </div>
+          <div class="kpis">
+            <div class="kpi highlight">
+              <div class="kpi-head">
+                <span>PHIẾU CẦN CAN THIỆP</span>
+              </div>
+              <div class="value">24</div>
+              <div class="note">
+                9 phiếu có nguy cơ trễ SLA trong 60 phút tới
+              </div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-head">
+                <span>ĐÚNG SLA HÔM NAY</span><span class="up">↑ 2.4%</span>
+              </div>
+              <div class="value">94.8%</div>
+              <div class="note">Mục tiêu vận hành: 93%</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-head">
+                <span>ĐANG XỬ LÝ</span><span>8 đội</span>
+              </div>
+              <div class="value">186</div>
+              <div class="note"><span class="up">+12</span> hồ sơ từ 08:00</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-head">
+                <span>API CẦN THEO DÕI</span><span class="down">3 lỗi</span>
+              </div>
+              <div class="value">2</div>
+              <div class="note">Kết nối đối tác đang retry</div>
+            </div>
+          </div>
+          <div class="workspace-primary">
+            <section class="card">
+              <div class="card-hd">
+                <div>
+                  <h2>Phiếu ưu tiên</h2>
+                </div>
+                <label class="queue-search"
+                  >⌕<input
+                    id="queueSearch"
+                    placeholder="Tìm mã phiếu, người yêu cầu..."
+                /></label>
+              </div>
+              <div class="filters">
+                <button class="chip on" data-filter="all">Tất cả 24</button
+                ><button class="chip" data-filter="late">Sắp trễ SLA 9</button
+                ><button class="chip" data-filter="supplement">
+                  Cần bổ sung 7</button
+                ><button class="chip" data-filter="integration">
+                  Lỗi tích hợp 2
+                </button>
+              </div>
+              <table class="queue">
+                <thead>
+                  <tr>
+                    <th>Phiếu / người yêu cầu</th>
+                    <th>Trạng thái</th>
+                    <th>Đội xử lý</th>
+                    <th>SLA</th>
+                  </tr>
+                </thead>
+                <tbody id="queueBody"></tbody>
+              </table>
+              <div class="queue-foot">
+                <span id="queueCount">Hiển thị 10 / 24 hồ sơ ưu tiên</span>
+                <div class="queue-pager">
+                  <button
+                    class="page-btn"
+                    id="pagePrev"
+                    aria-label="Trang trước"
+                  >
+                    ‹</button
+                  ><span id="queueRange">1–10 / 24</span
+                  ><button
+                    class="page-btn"
+                    id="pageNext"
+                    aria-label="Trang sau"
+                  >
+                    ›
+                  </button>
+                </div>
+              </div>
+            </section>
+            <aside class="card case-panel"><div id="caseDetail"></div></aside>
+          </div>
+          <section class="insights" aria-label="Phân tích vận hành">
+            <section class="card health">
+            <h2>Tỷ lệ xử lý đúng SLA theo đội</h2>
+            <div class="health-row">
+              <span>Tiếp nhận</span>
+              <div class="track">
+                <div
+                  class="fill"
+                  style="width: 91%; background: var(--mint)"
+                ></div>
+              </div>
+              <b style="color: var(--mint)">91%</b>
+            </div>
+            <div class="health-row">
+              <span>Thẩm định</span>
+              <div class="track">
+                <div
+                  class="fill"
+                  style="width: 84%; background: var(--blue)"
+                ></div>
+              </div>
+              <b style="color: var(--blue)">84%</b>
+            </div>
+            <div class="health-row">
+              <span>Đối tác giao nhận</span>
+              <div class="track">
+                <div
+                  class="fill"
+                  style="width: 68%; background: var(--amber)"
+                ></div>
+              </div>
+              <b style="color: #b87808">68%</b>
+            </div>
+            <div class="health-row">
+              <span>CSKH</span>
+              <div class="track">
+                <div
+                  class="fill"
+                  style="width: 96%; background: var(--mint)"
+                ></div>
+              </div>
+              <b style="color: var(--mint)">96%</b>
+            </div>
+          </section>
+            <article class="card insight-card sla-trend">
+              <div class="insight-head">
+                <div>
+                  <h2>Xu hướng SLA trong ngày</h2>
+                  <p>Tỷ lệ phiếu xử lý đúng SLA theo từng khung giờ</p>
+                </div>
+                <span class="insight-value">94.8% · ↑ 2.4%</span>
+              </div>
+              <div class="sla-chart">
+                <svg viewBox="0 0 640 118" role="img" aria-label="SLA tăng từ 91,2 phần trăm lúc 8 giờ lên 94,8 phần trăm lúc 14 giờ">
+                  <defs>
+                    <linearGradient id="slaArea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#356dff" stop-opacity=".22"></stop>
+                      <stop offset="1" stop-color="#356dff" stop-opacity="0"></stop>
+                    </linearGradient>
+                  </defs>
+                  <line class="chart-grid" x1="8" y1="18" x2="632" y2="18"></line>
+                  <line class="chart-grid" x1="8" y1="58" x2="632" y2="58"></line>
+                  <line class="chart-grid" x1="8" y1="98" x2="632" y2="98"></line>
+                  <line class="chart-target" x1="8" y1="66" x2="632" y2="66"></line>
+                  <path class="chart-area" d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36 L632 106 L8 106 Z"></path>
+                  <path class="chart-line" d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36"></path>
+                  <circle class="chart-dot" cx="8" cy="83" r="4"></circle>
+                  <circle class="chart-dot" cx="112" cy="75" r="4"></circle>
+                  <circle class="chart-dot" cx="216" cy="86" r="4"></circle>
+                  <circle class="chart-dot" cx="320" cy="61" r="4"></circle>
+                  <circle class="chart-dot" cx="424" cy="51" r="4"></circle>
+                  <circle class="chart-dot" cx="528" cy="42" r="4"></circle>
+                  <circle class="chart-dot" cx="632" cy="36" r="4"></circle>
+                </svg>
+                <div class="chart-labels"><span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span></div>
+                <div class="chart-legend"><span>SLA thực tế</span><span class="target">Mục tiêu 93%</span></div>
+              </div>
+            </article>
+            <article class="card insight-card">
+              <div class="insight-head">
+                <div>
+                  <h2>Tải xử lý theo đội</h2>
+                  <p>Số phiếu đang xử lý trên năng lực hiện tại</p>
+                </div>
+              </div>
+              <div class="capacity-list">
+                <div class="capacity-row"><span>Tiếp nhận</span><div class="mini-track"><i style="width: 64%; background: var(--mint)"></i></div><small>32/50</small></div>
+                <div class="capacity-row"><span>Thẩm định</span><div class="mini-track"><i style="width: 84%; background: var(--amber)"></i></div><small>42/50</small></div>
+                <div class="capacity-row"><span>Giao nhận</span><div class="mini-track"><i style="width: 92%; background: var(--red)"></i></div><small>23/25</small></div>
+                <div class="capacity-row"><span>CSKH</span><div class="mini-track"><i style="width: 69%; background: var(--blue)"></i></div><small>31/45</small></div>
+              </div>
+              <div class="capacity-note">Đối tác giao nhận đang vượt ngưỡng tải khuyến nghị 85%.</div>
+            </article>
+          </section>
+        </section>
+      </main>
+    </div>
+    <div class="drawer-back" id="drawerBack"></div>
+    <aside class="drawer" id="ticketDrawer" aria-hidden="true">
+      <div class="drawer-hd">
+        <div>
+          <span class="case-id" id="drawerId"></span>
+          <h2>Thông tin phiếu</h2>
+          <p id="drawerSubtitle"></p>
+        </div>
+        <button
+          class="drawer-x"
+          id="drawerClose"
+          aria-label="Đóng thông tin phiếu"
+        >
+          ×
+        </button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+    <script>
+      const cases = [
+        {
+          id: "YC-240811-018",
+          title: "Đăng ký phát hành thẻ tín dụng",
+          type: "Dịch vụ thẻ · Hồ sơ khách hàng",
+          requester: "Nguyễn Gia Hân",
+          status: "Cần bổ sung",
+          kind: "warn",
+          team: "Dịch vụ thẻ",
+          owner: "Trúc Vy",
+          sla: "00:18",
+          late: true,
+          step: 1,
+          action: "Yêu cầu bổ sung",
+          issue:
+            "Phiếu thiếu ảnh xác nhận số điện thoại mới. SLA còn 18 phút, cần gửi yêu cầu bổ sung.",
+          hasCustomer: true,
+        },
+        {
+          id: "YC-240811-041",
+          title: "Sự cố đồng bộ đối tác",
+          type: "Hệ thống · Tích hợp API",
+          requester: "API Gateway",
+          status: "Lỗi đối tác",
+          kind: "danger",
+          team: "Tích hợp API",
+          owner: "Minh Khoa",
+          sla: "00:32",
+          late: true,
+          step: 2,
+          action: "Kiểm tra retry",
+          issue:
+            "Endpoint đối tác trả về timeout hai lần liên tiếp. Hệ thống đang tự retry.",
+          hasCustomer: false,
+        },
+        {
+          id: "YC-240811-037",
+          title: "Phê duyệt chi phí chiến dịch",
+          type: "Chiến dịch · Đề xuất ngân sách",
+          requester: "Phòng Marketing",
+          status: "Chờ phê duyệt",
+          kind: "info",
+          team: "Ban điều hành",
+          owner: "Anh Thư",
+          sla: "01:14",
+          late: false,
+          step: 2,
+          action: "Nhận xử lý",
+          issue:
+            "Đề xuất đã được kiểm tra đủ hồ sơ. Cần phê duyệt ngân sách trước 10:30.",
+          hasCustomer: false,
+        },
+        {
+          id: "YC-240811-026",
+          title: "Hỗ trợ cấu hình form yêu cầu",
+          type: "Nội bộ · Dynamic Form",
+          requester: "Chi nhánh Đà Nẵng",
+          status: "Chờ phản hồi",
+          kind: "warn",
+          team: "Hỗ trợ hệ thống",
+          owner: "Quốc Huy",
+          sla: "02:46",
+          late: false,
+          step: 4,
+          action: "Phản hồi chi nhánh",
+          issue:
+            "Chi nhánh cần cập nhật danh mục cho form Hồ sơ khách. Đã có hướng dẫn dự thảo.",
+          hasCustomer: false,
+        },
+        {
+          id: "YC-240811-012",
+          title: "Ghi nhận phản hồi sau dịch vụ",
+          type: "CSKH · Chăm sóc sau bán",
+          requester: "Tự động từ khảo sát",
+          status: "Hoàn tất",
+          kind: "ok",
+          team: "CSKH",
+          owner: "Mỹ Duyên",
+          sla: "Đúng hạn",
+          late: false,
+          step: 5,
+          action: "Xem lịch sử",
+          issue: "Phản hồi đã được ghi nhận và phiếu được đóng lúc 09:12.",
+          hasCustomer: true,
+        },
+        {
+          id: "YC-240811-009",
+          title: "Điều chỉnh thông tin người thụ hưởng",
+          type: "Dữ liệu · Cập nhật hồ sơ",
+          requester: "Trần Minh Quân",
+          status: "Đang xử lý",
+          kind: "info",
+          team: "Kiểm soát dữ liệu",
+          owner: "Hải Nam",
+          sla: "03:08",
+          late: false,
+          step: 3,
+          action: "Tiếp tục thẩm định",
+          issue:
+            "Thông tin thay đổi đã được tiếp nhận, đang chờ đối chiếu với tài liệu đính kèm.",
+          hasCustomer: true,
+        },
+        {
+          id: "YC-240811-033",
+          title: "Tra soát giao dịch chưa ghi nhận",
+          type: "Giao dịch · Tra soát",
+          requester: "Lê Thu Trang",
+          status: "Chờ phản hồi",
+          kind: "warn",
+          team: "Vận hành giao dịch",
+          owner: "Thanh Hà",
+          sla: "00:54",
+          late: true,
+          step: 3,
+          action: "Liên hệ đối tác",
+          issue:
+            "Đối tác chưa trả kết quả tra soát cho giao dịch lúc 08:21. SLA còn 54 phút.",
+          hasCustomer: false,
+        },
+        {
+          id: "YC-240811-029",
+          title: "Cấp quyền truy cập báo cáo",
+          type: "Nội bộ · Phân quyền",
+          requester: "Phòng Tài chính",
+          status: "Chờ phê duyệt",
+          kind: "info",
+          team: "Quản trị hệ thống",
+          owner: "Đức Anh",
+          sla: "04:20",
+          late: false,
+          step: 2,
+          action: "Phê duyệt quyền",
+          issue:
+            "Yêu cầu đã được quản lý trực tiếp xác nhận và đang chờ quản trị viên phê duyệt.",
+          hasCustomer: false,
+        },
+        {
+          id: "YC-240811-021",
+          title: "Cập nhật địa chỉ nhận thông báo",
+          type: "CSKH · Thay đổi thông tin",
+          requester: "Phạm Ngọc Mai",
+          status: "Đang xử lý",
+          kind: "info",
+          team: "CSKH",
+          owner: "Ngọc Hân",
+          sla: "02:15",
+          late: false,
+          step: 3,
+          action: "Xác nhận thay đổi",
+          issue:
+            "Thông tin địa chỉ mới đã được nhập, cần xác nhận lần cuối trước khi cập nhật.",
+          hasCustomer: true,
+        },
+        {
+          id: "YC-240811-006",
+          title: "Đối soát dữ liệu cuối ngày",
+          type: "Hệ thống · Đối soát",
+          requester: "Tác vụ tự động",
+          status: "Hoàn tất",
+          kind: "ok",
+          team: "Dữ liệu",
+          owner: "Hệ thống CEP",
+          sla: "Đúng hạn",
+          late: false,
+          step: 5,
+          action: "Xem báo cáo",
+          issue: "Đối soát hoàn tất, không phát hiện chênh lệch dữ liệu.",
+          hasCustomer: false,
+        },
+      ];
+      cases.push(
+        ...Array.from({ length: 14 }, (_, i) => ({
+          id: `YC-240810-${String(98 - i).padStart(3, "0")}`,
+          title: [
+            "Xác minh thông tin hồ sơ",
+            "Cập nhật yêu cầu dịch vụ",
+            "Kiểm tra giao dịch đối tác",
+            "Phản hồi yêu cầu nội bộ",
+          ][i % 4],
+          type: [
+            "CSKH · Xác minh",
+            "Dịch vụ · Cập nhật",
+            "Hệ thống · Tra soát",
+            "Nội bộ · Hỗ trợ",
+          ][i % 4],
+          requester: [
+            "Nguyễn Minh Anh",
+            "Phòng Vận hành",
+            "Tác vụ tự động",
+            "Chi nhánh Cần Thơ",
+          ][i % 4],
+          status: ["Đang xử lý", "Chờ phản hồi", "Hoàn tất", "Chờ phê duyệt"][
+            i % 4
+          ],
+          kind: ["info", "warn", "ok", "info"][i % 4],
+          team: ["CSKH", "Vận hành", "Tích hợp API", "Hỗ trợ hệ thống"][i % 4],
+          owner: ["Thu Hà", "Quang Minh", "Hệ thống CEP", "Bảo Ngọc"][i % 4],
+          sla:
+            i % 4 === 2
+              ? "Đúng hạn"
+              : `${String((i % 5) + 1).padStart(2, "0")}:${String((i * 7) % 60).padStart(2, "0")}`,
+          late: i % 6 === 0,
+          step: (i % 5) + 1,
+          action: "Mở phiếu xử lý",
+          issue:
+            "Phiếu đang được xử lý theo quy trình nghiệp vụ và chưa phát sinh ngoại lệ.",
+          hasCustomer: i % 3 === 0,
+        })),
+      );
+      function initials(name) {
+        return (
+          name
+            .split(" ")
+            .filter((x) => x.length > 2)
+            .slice(-2)
+            .map((x) => x[0])
+            .join("") || "HT"
+        );
+      }
+      function avatarStyle(name) {
+        const colors = [
+          "#2f6bff",
+          "#6366f1",
+          "#0ea5e9",
+          "#10b981",
+          "#14b8a6",
+          "#f59e0b",
+          "#fb923c",
+          "#ec4899",
+          "#8b5cf6",
+          "#ef4444",
+        ];
+        let hash = 0;
+        for (let i = 0; i < name.length; i++)
+          hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+        return `background:${colors[hash % colors.length]};color:#fff`;
+      }
+      let queueFilter = "all",
+        queuePage = 1,
+        queueQuery = "";
+      const PAGE_SIZE = 10;
+      function filteredCases() {
+        const query = queueQuery.trim().toLocaleLowerCase("vi");
+        return cases
+          .map((c, i) => ({ c, i }))
+          .filter(
+            ({ c }) =>
+              (queueFilter === "all" ||
+                (queueFilter === "late" && c.late) ||
+                (queueFilter === "supplement" && c.status === "Cần bổ sung") ||
+                (queueFilter === "integration" &&
+                  (c.team === "Tích hợp API" ||
+                    c.type.includes("Tích hợp")))) &&
+              (!query ||
+                [c.id, c.title, c.requester, c.team].some((value) =>
+                  value.toLocaleLowerCase("vi").includes(query),
+                )),
+          );
+      }
+      function renderQueue() {
+        const filtered = filteredCases(),
+          pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        queuePage = Math.min(queuePage, pages);
+        const start = (queuePage - 1) * PAGE_SIZE,
+          rows = filtered.slice(start, start + PAGE_SIZE);
+        document.getElementById("queueBody").innerHTML = rows.length
+          ? rows
+              .map(
+                ({ c, i }) =>
+                  `<tr class="${i === selectedCase ? "selected" : ""}" data-i="${i}"><td><span class="case-id js-record" data-i="${i}">${c.id}</span><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><span class="person-copy"><span class="customer js-record" data-i="${i}">${c.title}</span><span class="sub">${c.type} · Yêu cầu: ${c.requester}</span></span></div></td><td><span class="status ${c.kind}">${c.status}</span></td><td>${c.team}</td><td class="sla ${c.late ? "late" : ""}">${c.sla}</td></tr>`,
+              )
+              .join("")
+          : '<tr><td colspan="4" style="padding:28px;text-align:center;color:var(--muted)">Không có phiếu phù hợp bộ lọc.</td></tr>';
+        const count = document.getElementById("queueCount"),
+          range = document.getElementById("queueRange"),
+          prev = document.getElementById("pagePrev"),
+          next = document.getElementById("pageNext");
+        if (count)
+          count.textContent = `Hiển thị ${rows.length} / ${filtered.length} hồ sơ ưu tiên`;
+        if (range)
+          range.textContent = rows.length
+            ? `${start + 1}–${start + rows.length} / ${filtered.length}`
+            : `0 / ${filtered.length}`;
+        prev.disabled = queuePage === 1;
+        next.disabled = queuePage === pages || !filtered.length;
+        document
+          .querySelectorAll(".queue tbody tr[data-i]")
+          .forEach((r) => (r.onclick = () => selectCase(+r.dataset.i)));
+        document.querySelectorAll(".js-record").forEach(
+          (el) =>
+            (el.onclick = (e) => {
+              e.stopPropagation();
+              selectCase(+el.dataset.i);
+              openDrawer();
+            }),
+        );
+      }
+      const CARD_TASKS = [
+        [
+          "Tiếp nhận",
+          [
+            ["Xác thực phiếu đầu vào", "done", "CEP Web", "09:12"],
+            ["Kiểm tra hồ sơ đính kèm", "warn", "Trúc Vy", "Cần bổ sung"],
+          ],
+        ],
+        [
+          "Phân loại",
+          [
+            ["Phân loại sản phẩm thẻ", "done", "Hệ thống", "09:13"],
+            ["Kiểm tra điều kiện kênh", "done", "Hệ thống", "09:13"],
+          ],
+        ],
+        [
+          "Thẩm định",
+          [
+            ["OCR CCCD", "done", "eKYC Engine", "09:16"],
+            ["Đối chiếu C06", "done", "C06 Gateway", "09:17"],
+            ["Xác minh SIM", "warn", "Telco Check", "Cần kiểm tra"],
+            ["Face match eKYC", "done", "eKYC Engine", "98.4%"],
+            ["CIC & CEP scoring", "active", "CEP Scoring", "Đang chạy"],
+            [
+              "Kiểm tra danh sách AML",
+              "done",
+              "AML Gateway",
+              "Không trùng khớp",
+            ],
+            ["Đối chiếu lịch sử tín dụng", "done", "CIC Gateway", "Nhóm 1"],
+            ["Tính tỷ lệ DTI", "done", "CEP Scoring", "2.1× thu nhập"],
+            ["Phân tích dòng tiền CASA", "done", "CEP Scoring", "Đạt"],
+            ["Kiểm tra chính sách sản phẩm", "done", "Rule Engine", "Đạt"],
+            ["Xác minh nơi làm việc", "queued", "Thẩm định", "Chờ"],
+            ["Rà soát chứng từ thu nhập", "queued", "Trúc Vy", "Chờ"],
+          ],
+        ],
+        [
+          "Phát hành",
+          [
+            ["Phê duyệt hạn mức", "queued", "Thẩm định", "Chờ"],
+            ["Ký hợp đồng điện tử", "queued", "Khách hàng", "Chờ"],
+            ["Tạo thẻ WAY4", "queued", "WAY4", "Chờ"],
+          ],
+        ],
+        [
+          "Hoàn tất",
+          [
+            ["Bàn giao OPS", "queued", "OPS", "Chờ"],
+            ["Xác nhận giao thẻ", "queued", "ĐVVC", "Chờ"],
+          ],
+        ],
+      ];
+      const GENERIC_TASKS = [
+        [
+          "Tiếp nhận",
+          [
+            ["Ghi nhận yêu cầu", "done", "CEP Web", "09:12"],
+            ["Kiểm tra nội dung", "done", "Hệ thống", "09:13"],
+          ],
+        ],
+        [
+          "Phân loại",
+          [
+            ["Xác định đội xử lý", "done", "Điều phối", "09:15"],
+            ["Phân công người phụ trách", "active", "Điều phối", "Đang xử lý"],
+          ],
+        ],
+        [
+          "Thẩm định",
+          [
+            ["Rà soát thông tin", "active", "Chuyên viên", "Đang xử lý"],
+            ["Kiểm tra tài liệu", "queued", "Chuyên viên", "Chờ"],
+          ],
+        ],
+        [
+          "Phát hành",
+          [
+            ["Phản hồi người yêu cầu", "queued", "Đội xử lý", "Chờ"],
+            ["Xác nhận hoàn tất", "queued", "Người yêu cầu", "Chờ"],
+          ],
+        ],
+        [
+          "Hoàn tất",
+          [
+            ["Đóng phiếu", "queued", "CEP Workflow", "Chờ"],
+            ["Lưu nhật ký audit", "queued", "CEP Workflow", "Chờ"],
+          ],
+        ],
+      ];
+      let selectedCase = 0,
+        selectedStage = 0,
+        showAllSubtasks = false;
+      function renderSubtasks() {
+        const c = cases[selectedCase],
+          flow = (c.hasCustomer ? CARD_TASKS : GENERIC_TASKS)[selectedStage],
+          tasks = flow[1],
+          visible = showAllSubtasks ? tasks : tasks.slice(0, 5);
+        const icons = {
+          done: "✓",
+          active: "↻",
+          warn: "!",
+          blocked: "×",
+          queued: "·",
+        };
+        const panel = document.getElementById("subtasks");
+        if (!panel) return;
+        panel.innerHTML = `<div class="subtask-head"><b>${flow[0]} · các việc cần theo dõi</b><span>${tasks.length} task</span></div>${visible.map(([name, state, owner, time]) => `<div class="subtask ${state}"><i class="sub-icon">${icons[state]}</i><div><b>${name}</b><small>${owner}</small></div><time>${time}</time></div>`).join("")}${tasks.length > 5 ? `<button class="subtask-toggle" id="subtaskToggle">${showAllSubtasks ? "Thu gọn" : `Xem thêm ${tasks.length - 5} việc`} ${showAllSubtasks ? "↑" : "↓"}</button>` : ""}`;
+        const toggle = document.getElementById("subtaskToggle");
+        if (toggle)
+          toggle.onclick = () => {
+            showAllSubtasks = !showAllSubtasks;
+            renderSubtasks();
+          };
+        document
+          .querySelectorAll(".step")
+          .forEach((x, n) => x.classList.toggle("active", n === selectedStage));
+      }
+      function selectCase(i) {
+        selectedCase = i;
+        selectedStage = Math.min(Math.max(cases[i].step - 1, 0), 4);
+        showAllSubtasks = false;
+        const c = cases[i];
+        document
+          .querySelectorAll(".queue tbody tr[data-i]")
+          .forEach((r) => r.classList.toggle("selected", +r.dataset.i === i));
+        const labels = [
+          "Tiếp nhận",
+          "Phân loại",
+          "Thẩm định",
+          "Phát hành",
+          "Hoàn tất",
+        ];
+        document.getElementById("caseDetail").innerHTML =
+          `<div class="case-identity"><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><div><span class="case-id">${c.id}</span><h2>${c.title}</h2><p>${c.type} · Yêu cầu bởi ${c.requester}</p></div></div><span class="status ${c.kind}">${c.status}</span></div><div class="workflow"><div class="flow-title">Tiến trình xử lý phiếu</div><div class="steps">${labels.map((x, n) => `<div class="step ${n < c.step - 1 ? "done" : ""} ${n === selectedStage ? "active" : ""}" data-stage="${n}"><div class="step-dot">${n < c.step - 1 ? "✓" : n + 1}</div><b>${x}</b><span>${n === c.step - 1 ? "Đang xử lý" : n < c.step - 1 ? "Hoàn tất" : "Chờ"}</span></div>`).join("")}</div></div><div class="subtasks" id="subtasks"></div><section class="result-card ${c.kind}"><div class="result-head"><b>Kết quả hồ sơ</b></div><div class="result-body"><div class="result-title"><i>${c.kind === "ok" ? "✓" : c.kind === "danger" ? "×" : "!"}</i><strong>${c.status}</strong></div><div class="result-row"><label>Lí do</label><span>${c.issue}</span></div><div class="result-row"><label>SLA</label><span class="${c.late ? "sla late" : "sla"}">${c.sla} · ${c.late ? "Cần ưu tiên xử lý" : "Trong ngưỡng"}</span></div></div><div class="result-action"><span>${c.kind === "ok" ? "Phiếu không còn thao tác bắt buộc." : "Hành động tiếp theo"}</span><button>${c.kind === "ok" ? "Xem lịch sử" : c.action} →</button></div></section>`;
+        document.querySelectorAll(".step").forEach(
+          (x) =>
+            (x.onclick = () => {
+              selectedStage = +x.dataset.stage;
+              showAllSubtasks = false;
+              renderSubtasks();
+            }),
+        );
+        renderSubtasks();
+      }
+      function field(label, value) {
+        return `<div class="field"><label>${label}</label><b>${value}</b></div>`;
+      }
+      const CARD_GROUPS = [
+        [
+          "Thông tin phiếu",
+          [
+            ["Mã phiếu", "YC-240811-018"],
+            ["Kênh tiếp nhận", "CEP Web"],
+            ["Người tạo", "Nguyễn Gia Hân"],
+            ["Trạng thái", "Cần bổ sung", "warn"],
+            ["Đội phụ trách", "CSKH"],
+            ["Hạn SLA", "00:18", "danger"],
+          ],
+        ],
+        [
+          "Đăng ký thẻ (đầu vào)",
+          [
+            ["Loại thẻ đăng ký", "Tín dụng"],
+            ["Sản phẩm thẻ", "Mastercard Platinum"],
+            ["Hạn mức đề nghị", "80.000.000 đ"],
+            ["Tên dập nổi", "NGUYEN GIA HAN"],
+            ["Hình thức phát hành", "Thẻ cứng + điện tử"],
+            ["Ngày sao kê", "Ngày 15"],
+          ],
+        ],
+        [
+          "Định danh · eKYC / OCR CCCD",
+          [
+            ["Số CCCD", "079201014672"],
+            ["Họ và tên", "NGUYỄN GIA HÂN"],
+            ["Ngày sinh", "12/05/1993"],
+            ["Mã CIF", "CIF-192084"],
+            ["Xác thực C06", "PASS", "good"],
+            ["Face match", "98.4%", "good"],
+            ["Điều kiện chung", "Đạt", "good"],
+            ["Tệp đính kèm", "3 tệp"],
+          ],
+        ],
+        [
+          "Liên hệ · Cư trú · Nhân khẩu",
+          [
+            ["SĐT chính", "0908 244 681"],
+            ["SĐT chính chủ", "Đã xác minh", "good"],
+            ["Mức rủi ro SIM", "Thấp", "good"],
+            ["C06: SĐT ↔ CCCD", "Khớp", "good"],
+            ["Email", "han.nguyen@example.vn"],
+            ["Cư trú hiện tại", "Quận 1, TP.HCM"],
+            ["Sở hữu nhà", "Ở cùng gia đình"],
+            ["Người phụ thuộc", "01"],
+          ],
+        ],
+        [
+          "Việc làm & Thu nhập",
+          [
+            ["Thu nhập/tháng", "20–40 triệu"],
+            ["Loại công việc", "NV văn phòng"],
+            ["Thâm niên", "32 tháng"],
+            ["Tham gia BHXH", "Có", "good"],
+            ["Công ty", "Công ty TNHH An Phát"],
+            ["Ngành nghề", "Dịch vụ"],
+            ["Chức vụ", "Chuyên viên"],
+            ["Nhận lương", "Chuyển khoản"],
+          ],
+        ],
+        [
+          "Tra cứu & CEP Scoring",
+          [
+            ["Nhóm nợ CIC", "Nhóm 1", "good"],
+            ["Thâm niên CIF", "26 tháng"],
+            ["CASA TB 3 tháng", "18.600.000 đ"],
+            ["Tần suất GD 6 tháng", "6/6 tháng", "good"],
+            ["DTI", "2.1× thu nhập", "good"],
+            ["DS đen / AML", "Không", "good"],
+            ["Tổng điểm CEP", "742", "good"],
+            ["Hạng rủi ro", "A · Thấp", "good"],
+          ],
+        ],
+        [
+          "Phân bổ & Phê duyệt",
+          [
+            ["Phân loại khách", "Priority"],
+            ["ĐVKD quản lý", "CN Hồ Chí Minh 01"],
+            ["NV được phân bổ", "Trúc Vy"],
+            ["Kết quả thẩm định", "Đạt", "good"],
+            ["Người thẩm định", "Lê Minh Khoa"],
+            ["Hạn mức phê duyệt", "80.000.000 đ"],
+            ["Người duyệt cuối", "Nguyễn Hoài An"],
+            ["Ghi chú", "Đủ điều kiện phát hành"],
+          ],
+        ],
+        [
+          "Phát hành thẻ (WAY4)",
+          [
+            ["SP thẻ phê duyệt", "Mastercard Platinum"],
+            ["Ký HĐ điện tử", "Đã ký", "good"],
+            ["Mã giao dịch HĐĐT", "ECT-928411"],
+            ["Mã yêu cầu phát hành", "W4-110293"],
+            ["TT phát hành WAY4", "Đã tiếp nhận", "good"],
+            ["Thẻ điện tử", "Đã tạo", "good"],
+          ],
+        ],
+        [
+          "Giao nhận (OPS)",
+          [
+            ["Hình thức nhận thẻ", "Giao tận nhà"],
+            ["Địa chỉ giao thẻ", "Quận 1, TP.HCM"],
+            ["Mã vận đơn", "—", "empty"],
+            ["ĐV chuyển phát", "—", "empty"],
+            ["TT giao nhận", "Chưa phát hành", "empty"],
+            ["ETA", "—", "empty"],
+          ],
+        ],
+        ["Thông báo", []],
+      ];
+      const TICKET_GROUPS = [
+        [
+          "Thông tin phiếu",
+          [
+            ["Mã phiếu", (c) => c.id],
+            ["Loại phiếu", (c) => c.type],
+            ["Người yêu cầu", (c) => c.requester],
+            ["Đội phụ trách", (c) => c.team],
+            ["Người xử lý", (c) => c.owner],
+            ["Mức ưu tiên", (c) => (c.late ? "Cao" : "Bình thường")],
+          ],
+        ],
+        [
+          "Nội dung yêu cầu",
+          [
+            ["Tiêu đề", (c) => c.title],
+            ["Nội dung", (c) => c.issue],
+            ["Kênh tạo", "CEP Web"],
+            ["Trạng thái", (c) => c.status, "warn"],
+          ],
+        ],
+        [
+          "Tệp đính kèm",
+          [
+            ["Phiếu yêu cầu.pdf", "Đã nhận", "good"],
+            ["Biên bản xử lý.xlsx", "—", "empty"],
+            ["Tệp liên quan", "02 tệp"],
+          ],
+        ],
+        [
+          "Tích hợp & audit",
+          [
+            ["CEP Workflow", "200 OK", "good"],
+            ["Thông báo nội bộ", "Đã gửi", "good"],
+            ["Sự kiện gần nhất", "09:24"],
+            ["Lịch sử xử lý", "03 sự kiện"],
+          ],
+        ],
+        ["Thông báo", []],
+      ];
+      const editableLabels = new Set([
+        "Kênh tiếp nhận",
+        "Loại thẻ đăng ký",
+        "Sản phẩm thẻ",
+        "Hạn mức đề nghị",
+        "Tên dập nổi",
+        "Ngày sao kê",
+        "SĐT chính",
+        "Email",
+        "Cư trú hiện tại",
+        "Sở hữu nhà",
+        "Người phụ thuộc",
+        "Thu nhập/tháng",
+        "Loại công việc",
+        "Thâm niên",
+        "Công ty",
+        "Ngành nghề",
+        "Chức vụ",
+        "Nhận lương",
+        "Phân loại khách",
+        "ĐVKD quản lý",
+        "NV được phân bổ",
+        "Hạn mức phê duyệt",
+        "Hình thức nhận thẻ",
+        "Địa chỉ giao thẻ",
+        "Người xử lý",
+        "Mức ưu tiên",
+        "Nội dung",
+      ]);
+      const selectOptions = {
+        "Kênh tiếp nhận": ["CEP Web", "Ứng dụng CEP", "Email", "Tổng đài", "Tại quầy"],
+        "Loại thẻ đăng ký": ["Tín dụng", "Ghi nợ"],
+        "Sản phẩm thẻ": ["Mastercard Platinum", "Mastercard Gold", "Visa Platinum", "Visa Classic"],
+        "Ngày sao kê": ["Ngày 5", "Ngày 10", "Ngày 15", "Ngày 20", "Ngày 25"],
+        "Sở hữu nhà": ["Sở hữu", "Ở cùng gia đình", "Thuê nhà", "Khác"],
+        "Loại công việc": ["NV văn phòng", "Kinh doanh", "Tự doanh", "Công chức", "Khác"],
+        "Nhận lương": ["Chuyển khoản", "Tiền mặt"],
+        "Phân loại khách": ["Standard", "Priority", "VIP"],
+        "Hình thức nhận thẻ": ["Giao tận nhà", "Nhận tại chi nhánh"],
+        "Mức ưu tiên": ["Bình thường", "Cao", "Khẩn"],
+        "Người xử lý": ["Trúc Vy", "Minh Khoa", "Anh Thư", "Quốc Huy", "Mỹ Duyên", "Hải Nam"],
+      };
+      let activeGroups = [],
+        activeGroup = 0,
+        draft = {},
+        openDropdownMenu = null,
+        openDropdownTrigger = null,
+        openDropdownHome = null;
+      const savedFields = {};
+      function inputFor(label, value) {
+        const val = String(value);
+        if (selectOptions[label]) {
+          const opts = [...new Set([...selectOptions[label], val])];
+          return `<div class="df-dropdown"><button type="button" class="df-drop-trigger js-drop" data-k="${label}" aria-haspopup="listbox" aria-expanded="false">${val}</button><div class="df-options" role="listbox">${opts.map((x) => `<button type="button" class="df-option ${x === val ? "selected" : ""}" role="option" aria-selected="${x === val}" data-k="${label}" data-v="${x}">${x}</button>`).join("")}</div></div>`;
+        }
+        return `<input class="df-input js-df ${val === "—" ? "required" : ""}" data-k="${label}" value="${val === "—" ? "" : val}" ${val === "—" ? 'required placeholder="Nhập thông tin"' : ""}>`;
+      }
+      function ticketNotifications(c) {
+        const items = [];
+        if (c.kind === "warn" || c.kind === "danger")
+          items.push({
+            type: "leader",
+            icon: "!",
+            title: c.late ? "Cảnh báo SLA gửi đến trưởng nhóm" : "Phiếu cần được theo dõi",
+            text: c.late
+              ? `Phiếu còn ${c.sla} trước hạn xử lý và đã được đưa vào danh sách ưu tiên.`
+              : c.issue,
+            time: "09:41",
+            unread: true,
+          });
+        if (c.status === "Cần bổ sung" || c.status === "Chờ phản hồi")
+          items.push({
+            type: "customer",
+            icon: "✉",
+            title: "Đã gửi thông báo đến người yêu cầu",
+            text:
+              c.status === "Cần bổ sung"
+                ? "Yêu cầu bổ sung thông tin đã được gửi qua email và ứng dụng CEP."
+                : "Thông báo cập nhật tiến độ đã được gửi đến người yêu cầu.",
+            time: "09:28",
+            unread: false,
+          });
+        if (c.kind === "ok")
+          items.push({
+            type: "customer",
+            icon: "✓",
+            title: "Đã gửi kết quả xử lý",
+            text: "Người yêu cầu đã nhận thông báo hoàn tất phiếu qua email và ứng dụng CEP.",
+            time: "09:12",
+            unread: false,
+          });
+        return items;
+      }
+      function renderTicketNotifications(c) {
+        const items = ticketNotifications(c);
+        return `<div class="df-title"><h3>Thông báo</h3><span>${items.length} thông báo</span></div>${
+          items.length
+            ? `<div class="ticket-notifications">${items
+                .map(
+                  (item) =>
+                    `<article class="ticket-notification ${item.type === "leader" ? "leader" : ""} ${item.unread ? "unread" : ""}"><span class="ticket-notification-icon">${item.icon}</span><div><b>${item.title}</b><p>${item.text}</p></div><time>${item.time}</time></article>`,
+                )
+                .join("")}</div>`
+            : '<div class="ticket-notification-empty"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h14"></path><path d="M10 21h4"></path><path d="m3 3 18 18"></path></svg>Chưa có thông báo cho phiếu này</div>'
+        }`;
+      }
+      function renderDfGroup(groups, index) {
+        closeDropdowns();
+        activeGroups = groups;
+        activeGroup = index;
+        const [name, items] = groups[index];
+        if (name === "Thông báo") {
+          document.getElementById("dfDetail").innerHTML =
+            renderTicketNotifications(cases[selectedCase]);
+          document
+            .querySelectorAll(".df-tab")
+            .forEach((x, i) => x.classList.toggle("on", i === index));
+          return;
+        }
+        document.getElementById("dfDetail").innerHTML =
+          `<div class="df-title"><h3>${name}</h3><span>${items.length} trường dữ liệu</span></div><div class="df-fields">${items
+            .map(([label, value, state]) => {
+              const v =
+                draft[label] ??
+                savedFields[`${cases[selectedCase].id}:${label}`] ??
+                (typeof value === "function"
+                  ? value(cases[selectedCase])
+                  : value);
+              return `<div class="df-field ${state || ""}"><label>${label}</label>${editableLabels.has(label) ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
+            })
+            .join(
+              "",
+            )}</div><div class="df-save"><small id="dfSaveState" class="${Object.keys(draft).length ? "changed" : ""}">${Object.keys(draft).length ? "Có thay đổi chưa lưu" : "Đã lưu thay đổi"}</small><button id="dfSaveBtn" ${Object.keys(draft).length ? "" : "disabled"}>Lưu thay đổi</button></div>`;
+        document
+          .querySelectorAll(".df-tab")
+          .forEach((x, i) => x.classList.toggle("on", i === index));
+        const markChanged = (key, value) => {
+          draft[key] = value;
+          const state = document.getElementById("dfSaveState"),
+            button = document.getElementById("dfSaveBtn");
+          state.textContent = "Có thay đổi chưa lưu";
+          state.classList.add("changed");
+          button.disabled = false;
+        };
+        document
+          .querySelectorAll(".js-df")
+          .forEach(
+            (x) => (x.oninput = () => markChanged(x.dataset.k, x.value)),
+          );
+        document.querySelectorAll(".js-drop").forEach(
+          (trigger) =>
+            (trigger.onclick = () => {
+              const menu = trigger.nextElementSibling,
+                isOpen = menu === openDropdownMenu;
+              closeDropdowns();
+              if (!isOpen) openDropdown(trigger, menu);
+            }),
+        );
+        document.querySelectorAll(".df-option").forEach(
+          (option) =>
+            (option.onclick = () => {
+              markChanged(option.dataset.k, option.dataset.v);
+              renderDfGroup(activeGroups, activeGroup);
+            }),
+        );
+        document.getElementById("dfSaveBtn").onclick = saveDraft;
+      }
+      function saveDraft() {
+        const invalid = [...document.querySelectorAll(".js-df:invalid")];
+        if (invalid.length) {
+          invalid[0].focus();
+          return;
+        }
+        const button = document.getElementById("dfSaveBtn");
+        button.disabled = true;
+        button.innerHTML = '<span class="save-spin">◌</span> Đang lưu';
+        setTimeout(() => {
+          Object.entries(draft).forEach(
+            ([key, value]) =>
+              (savedFields[`${cases[selectedCase].id}:${key}`] = value),
+          );
+          draft = {};
+          renderDfGroup(activeGroups, activeGroup);
+        }, 650);
+      }
+      function openDrawer() {
+        draft = {};
+        const c = cases[selectedCase],
+          groups = c.hasCustomer ? CARD_GROUPS : TICKET_GROUPS;
+        document.getElementById("drawerId").textContent = c.id;
+        document.getElementById("drawerSubtitle").textContent =
+          `${c.title} · ${c.status}`;
+        document.getElementById("drawerBody").innerHTML =
+          `<div class="record-banner"><div><b>${c.title}</b><small>${c.type} · Yêu cầu bởi ${c.requester}</small></div><span class="status ${c.kind}">${c.status}</span></div><div class="df-workspace"><nav class="df-rail">${groups.map((g, i) => `<button class="df-tab ${i === 0 ? "on" : ""}" data-g="${i}"><span class="df-num">${i + 1}</span>${g[0]}</button>`).join("")}</nav><section class="df-content" id="dfDetail"></section></div>`;
+        document
+          .querySelectorAll(".df-tab")
+          .forEach(
+            (x) => (x.onclick = () => renderDfGroup(groups, +x.dataset.g)),
+          );
+        renderDfGroup(groups, 0);
+        document.getElementById("drawerBack").classList.add("open");
+        document.getElementById("ticketDrawer").classList.add("open");
+        document
+          .getElementById("ticketDrawer")
+          .setAttribute("aria-hidden", "false");
+        document.getElementById("drawerClose").focus();
+      }
+      function openDropdown(trigger, menu) {
+        const rect = trigger.getBoundingClientRect();
+        openDropdownMenu = menu;
+        openDropdownTrigger = trigger;
+        openDropdownHome = trigger.parentElement;
+        document.body.appendChild(menu);
+        menu.style.left = `${rect.left}px`;
+        menu.style.top = `${rect.bottom + 4}px`;
+        menu.style.width = `${rect.width}px`;
+        menu.classList.add("open");
+        trigger.classList.add("open");
+        trigger.setAttribute("aria-expanded", "true");
+      }
+      function closeDropdowns() {
+        if (!openDropdownMenu) return;
+        openDropdownMenu.classList.remove("open");
+        openDropdownMenu.removeAttribute("style");
+        if (openDropdownHome?.isConnected)
+          openDropdownHome.appendChild(openDropdownMenu);
+        openDropdownTrigger?.classList.remove("open");
+        openDropdownTrigger?.setAttribute("aria-expanded", "false");
+        openDropdownMenu = null;
+        openDropdownTrigger = null;
+        openDropdownHome = null;
+      }
+      function closeDrawer() {
+        closeDropdowns();
+        document.getElementById("drawerBack").classList.remove("open");
+        document.getElementById("ticketDrawer").classList.remove("open");
+        document
+          .getElementById("ticketDrawer")
+          .setAttribute("aria-hidden", "true");
+      }
+      document.getElementById("drawerClose").onclick = closeDrawer;
+      document.getElementById("drawerBack").onclick = closeDrawer;
+
+      const notificationBell = document.getElementById("notificationBell");
+      const notificationPanel = document.getElementById("notificationPanel");
+      function closeNotifications() {
+        notificationPanel.classList.remove("open");
+        notificationBell.setAttribute("aria-expanded", "false");
+      }
+      notificationBell.onclick = () => {
+        closeUserMenu();
+        const open = notificationPanel.classList.toggle("open");
+        notificationBell.setAttribute("aria-expanded", String(open));
+      };
+
+      const userMenuButton = document.getElementById("userMenuButton"),
+        userMenu = document.getElementById("userMenu");
+      function closeUserMenu() {
+        userMenu.classList.remove("open");
+        userMenuButton.setAttribute("aria-expanded", "false");
+      }
+      userMenuButton.onclick = () => {
+        closeNotifications();
+        const open = userMenu.classList.toggle("open");
+        userMenuButton.setAttribute("aria-expanded", String(open));
+      };
+
+      document.addEventListener("click", (e) => {
+        if (
+          !e.target.closest(".df-dropdown") &&
+          !e.target.closest(".df-options")
+        )
+          closeDropdowns();
+        if (!e.target.closest(".notification-wrap")) closeNotifications();
+        if (!e.target.closest(".user-wrap")) closeUserMenu();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (userMenu.classList.contains("open")) {
+            closeUserMenu();
+            userMenuButton.focus();
+            return;
+          }
+          if (notificationPanel.classList.contains("open")) {
+            closeNotifications();
+            notificationBell.focus();
+            return;
+          }
+          if (openDropdownMenu) {
+            const trigger = openDropdownTrigger;
+            closeDropdowns();
+            trigger?.focus();
+          } else closeDrawer();
+        }
+      });
+      document
+        .getElementById("drawerBody")
+        .addEventListener("scroll", closeDropdowns);
+      window.addEventListener("resize", closeDropdowns);
+      document.getElementById("queueSearch").oninput = (e) => {
+        queueQuery = e.target.value;
+        queuePage = 1;
+        renderQueue();
+      };
+      document.querySelectorAll(".chip").forEach(
+        (x) =>
+          (x.onclick = () => {
+            queueFilter = x.dataset.filter;
+            queuePage = 1;
+            document
+              .querySelectorAll(".chip")
+              .forEach((y) => y.classList.remove("on"));
+            x.classList.add("on");
+            renderQueue();
+          }),
+      );
+      document.getElementById("pagePrev").onclick = () => {
+        if (queuePage > 1) {
+          queuePage--;
+          renderQueue();
+        }
+      };
+      document.getElementById("pageNext").onclick = () => {
+        if (queuePage * PAGE_SIZE < filteredCases().length) {
+          queuePage++;
+          renderQueue();
+        }
+      };
+      renderQueue();
+      selectCase(0);
+    </script>
+  </body>
+</html>
