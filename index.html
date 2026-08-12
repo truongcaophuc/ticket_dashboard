@@ -459,11 +459,77 @@
       .date b {
         color: var(--ink);
       }
+      .view-tabs {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 10px;
+        margin-bottom: 17px;
+        border-bottom: 1px solid var(--line);
+        background: #fff;
+      }
+      .view-tab {
+        border: 0;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+        background: transparent;
+        color: #8a91aa;
+        padding: 14px 20px 13px;
+        font: 800 14px inherit;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .view-tab:hover {
+        color: var(--blue);
+      }
+      .view-tab.on {
+        color: var(--blue);
+        border-bottom-color: var(--blue);
+        box-shadow: none;
+      }
+      .view-tab [data-lucide],
+      .view-tab .lucide {
+        width: 16px;
+        height: 16px;
+        color: #98a1b8;
+        stroke-width: 2.2;
+      }
+      .view-tab.on [data-lucide],
+      .view-tab.on .lucide {
+        color: var(--blue);
+      }
+      .tab-badge {
+        min-width: 26px;
+        height: 21px;
+        padding: 0 8px;
+        border-radius: 999px;
+        display: inline-grid;
+        place-items: center;
+        background: var(--red);
+        color: #fff;
+        font-size: 11px;
+        font-weight: 900;
+      }
+      .view-pane {
+        display: none;
+      }
+      .view-pane.on {
+        display: block;
+      }
       .kpis {
         display: grid;
         grid-template-columns: 1.25fr repeat(3, 1fr);
         gap: 14px;
         margin-bottom: 17px;
+      }
+      .kpis,
+      .insights {
+        display: none;
+      }
+      .is-temp-hidden {
+        display: none !important;
       }
       .kpi {
         background: var(--surface);
@@ -655,10 +721,9 @@
         min-width: 0;
       }
       .customer {
-        display: block;
+        display: inline;
         font-weight: 800;
         color: var(--ink);
-        margin-bottom: 3px;
         cursor: pointer;
       }
       .customer:hover,
@@ -666,8 +731,19 @@
         text-decoration: none;
       }
       .sub {
+        display: block;
+        margin-top: 3px;
         color: var(--muted);
         font-size: 11px;
+        cursor: pointer;
+        width: fit-content;
+      }
+      .case-title-line {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        flex-wrap: wrap;
       }
       .case-identity .person-avatar {
         width: 38px;
@@ -744,6 +820,9 @@
         color: #b8c1d0;
         background: #f7f9fc;
         cursor: not-allowed;
+      }
+      .sla-foot {
+        padding: 10px 0 0;
       }
       .case-panel {
         padding: 0;
@@ -832,9 +911,19 @@
         background: var(--mint);
         color: #fff;
       }
-      .step.active .step-dot {
+      .step.current .step-dot {
         background: var(--blue);
         color: #fff;
+        box-shadow: 0 0 0 3px #dbe5ff;
+      }
+      .step.current.sla-over .step-dot {
+        background: var(--red);
+        box-shadow: 0 0 0 3px #ffe0e6;
+      }
+      .step.active {
+        background: #f3f6ff;
+      }
+      .step.active .step-dot {
         box-shadow: 0 0 0 3px #dbe5ff;
       }
       .step b {
@@ -844,6 +933,20 @@
       .step span {
         color: var(--muted);
         font-size: 9px;
+      }
+      .step em {
+        display: block;
+        margin-top: 3px;
+        color: #52627a;
+        font-size: 9px;
+        font-style: normal;
+        font-weight: 800;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .step.sla-over em {
+        color: var(--red);
       }
       .subtasks {
         margin: 4px 17px 15px;
@@ -877,6 +980,289 @@
       .subtask:last-child {
         border-bottom: 0;
       }
+      .subtask-wrap {
+        border-bottom: 1px solid #eff2f7;
+      }
+      .subtask-wrap:last-child {
+        border-bottom: 0;
+      }
+      .subtask-wrap .subtask {
+        border-bottom: 0;
+      }
+      .task-fields {
+        margin-top: 3px;
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        color: #8b98ad;
+        font-size: 9.5px;
+        font-weight: 700;
+      }
+      .task-field-chip {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+      }
+      .ticket-notice-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        width: fit-content;
+        margin-top: 5px;
+        border-radius: 999px;
+        background: #fff3df;
+        color: #9a5b12;
+        padding: 3px 7px;
+        font-size: 9px;
+        font-weight: 900;
+      }
+      .ticket-notice-badge:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #d48a09;
+      }
+      .drawer-tab-count {
+        min-width: 17px;
+        height: 17px;
+        border-radius: 999px;
+        display: inline-grid;
+        place-items: center;
+        background: var(--red);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .ticket-notice-inline {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        width: fit-content;
+        border: 0;
+        border-radius: 999px;
+        background: #fff3df;
+        color: #9a5b12;
+        padding: 3px 7px;
+        font-family: inherit;
+        font-size: 9px;
+        font-weight: 900;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .ticket-notice-inline:hover {
+        opacity: 0.82;
+      }
+      .ticket-notice-inline:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #d48a09;
+      }
+      .task-field-chip.on {
+        color: var(--blue);
+      }
+      .task-type {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .task-type.api,
+      .task-type.callback {
+        background: #ecfeff;
+        color: #0e7490;
+      }
+      .task-type.rule {
+        background: #eef3ff;
+        color: #315dce;
+      }
+      .task-type.human {
+        background: #fff7ed;
+        color: #9a5b12;
+      }
+      .drawer-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 14px;
+      }
+      .drawer-actions button {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: #4b5a72;
+        padding: 8px 10px;
+        font: 800 11px inherit;
+        cursor: pointer;
+      }
+      .drawer-actions button.primary {
+        border-color: var(--blue);
+        background: var(--blue);
+        color: #fff;
+      }
+      .drawer-actions button:hover {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .drawer-actions button.primary:hover {
+        background: #255ae2;
+        color: #fff;
+      }
+      .api-payload {
+        margin: 0;
+        border-radius: 9px;
+        background: #111827;
+        color: #d7e0ee;
+        padding: 12px;
+        font:
+          11px/1.55 ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        overflow: auto;
+      }
+      .api-package {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .api-package-hd {
+        padding: 11px 12px;
+        border-bottom: 1px solid var(--line);
+        background: #f8faff;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: start;
+      }
+      .api-package-hd b {
+        display: block;
+        font-size: 12px;
+      }
+      .api-package-hd span {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .api-package-hd button {
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: var(--blue);
+        padding: 6px 9px;
+        font: 800 10px inherit;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .api-package-hd button:hover {
+        background: var(--blue-soft);
+      }
+      .task-tabs {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        margin: 0 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #eef3fb;
+        overflow-x: auto;
+      }
+      .task-tab {
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: #66748e;
+        padding: 7px 10px;
+        font: 800 11px inherit;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .task-tab.on {
+        background: #fff;
+        color: var(--blue);
+        box-shadow: 0 1px 3px rgba(23, 35, 59, 0.08);
+      }
+      .task-pane {
+        display: none;
+      }
+      .task-pane.on {
+        display: block;
+      }
+      .rule-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .rule-table th {
+        background: #f8faff;
+        color: #8490a6;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-align: left;
+        text-transform: uppercase;
+      }
+      .rule-table th,
+      .rule-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #eff2f7;
+        font-size: 11px;
+      }
+      .rule-table tr:last-child td {
+        border-bottom: 0;
+      }
+      .callback-timeline {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+      }
+      .callback-step {
+        display: grid;
+        grid-template-columns: 24px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid #eff2f7;
+        font-size: 11px;
+      }
+      .callback-step:last-child {
+        border-bottom: 0;
+      }
+      .callback-dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: var(--mint-soft);
+        color: var(--mint);
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .callback-step.wait .callback-dot {
+        background: #eef2f7;
+        color: #8490a5;
+      }
       .subtask-toggle {
         width: 100%;
         border: 0;
@@ -894,10 +1280,16 @@
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        display: grid;
-        place-items: center;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         font-size: 10px;
         font-weight: 900;
+      }
+      .sub-icon .lucide {
+        width: 11px;
+        height: 11px;
+        stroke-width: 3;
       }
       .subtask b {
         display: block;
@@ -926,6 +1318,10 @@
         background: var(--amber-soft);
         color: var(--amber);
       }
+      .subtask.warn {
+        background: transparent;
+        color: inherit;
+      }
       .subtask.blocked .sub-icon {
         background: var(--red-soft);
         color: var(--red);
@@ -933,6 +1329,32 @@
       .subtask.queued .sub-icon {
         background: #eef2f7;
         color: #8490a5;
+      }
+      .subtask.sla-near {
+        background: transparent;
+      }
+      .subtask-sla {
+        justify-self: end;
+        text-align: right;
+      }
+      .subtask-sla time,
+      .subtask-sla span {
+        display: block;
+      }
+      .subtask-sla span {
+        margin-top: 2px;
+        font:
+          800 9px ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        color: #8490a5;
+      }
+      .subtask-sla .over {
+        color: var(--red);
+      }
+      .subtask-sla .near {
+        color: #b87808;
       }
       .result-card {
         margin: 0 17px 15px;
@@ -1031,6 +1453,10 @@
         font-weight: 400;
         cursor: pointer;
         white-space: nowrap;
+        transition: opacity 0.16s ease;
+      }
+      .result-action button:hover {
+        opacity: 0.86;
       }
       .meta-grid {
         display: grid;
@@ -1091,7 +1517,9 @@
       }
       .insights {
         display: grid;
-        grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 1.45fr) minmax(280px, 0.9fr);
+        grid-template-columns:
+          minmax(280px, 0.9fr) minmax(420px, 1.45fr)
+          minmax(280px, 0.9fr);
         gap: 17px;
         margin-top: 17px;
         align-items: stretch;
@@ -1226,6 +1654,438 @@
         margin-top: 14px;
         padding-top: 10px;
       }
+      .sla-detail {
+        margin-top: 17px;
+        overflow: visible;
+        position: relative;
+      }
+      .sla-detail-hd {
+        padding: 16px 17px 13px;
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid var(--line);
+      }
+      .sla-detail-hd > div:first-child {
+        flex: 1;
+        min-width: 0;
+      }
+      .sla-detail-hd h2 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .sla-detail-hd p {
+        margin: 3px 0 0;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .sla-picker {
+        position: relative;
+        min-width: 0;
+      }
+      .sla-controls {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: minmax(320px, 520px) minmax(240px, 430px);
+        gap: 10px;
+        align-items: start;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .sla-picker-btn {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #fff;
+        color: var(--ink);
+        padding: 10px 12px;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .sla-picker-btn b,
+      .sla-picker-option b {
+        display: block;
+        font-size: 12px;
+      }
+      .sla-picker-btn span,
+      .sla-picker-option span {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.35;
+      }
+      .sla-picker-menu {
+        position: absolute;
+        left: 0;
+        top: calc(100% + 6px);
+        width: 100%;
+        min-width: 100%;
+        box-sizing: border-box;
+        max-height: 320px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 18px 45px rgba(23, 35, 59, 0.16);
+        padding: 6px;
+        z-index: 12;
+        display: none;
+      }
+      .sla-picker.open .sla-picker-menu {
+        display: grid;
+        gap: 3px;
+      }
+      .sla-picker-option {
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        padding: 9px 10px;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        align-items: center;
+      }
+      .sla-picker-option:hover,
+      .sla-picker-option.on {
+        background: var(--blue-soft);
+      }
+      .sla-picker-option .sla {
+        font-size: 11px;
+      }
+      .sla-quick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .sla-quick .chip {
+        padding: 5px 8px;
+      }
+      .sla-search {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #fff;
+        color: #8e9ab0;
+        padding: 0 11px;
+      }
+      .sla-search input {
+        width: 100%;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font: inherit;
+      }
+      .sla-picker-empty {
+        padding: 18px 12px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+      .sla-summary {
+        padding: 13px 17px;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 9px;
+        border-bottom: 1px solid var(--line);
+        background: #fbfcff;
+      }
+      .sla-chip2 {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 9px 10px;
+        min-width: 0;
+      }
+      .sla-chip2 span {
+        display: block;
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+      .sla-chip2 b {
+        display: block;
+        margin-top: 5px;
+        font-size: 18px;
+        line-height: 1;
+      }
+      .sla-chip2.ok {
+        border-color: #c7efd9;
+        background: #f4fcf8;
+        color: #087a55;
+      }
+      .sla-chip2.bad {
+        border-color: #ffd0d8;
+        background: #fff5f7;
+        color: #c9344d;
+      }
+      .sla-chip2.warn {
+        border-color: #fde4b5;
+        background: #fffbf0;
+        color: #aa6e08;
+      }
+      .sla-note {
+        margin: 13px 17px 0;
+        padding: 10px 12px;
+        border: 1px dashed #dce5f5;
+        border-radius: 8px;
+        background: #f8faff;
+        color: #5e6d84;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+      .sla-table-wrap {
+        padding: 13px 17px 17px;
+        overflow: auto;
+      }
+      .sla-workspace {
+        display: block;
+        padding: 13px 17px 17px;
+      }
+      .sla-workspace .sla-table-wrap {
+        padding: 0;
+      }
+      .sla-detail-table {
+        width: 100%;
+        min-width: 860px;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .sla-detail-table th {
+        padding: 10px 11px;
+        background: #f8faff;
+        border-bottom: 1px solid var(--line);
+        color: #8490a6;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-align: left;
+        text-transform: uppercase;
+      }
+      .sla-detail-table th:nth-child(1),
+      .sla-detail-table th:nth-child(2),
+      .sla-detail-table th:nth-child(4),
+      .sla-detail-table th:nth-child(5),
+      .sla-detail-table th:nth-child(6),
+      .sla-detail-table th:nth-child(7) {
+        text-align: center;
+      }
+      .sla-detail-table td {
+        padding: 10px 11px;
+        border-bottom: 1px solid #eff2f7;
+        font-size: 11px;
+        vertical-align: middle;
+      }
+      .sla-detail-table td:nth-child(1),
+      .sla-detail-table td:nth-child(2),
+      .sla-detail-table td:nth-child(4),
+      .sla-detail-table td:nth-child(5),
+      .sla-detail-table td:nth-child(6),
+      .sla-detail-table td:nth-child(7) {
+        text-align: center;
+      }
+      .sla-detail-table tbody tr {
+        cursor: pointer;
+      }
+      .sla-detail-table tbody tr:hover {
+        background: #f4f7ff;
+      }
+      .sla-detail-table tr.active {
+        box-shadow: inset 3px 0 var(--blue);
+        background: #f4f7ff;
+      }
+      .sla-detail-table tr.selected {
+        box-shadow: inset 3px 0 var(--blue);
+        background: #eef4ff;
+      }
+      .sla-detail-table tr:last-child td {
+        border-bottom: 0;
+      }
+      .sla-lane {
+        font:
+          900 11px ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        color: #61708a;
+      }
+      .sla-num {
+        text-align: center;
+        font:
+          800 11px ui-monospace,
+          SFMono-Regular,
+          Consolas,
+          monospace;
+        white-space: nowrap;
+      }
+      .sla-owner {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 3px 8px;
+        background: #eef3ff;
+        color: #315dce;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .sla-type {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        padding: 3px 8px;
+        font-size: 10px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .sla-type.async {
+        background: #ecfeff;
+        border-color: #b8eef5;
+        color: #0e7490;
+      }
+      .sla-type.human {
+        background: #fff7ed;
+        border-color: #fed7aa;
+        color: #9a5b12;
+      }
+      .sla-state {
+        display: inline-flex;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 10px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+      .sla-state.ok {
+        background: var(--mint-soft);
+        color: #07875d;
+      }
+      .sla-state.near {
+        background: var(--amber-soft);
+        color: #a66a08;
+      }
+      .sla-state.bad {
+        background: var(--red-soft);
+        color: #c9344d;
+      }
+      .sla-side {
+        display: none;
+      }
+      .sla-side.empty {
+        display: none;
+      }
+      .sla-side.open {
+        display: block;
+      }
+      .sla-side-hd {
+        padding: 14px 15px;
+        border-bottom: 1px solid var(--line);
+        background: #f8faff;
+        position: relative;
+      }
+      .sla-side-hd small {
+        display: block;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .sla-side-hd h3 {
+        margin: 5px 0 0;
+        font-size: 14px;
+        line-height: 1.35;
+        padding-right: 28px;
+      }
+      .sla-side-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        background: #fff;
+        color: #68758e;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        cursor: pointer;
+      }
+      .sla-side-close:hover {
+        color: var(--blue);
+        border-color: #cbd8f5;
+        background: var(--blue-soft);
+      }
+      .sla-side-body {
+        padding: 13px 15px;
+        display: grid;
+        gap: 10px;
+      }
+      .sla-side-row {
+        display: grid;
+        grid-template-columns: 88px 1fr;
+        gap: 10px;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+      .sla-side-row label {
+        color: #8b98ad;
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .sla-side-actions {
+        display: flex;
+        gap: 8px;
+        padding: 12px 15px 15px;
+        border-top: 1px solid var(--line);
+      }
+      .sla-side-actions button {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: #4b5a72;
+        padding: 8px 10px;
+        font: 800 11px inherit;
+        cursor: pointer;
+      }
+      .sla-side-actions button.primary {
+        border-color: var(--blue);
+        background: var(--blue);
+        color: #fff;
+      }
+      .sla-side-actions button:hover {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .sla-side-actions button.primary:hover {
+        background: #255ae2;
+        color: #fff;
+      }
       .drawer-back {
         position: fixed;
         inset: 0;
@@ -1301,12 +2161,98 @@
       }
       .drawer-body {
         overflow: auto;
+        flex: 1;
         padding: 18px 22px 38px;
+      }
+      .drawer-tabs {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        margin: -2px 0 15px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #eef3fb;
+      }
+      .drawer-tab {
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #66748e;
+        padding: 8px 12px;
+        font: 800 12px inherit;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .drawer-tab.on {
+        background: #fff;
+        color: var(--blue);
+        box-shadow: 0 1px 3px rgba(23, 35, 59, 0.08);
+      }
+      .drawer-pane {
+        display: none;
+      }
+      .drawer-pane.on {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 225px);
+      }
+      .drawer-sla-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .drawer-sla-card {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        padding: 9px 10px;
+      }
+      .drawer-sla-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 9px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+      .drawer-sla-card b {
+        display: block;
+        margin-top: 5px;
+        font-size: 17px;
+      }
+      .drawer-sla-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        overflow: hidden;
+        background: #fff;
+      }
+      .drawer-sla-table th,
+      .drawer-sla-table td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #eff2f7;
+        font-size: 11px;
+        text-align: left;
+      }
+      .drawer-sla-table th {
+        background: #f8faff;
+        color: #8490a6;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .drawer-sla-table tr:last-child td {
+        border-bottom: 0;
       }
       .df-workspace {
         display: grid;
         grid-template-columns: 155px minmax(0, 1fr);
         gap: 14px;
+        flex: 1;
       }
       .df-rail {
         display: grid;
@@ -1318,33 +2264,15 @@
         background: transparent;
         text-align: left;
         border-radius: 8px;
-        padding: 8px 7px;
+        padding: 8px 10px;
         color: #66748e;
         font: 600 11px/1.25 inherit;
         cursor: pointer;
-        display: flex;
-        gap: 7px;
       }
       .df-tab:hover,
       .df-tab.on {
         background: var(--blue-soft);
         color: #275bd4;
-      }
-      .df-num {
-        width: 19px;
-        height: 19px;
-        flex: none;
-        border-radius: 6px;
-        display: grid;
-        place-items: center;
-        background: #edf1f7;
-        color: #8290a7;
-        font-size: 9px;
-        font-weight: 800;
-      }
-      .df-tab.on .df-num {
-        background: var(--blue);
-        color: #fff;
       }
       .df-content {
         min-width: 0;
@@ -1405,8 +2333,14 @@
       .df-field.warn b {
         color: #b87808;
       }
+      .df-field.warn {
+        background: transparent;
+      }
       .df-field.danger b {
         color: #cb3851;
+      }
+      .df-field.danger {
+        background: transparent;
       }
       .df-input {
         width: 100%;
@@ -1425,8 +2359,8 @@
         box-shadow: 0 0 0 3px var(--blue-soft);
       }
       .df-input.required:invalid {
-        border-color: var(--amber);
-        background: #fff9ec;
+        border-color: #dfe5f0;
+        background: #fff;
       }
       .df-select {
         appearance: auto;
@@ -1463,7 +2397,10 @@
         box-shadow: 0 0 0 3px var(--blue-soft);
       }
       .df-options {
-        position: fixed;
+        position: absolute;
+        left: 0;
+        top: calc(100% + 4px);
+        width: 100%;
         z-index: 30;
         background: #fff;
         border: 1px solid #dfe5f0;
@@ -1505,10 +2442,11 @@
         padding-bottom: 76px;
       }
       .df-save {
-        position: absolute;
-        left: 0;
+        position: fixed;
         right: 0;
         bottom: 0;
+        width: min(650px, 100vw);
+        box-sizing: border-box;
         margin: 0;
         padding: 11px 22px;
         background: rgba(255, 255, 255, 0.97);
@@ -1534,6 +2472,7 @@
         background: var(--blue);
         color: #fff;
         padding: 7px 10px;
+        font-family: inherit;
         font-size: 11px;
         font-weight: 800;
         cursor: pointer;
@@ -1595,6 +2534,52 @@
         color: var(--muted);
         margin-top: 3px;
         font-size: 10px;
+      }
+      .ticket-notice-strip {
+        margin: -4px 0 15px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+        overflow: hidden;
+      }
+      .ticket-notice-toggle {
+        width: 100%;
+        border: 0;
+        background: #fff;
+        color: #4b5a72;
+        padding: 10px 12px;
+        font: 800 11px inherit;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .ticket-notice-toggle:hover {
+        background: #f8faff;
+        color: var(--blue);
+      }
+      .ticket-notice-count {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .ticket-notice-count:before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--blue);
+      }
+      .ticket-notice-body {
+        display: none;
+        padding: 0 12px 12px;
+      }
+      .ticket-notice-strip.open .ticket-notice-body {
+        display: block;
       }
       .drawer-section {
         margin: 18px 0;
@@ -1696,10 +2681,21 @@
         background: #fff;
         border: 1px solid var(--line);
         border-radius: 9px;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        font: inherit;
+      }
+      .ticket-notification:hover {
+        border-color: #cbd8f5;
+        background: #fbfcff;
       }
       .ticket-notification.unread {
         border-color: #cbd8f5;
         background: #f8faff;
+      }
+      .ticket-notification.read {
+        opacity: 0.78;
       }
       .ticket-notification-icon {
         width: 34px;
@@ -1819,6 +2815,9 @@
           width: min(24vw, 860px);
           min-width: 780px;
         }
+        .df-save {
+          width: max(780px, min(24vw, 860px));
+        }
       }
       @media (max-width: 1400px) {
         .insights {
@@ -1869,6 +2868,25 @@
         .kpi.highlight {
           grid-column: span 2;
         }
+        .sla-summary {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .sla-controls {
+          grid-template-columns: 1fr;
+        }
+        .sla-workspace {
+          display: block;
+        }
+        .sla-side {
+          position: fixed;
+          top: auto;
+          right: 14px;
+          bottom: 14px;
+          left: 14px;
+          width: auto;
+          max-height: min(520px, calc(100vh - 28px));
+          overflow: auto;
+        }
       }
       @media (max-width: 700px) {
         .app {
@@ -1899,6 +2917,14 @@
         .intro .date {
           margin-top: 10px;
         }
+        .view-tabs {
+          overflow-x: auto;
+          padding-left: 0;
+        }
+        .view-tab {
+          padding-inline: 8px;
+          white-space: nowrap;
+        }
         .kpis {
           grid-template-columns: 1fr;
         }
@@ -1927,6 +2953,15 @@
         }
         .card {
           border-radius: 10px;
+        }
+        .sla-detail-hd {
+          display: block;
+        }
+        .sla-summary {
+          grid-template-columns: 1fr 1fr;
+        }
+        .sla-chip2 span {
+          white-space: normal;
         }
       }
     </style>
@@ -1983,7 +3018,9 @@
               aria-controls="notificationPanel"
             >
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                <path
+                  d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+                ></path>
                 <path d="M10 21h4"></path>
               </svg>
             </button>
@@ -2049,7 +3086,9 @@
               <button type="button" role="menuitem">Thông tin tài khoản</button>
               <button type="button" role="menuitem">Cài đặt cá nhân</button>
               <button type="button" role="menuitem">Đổi mật khẩu</button>
-              <button class="logout" type="button" role="menuitem">Đăng xuất</button>
+              <button class="logout" type="button" role="menuitem">
+                Đăng xuất
+              </button>
             </div>
           </div>
         </header>
@@ -2062,7 +3101,7 @@
               Cập nhật lúc <b>09:42 · Thứ hai, 11 tháng 8</b>
             </div>
           </div>
-          <div class="kpis">
+          <div class="kpis is-temp-hidden">
             <div class="kpi highlight">
               <div class="kpi-head">
                 <span>PHIẾU CẦN CAN THIỆP</span>
@@ -2094,104 +3133,142 @@
               <div class="note">Kết nối đối tác đang retry</div>
             </div>
           </div>
-          <div class="workspace-primary">
-            <section class="card">
-              <div class="card-hd">
-                <div>
-                  <h2>Phiếu ưu tiên</h2>
+          <div
+            class="view-tabs"
+            role="tablist"
+            aria-label="Chế độ xem vận hành"
+          >
+            <button
+              class="view-tab on"
+              id="tabOverview"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="overviewPane"
+              data-view="overview"
+            >
+              <i data-lucide="layout-dashboard"></i>Tổng quan
+            </button>
+            <button
+              class="view-tab"
+              id="tabSla"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="slaPane"
+              data-view="sla"
+            >
+              <i data-lucide="timer"></i>SLA chi tiết
+            </button>
+          </div>
+          <section
+            class="view-pane on"
+            id="overviewPane"
+            role="tabpanel"
+            aria-labelledby="tabOverview"
+          >
+            <div class="workspace-primary">
+              <section class="card">
+                <div class="card-hd">
+                  <div>
+                    <h2>Phiếu ưu tiên</h2>
+                  </div>
+                  <label class="queue-search"
+                    >⌕<input
+                      id="queueSearch"
+                      placeholder="Tìm mã phiếu, người yêu cầu..."
+                  /></label>
                 </div>
-                <label class="queue-search"
-                  >⌕<input
-                    id="queueSearch"
-                    placeholder="Tìm mã phiếu, người yêu cầu..."
-                /></label>
-              </div>
-              <div class="filters">
-                <button class="chip on" data-filter="all">Tất cả 24</button
-                ><button class="chip" data-filter="late">Sắp trễ SLA 9</button
-                ><button class="chip" data-filter="supplement">
-                  Cần bổ sung 7</button
-                ><button class="chip" data-filter="integration">
-                  Lỗi tích hợp 2
-                </button>
-              </div>
-              <table class="queue">
-                <thead>
-                  <tr>
-                    <th>Phiếu / người yêu cầu</th>
-                    <th>Trạng thái</th>
-                    <th>Đội xử lý</th>
-                    <th>SLA</th>
-                  </tr>
-                </thead>
-                <tbody id="queueBody"></tbody>
-              </table>
-              <div class="queue-foot">
-                <span id="queueCount">Hiển thị 10 / 24 hồ sơ ưu tiên</span>
-                <div class="queue-pager">
-                  <button
-                    class="page-btn"
-                    id="pagePrev"
-                    aria-label="Trang trước"
-                  >
-                    ‹</button
-                  ><span id="queueRange">1–10 / 24</span
-                  ><button
-                    class="page-btn"
-                    id="pageNext"
-                    aria-label="Trang sau"
-                  >
-                    ›
+                <div class="filters">
+                  <button class="chip on" data-filter="all">Tất cả 24</button
+                  ><button class="chip" data-filter="late">Sắp trễ SLA 9</button
+                  ><button class="chip" data-filter="supplement">
+                    Cần bổ sung 7</button
+                  ><button class="chip" data-filter="integration">
+                    Lỗi tích hợp 2
                   </button>
                 </div>
-              </div>
-            </section>
-            <aside class="card case-panel"><div id="caseDetail"></div></aside>
-          </div>
-          <section class="insights" aria-label="Phân tích vận hành">
-            <section class="card health">
-            <h2>Tỷ lệ xử lý đúng SLA theo đội</h2>
-            <div class="health-row">
-              <span>Tiếp nhận</span>
-              <div class="track">
-                <div
-                  class="fill"
-                  style="width: 91%; background: var(--mint)"
-                ></div>
-              </div>
-              <b style="color: var(--mint)">91%</b>
-            </div>
-            <div class="health-row">
-              <span>Thẩm định</span>
-              <div class="track">
-                <div
-                  class="fill"
-                  style="width: 84%; background: var(--blue)"
-                ></div>
-              </div>
-              <b style="color: var(--blue)">84%</b>
-            </div>
-            <div class="health-row">
-              <span>Đối tác giao nhận</span>
-              <div class="track">
-                <div
-                  class="fill"
-                  style="width: 68%; background: var(--amber)"
-                ></div>
-              </div>
-              <b style="color: #b87808">68%</b>
-            </div>
-            <div class="health-row">
-              <span>CSKH</span>
-              <div class="track">
-                <div
-                  class="fill"
-                  style="width: 96%; background: var(--mint)"
-                ></div>
-              </div>
-              <b style="color: var(--mint)">96%</b>
+                <table class="queue">
+                  <thead>
+                    <tr>
+                      <th>Phiếu / người yêu cầu</th>
+                      <th>Trạng thái</th>
+                      <th>Đội xử lý</th>
+                      <th>SLA</th>
+                    </tr>
+                  </thead>
+                  <tbody id="queueBody"></tbody>
+                </table>
+                <div class="queue-foot">
+                  <span id="queueCount">Hiển thị 10 / 24 hồ sơ ưu tiên</span>
+                  <div class="queue-pager">
+                    <button
+                      class="page-btn"
+                      id="pagePrev"
+                      aria-label="Trang trước"
+                    >
+                      ‹</button
+                    ><span id="queueRange">1–10 / 24</span
+                    ><button
+                      class="page-btn"
+                      id="pageNext"
+                      aria-label="Trang sau"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+              </section>
+              <aside class="card case-panel"><div id="caseDetail"></div></aside>
             </div>
           </section>
+          <section
+            class="insights is-temp-hidden"
+            aria-label="Phân tích vận hành"
+          >
+            <section class="card health">
+              <h2>Tỷ lệ xử lý đúng SLA theo đội</h2>
+              <div class="health-row">
+                <span>Tiếp nhận</span>
+                <div class="track">
+                  <div
+                    class="fill"
+                    style="width: 91%; background: var(--mint)"
+                  ></div>
+                </div>
+                <b style="color: var(--mint)">91%</b>
+              </div>
+              <div class="health-row">
+                <span>Thẩm định</span>
+                <div class="track">
+                  <div
+                    class="fill"
+                    style="width: 84%; background: var(--blue)"
+                  ></div>
+                </div>
+                <b style="color: var(--blue)">84%</b>
+              </div>
+              <div class="health-row">
+                <span>Đối tác giao nhận</span>
+                <div class="track">
+                  <div
+                    class="fill"
+                    style="width: 68%; background: var(--amber)"
+                  ></div>
+                </div>
+                <b style="color: #b87808">68%</b>
+              </div>
+              <div class="health-row">
+                <span>CSKH</span>
+                <div class="track">
+                  <div
+                    class="fill"
+                    style="width: 96%; background: var(--mint)"
+                  ></div>
+                </div>
+                <b style="color: var(--mint)">96%</b>
+              </div>
+            </section>
             <article class="card insight-card sla-trend">
               <div class="insight-head">
                 <div>
@@ -2201,19 +3278,61 @@
                 <span class="insight-value">94.8% · ↑ 2.4%</span>
               </div>
               <div class="sla-chart">
-                <svg viewBox="0 0 640 118" role="img" aria-label="SLA tăng từ 91,2 phần trăm lúc 8 giờ lên 94,8 phần trăm lúc 14 giờ">
+                <svg
+                  viewBox="0 0 640 118"
+                  role="img"
+                  aria-label="SLA tăng từ 91,2 phần trăm lúc 8 giờ lên 94,8 phần trăm lúc 14 giờ"
+                >
                   <defs>
                     <linearGradient id="slaArea" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stop-color="#356dff" stop-opacity=".22"></stop>
-                      <stop offset="1" stop-color="#356dff" stop-opacity="0"></stop>
+                      <stop
+                        offset="0"
+                        stop-color="#356dff"
+                        stop-opacity=".22"
+                      ></stop>
+                      <stop
+                        offset="1"
+                        stop-color="#356dff"
+                        stop-opacity="0"
+                      ></stop>
                     </linearGradient>
                   </defs>
-                  <line class="chart-grid" x1="8" y1="18" x2="632" y2="18"></line>
-                  <line class="chart-grid" x1="8" y1="58" x2="632" y2="58"></line>
-                  <line class="chart-grid" x1="8" y1="98" x2="632" y2="98"></line>
-                  <line class="chart-target" x1="8" y1="66" x2="632" y2="66"></line>
-                  <path class="chart-area" d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36 L632 106 L8 106 Z"></path>
-                  <path class="chart-line" d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36"></path>
+                  <line
+                    class="chart-grid"
+                    x1="8"
+                    y1="18"
+                    x2="632"
+                    y2="18"
+                  ></line>
+                  <line
+                    class="chart-grid"
+                    x1="8"
+                    y1="58"
+                    x2="632"
+                    y2="58"
+                  ></line>
+                  <line
+                    class="chart-grid"
+                    x1="8"
+                    y1="98"
+                    x2="632"
+                    y2="98"
+                  ></line>
+                  <line
+                    class="chart-target"
+                    x1="8"
+                    y1="66"
+                    x2="632"
+                    y2="66"
+                  ></line>
+                  <path
+                    class="chart-area"
+                    d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36 L632 106 L8 106 Z"
+                  ></path>
+                  <path
+                    class="chart-line"
+                    d="M8 83 L112 75 L216 86 L320 61 L424 51 L528 42 L632 36"
+                  ></path>
                   <circle class="chart-dot" cx="8" cy="83" r="4"></circle>
                   <circle class="chart-dot" cx="112" cy="75" r="4"></circle>
                   <circle class="chart-dot" cx="216" cy="86" r="4"></circle>
@@ -2222,8 +3341,15 @@
                   <circle class="chart-dot" cx="528" cy="42" r="4"></circle>
                   <circle class="chart-dot" cx="632" cy="36" r="4"></circle>
                 </svg>
-                <div class="chart-labels"><span>08:00</span><span>09:00</span><span>10:00</span><span>11:00</span><span>12:00</span><span>13:00</span><span>14:00</span></div>
-                <div class="chart-legend"><span>SLA thực tế</span><span class="target">Mục tiêu 93%</span></div>
+                <div class="chart-labels">
+                  <span>08:00</span><span>09:00</span><span>10:00</span
+                  ><span>11:00</span><span>12:00</span><span>13:00</span
+                  ><span>14:00</span>
+                </div>
+                <div class="chart-legend">
+                  <span>SLA thực tế</span
+                  ><span class="target">Mục tiêu 93%</span>
+                </div>
               </div>
             </article>
             <article class="card insight-card">
@@ -2234,13 +3360,153 @@
                 </div>
               </div>
               <div class="capacity-list">
-                <div class="capacity-row"><span>Tiếp nhận</span><div class="mini-track"><i style="width: 64%; background: var(--mint)"></i></div><small>32/50</small></div>
-                <div class="capacity-row"><span>Thẩm định</span><div class="mini-track"><i style="width: 84%; background: var(--amber)"></i></div><small>42/50</small></div>
-                <div class="capacity-row"><span>Giao nhận</span><div class="mini-track"><i style="width: 92%; background: var(--red)"></i></div><small>23/25</small></div>
-                <div class="capacity-row"><span>CSKH</span><div class="mini-track"><i style="width: 69%; background: var(--blue)"></i></div><small>31/45</small></div>
+                <div class="capacity-row">
+                  <span>Tiếp nhận</span>
+                  <div class="mini-track">
+                    <i style="width: 64%; background: var(--mint)"></i>
+                  </div>
+                  <small>32/50</small>
+                </div>
+                <div class="capacity-row">
+                  <span>Thẩm định</span>
+                  <div class="mini-track">
+                    <i style="width: 84%; background: var(--amber)"></i>
+                  </div>
+                  <small>42/50</small>
+                </div>
+                <div class="capacity-row">
+                  <span>Giao nhận</span>
+                  <div class="mini-track">
+                    <i style="width: 92%; background: var(--red)"></i>
+                  </div>
+                  <small>23/25</small>
+                </div>
+                <div class="capacity-row">
+                  <span>CSKH</span>
+                  <div class="mini-track">
+                    <i style="width: 69%; background: var(--blue)"></i>
+                  </div>
+                  <small>31/45</small>
+                </div>
               </div>
-              <div class="capacity-note">Đối tác giao nhận đang vượt ngưỡng tải khuyến nghị 85%.</div>
+              <div class="capacity-note">
+                Đối tác giao nhận đang vượt ngưỡng tải khuyến nghị 85%.
+              </div>
             </article>
+          </section>
+          <section
+            class="view-pane"
+            id="slaPane"
+            role="tabpanel"
+            aria-labelledby="tabSla"
+          >
+            <section
+              class="card sla-detail"
+              aria-label="SLA chi tiết theo task"
+            >
+              <div class="sla-detail-hd">
+                <div>
+                  <h2>SLA chi tiết theo tiến trình</h2>
+                  <p id="slaDetailSub">
+                    Theo dõi ngưỡng xử lý cho từng task của phiếu đang chọn
+                  </p>
+                  <div class="sla-controls">
+                    <div>
+                      <div class="sla-picker" id="slaPicker">
+                        <button
+                          class="sla-picker-btn"
+                          id="slaPickerBtn"
+                          type="button"
+                          aria-expanded="false"
+                        ></button>
+                        <div class="sla-picker-menu" id="slaPickerMenu"></div>
+                      </div>
+                      <div class="sla-quick" id="slaQuickFilters">
+                        <button
+                          class="chip on"
+                          type="button"
+                          data-sla-filter="all"
+                        >
+                          Tất cả
+                        </button>
+                        <button
+                          class="chip"
+                          type="button"
+                          data-sla-filter="late"
+                        >
+                          Sắp trễ
+                        </button>
+                        <button
+                          class="chip"
+                          type="button"
+                          data-sla-filter="supplement"
+                        >
+                          Cần bổ sung
+                        </button>
+                        <button
+                          class="chip"
+                          type="button"
+                          data-sla-filter="integration"
+                        >
+                          Lỗi tích hợp
+                        </button>
+                      </div>
+                    </div>
+                    <label class="sla-search"
+                      >⌕<input
+                        id="slaCaseSearch"
+                        placeholder="Tìm mã phiếu, tiêu đề, đội xử lý..."
+                    /></label>
+                  </div>
+                </div>
+              </div>
+              <div class="sla-note">
+                SLA được tách theo 2 loại: chờ callback từ hệ thống ngoài và chờ
+                người xử lý thao tác trên UI.
+              </div>
+              <div class="sla-workspace">
+                <div class="sla-table-wrap">
+                  <table class="sla-detail-table">
+                    <thead>
+                      <tr>
+                        <th>Lane</th>
+                        <th>Đội xử lý</th>
+                        <th>Tác vụ</th>
+                        <th>Loại SLA</th>
+                        <th class="sla-num">Ngưỡng</th>
+                        <th class="sla-num">Thực tế</th>
+                        <th>Trạng thái</th>
+                      </tr>
+                    </thead>
+                    <tbody id="slaDetailBody"></tbody>
+                  </table>
+                  <div class="queue-foot sla-foot">
+                    <span id="slaTableCount">Hiển thị 0 / 0 task SLA</span>
+                    <div class="queue-pager">
+                      <button
+                        class="page-btn"
+                        id="slaPagePrev"
+                        type="button"
+                        aria-label="Trang SLA trước"
+                      >
+                        ‹</button
+                      ><span id="slaTableRange">0 / 0</span
+                      ><button
+                        class="page-btn"
+                        id="slaPageNext"
+                        type="button"
+                        aria-label="Trang SLA sau"
+                      >
+                        ›
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <aside class="sla-side empty" id="slaSide">
+                  Chọn một task trong bảng để xem chi tiết SLA.
+                </aside>
+              </div>
+            </section>
           </section>
         </section>
       </main>
@@ -2250,7 +3516,7 @@
       <div class="drawer-hd">
         <div>
           <span class="case-id" id="drawerId"></span>
-          <h2>Thông tin phiếu</h2>
+          <h2 id="drawerTitle">Thông tin phiếu</h2>
           <p id="drawerSubtitle"></p>
         </div>
         <button
@@ -2263,6 +3529,7 @@
       </div>
       <div class="drawer-body" id="drawerBody"></div>
     </aside>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>
       const cases = [
         {
@@ -2533,7 +3800,7 @@
           ? rows
               .map(
                 ({ c, i }) =>
-                  `<tr class="${i === selectedCase ? "selected" : ""}" data-i="${i}"><td><span class="case-id js-record" data-i="${i}">${c.id}</span><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><span class="person-copy"><span class="customer js-record" data-i="${i}">${c.title}</span><span class="sub">${c.type} · Yêu cầu: ${c.requester}</span></span></div></td><td><span class="status ${c.kind}">${c.status}</span></td><td>${c.team}</td><td class="sla ${c.late ? "late" : ""}">${c.sla}</td></tr>`,
+                  `<tr class="${i === selectedCase ? "selected" : ""}" data-i="${i}"><td><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><span class="person-copy"><span class="case-id js-record" data-i="${i}">${c.id}</span><span class="case-title-line"><span class="customer js-record" data-i="${i}">${c.title}</span>${ticketNoticeCount(c) ? `<button class="ticket-notice-inline js-notice" type="button" data-i="${i}">${ticketNoticeCount(c)} thông báo</button>` : ""}</span><span class="sub js-record" data-i="${i}">${c.type} · Yêu cầu: ${c.requester}</span></span></div></td><td><span class="status ${c.kind}">${c.status}</span></td><td>${c.team}</td><td class="sla ${c.late ? "late" : ""}">${c.sla}</td></tr>`,
               )
               .join("")
           : '<tr><td colspan="4" style="padding:28px;text-align:center;color:var(--muted)">Không có phiếu phù hợp bộ lọc.</td></tr>';
@@ -2558,6 +3825,14 @@
               e.stopPropagation();
               selectCase(+el.dataset.i);
               openDrawer();
+            }),
+        );
+        document.querySelectorAll(".js-notice").forEach(
+          (el) =>
+            (el.onclick = (e) => {
+              e.stopPropagation();
+              selectCase(+el.dataset.i);
+              openDrawer("notice");
             }),
         );
       }
@@ -2651,30 +3926,548 @@
           ],
         ],
       ];
+      const SLA_TYPE_LABELS = {
+        async: "Chờ callback",
+        human: "Chờ user xử lý",
+      };
+      const SLA_OWNER_CLASS = {
+        "CEP Web": "info",
+        "Hệ thống": "info",
+        "Rule Engine": "info",
+        "CEP Scoring": "info",
+        "eKYC Engine": "info",
+        "C06 Gateway": "info",
+        "AML Gateway": "info",
+        "CIC Gateway": "info",
+        "Telco Check": "warn",
+        WAY4: "warn",
+        ĐVVC: "warn",
+        "Khách hàng": "warn",
+        "Trúc Vy": "ok",
+        "Thẩm định": "ok",
+        "Chuyên viên": "ok",
+        "Điều phối": "ok",
+      };
+      function taskType(task) {
+        const [name, , owner] = task;
+        if (
+          /WAY4|ĐVVC|Telco|Gateway|Engine|CIC|AML|Scoring|Hệ thống/.test(owner)
+        ) {
+          if (/ĐVVC|WAY4|callback|giao|Xác nhận giao/i.test(`${name} ${owner}`))
+            return "callback";
+          return "api";
+        }
+        if (
+          /Rule|điều kiện|chính sách|danh sách|DTI|Phân loại/i.test(
+            `${name} ${owner}`,
+          )
+        )
+          return "rule";
+        return "human";
+      }
+      const TASK_TYPE_LABELS = {
+        api: "API",
+        callback: "Callback",
+        rule: "Rule",
+        human: "Người xử lý",
+      };
+      function laneResult(flow, stageIndex, c) {
+        const tasks = flow[1],
+          done = tasks.filter((x) => x[1] === "done").length,
+          active = tasks.some((x) => x[1] === "active" || x[1] === "warn"),
+          hasOver = tasks.some(
+            (task, i) => taskSla(task, stageIndex, i, c).over,
+          );
+        if (hasOver) return "Quá hạn SLA";
+        if (!done && !active) return "—";
+        if (active) return "Đang xử lý";
+        return `${done}/${tasks.length} task`;
+      }
+      function apiPayloadFor(task, c) {
+        const [name, , owner] = task;
+        return JSON.stringify(
+          {
+            requestId: `${c.id}-${owner.replace(/\s+/g, "").toUpperCase()}`,
+            task: name,
+            partner: owner,
+            input: { ticketId: c.id, requester: c.requester, type: c.type },
+            output: {
+              status: "UPDATED",
+              updatedFields: ["task_status", "sla_state"],
+            },
+          },
+          null,
+          2,
+        );
+      }
+      function apiPackagesFor(c) {
+        const flows = c.hasCustomer ? CARD_TASKS : GENERIC_TASKS;
+        return flows.flatMap((flow, stageIndex) =>
+          flow[1]
+            .map((task, taskIndex) => ({
+              task,
+              taskIndex,
+              stageIndex,
+              type: taskType(task),
+            }))
+            .filter((x) => x.type === "api" || x.type === "callback")
+            .map(({ task, taskIndex, stageIndex, type }) => {
+              const [name, , owner] = task;
+              return {
+                id: `${c.id}-${stageIndex}-${taskIndex}`,
+                name: `${owner} · ${name}`,
+                task: name,
+                lane: flow[0],
+                type,
+                payload: apiPayloadFor(task, c),
+              };
+            }),
+        );
+      }
+      function openApiPackagesDrawer() {
+        const c = cases[selectedCase],
+          packages = apiPackagesFor(c);
+        document.getElementById("drawerId").textContent = c.id;
+        document.getElementById("drawerTitle").textContent =
+          "Dữ liệu API đối tác";
+        document.getElementById("drawerSubtitle").textContent =
+          `${packages.length} package · payload lấy theo hồ sơ hiện tại`;
+        document.getElementById("drawerBody").innerHTML = packages.length
+          ? packages
+              .map(
+                (pkg) =>
+                  `<article class="api-package"><div class="api-package-hd"><div><b>${pkg.name}</b><span>${pkg.type === "callback" ? "Callback" : "API"} · ${pkg.lane} · Task: ${pkg.task}</span></div><button type="button" data-api-export="${pkg.id}">Xuất JSON</button></div><pre class="api-payload">${pkg.payload.replace(/</g, "&lt;")}</pre></article>`,
+              )
+              .join("")
+          : '<div class="ticket-notification-empty">Phiếu này chưa có package API đối tác.</div>';
+        document.querySelectorAll("[data-api-export]").forEach(
+          (button) =>
+            (button.onclick = () => {
+              const pkg = packages.find(
+                (x) => x.id === button.dataset.apiExport,
+              );
+              if (pkg) exportJson(`${pkg.id}.json`, pkg.payload);
+            }),
+        );
+        document.getElementById("drawerBack").classList.add("open");
+        document.getElementById("ticketDrawer").classList.add("open");
+        document
+          .getElementById("ticketDrawer")
+          .setAttribute("aria-hidden", "false");
+        document.getElementById("drawerClose").focus();
+      }
+      function exportJson(filename, payload) {
+        const blob = new Blob([payload], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+      }
+      function taskSla(task, stageIndex, taskIndex, c) {
+        const [name, state, owner] = task,
+          isAsync =
+            /Gateway|Engine|WAY4|ĐVVC|Telco|CIC|AML|C06|Scoring|Rule|Hệ thống/.test(
+              owner,
+            ),
+          budget = isAsync
+            ? [5, 10, 12, 20, 30][stageIndex]
+            : [30, 45, 60, 90, 120][stageIndex];
+        let ratio =
+          state === "done"
+            ? 0.52 + ((taskIndex + stageIndex) % 3) * 0.12
+            : state === "queued"
+              ? 0
+              : state === "warn"
+                ? 0.88
+                : state === "blocked"
+                  ? 1.18
+                  : 0.78;
+        if (c.late && stageIndex === c.step - 1 && taskIndex < 2)
+          ratio = taskIndex === 0 ? 0.94 : 1.18;
+        if (c.kind === "danger" && stageIndex === c.step - 1)
+          ratio = Math.max(ratio, 1.08);
+        const actual =
+            state === "queued" ? 0 : Math.max(1, Math.round(budget * ratio)),
+          over = actual > budget,
+          near = !over && actual > budget * 0.8,
+          id = `${c.id}:${stageIndex}:${taskIndex}`;
+        return {
+          id,
+          name,
+          state,
+          owner,
+          stage: stageIndex + 1,
+          type: isAsync ? "async" : "human",
+          budget,
+          actual,
+          over,
+          near,
+        };
+      }
+      function slaRowsFor(c) {
+        const flows = c.hasCustomer ? CARD_TASKS : GENERIC_TASKS;
+        return flows.flatMap((flow, stageIndex) =>
+          flow[1].map((task, taskIndex) =>
+            taskSla(task, stageIndex, taskIndex, c),
+          ),
+        );
+      }
+      function filteredSlaRowsFor(c) {
+        const rows = slaRowsFor(c);
+        if (slaCaseFilter === "late")
+          return rows.filter((x) => x.near || x.over);
+        if (slaCaseFilter === "supplement")
+          return rows.filter(
+            (x) =>
+              x.state === "warn" ||
+              x.state === "blocked" ||
+              /bổ sung|kiểm tra|xác minh/i.test(x.name),
+          );
+        if (slaCaseFilter === "integration")
+          return rows.filter(
+            (x) =>
+              x.type === "async" ||
+              /api|gateway|engine|way4|callback|đối tác|tích hợp/i.test(
+                `${x.name} ${x.owner}`,
+              ),
+          );
+        return rows;
+      }
+      function fmtSla(minutes) {
+        if (!minutes) return "—";
+        if (minutes < 60) return `${minutes}′`;
+        const h = Math.floor(minutes / 60),
+          m = minutes % 60;
+        return m ? `${h}g${String(m).padStart(2, "0")}` : `${h}g`;
+      }
+      function slaStateText(row) {
+        if (!row.actual) return ["ok", "Chờ chạy"];
+        if (row.over) return ["bad", "Quá hạn"];
+        if (row.near) return ["near", "Cận hạn"];
+        return ["ok", "Đúng hạn"];
+      }
+      let selectedSlaId = null;
+      let slaCaseFilter = "all";
+      let slaCaseQuery = "";
+      let slaPage = 1;
+      const SLA_PAGE_SIZE = 8;
+      function slaCaseOptions() {
+        return cases.filter((c) => {
+          const q = slaCaseQuery.trim().toLowerCase();
+          if (
+            q &&
+            !`${c.id} ${c.title} ${c.status} ${c.team} ${c.requester} ${c.type}`
+              .toLowerCase()
+              .includes(q)
+          )
+            return false;
+          if (slaCaseFilter === "late") return c.late;
+          if (slaCaseFilter === "supplement")
+            return c.status === "Cần bổ sung" || c.status === "Chờ phản hồi";
+          if (slaCaseFilter === "integration")
+            return c.type.includes("Tích hợp") || c.team.includes("Tích hợp");
+          return true;
+        });
+      }
+      function setSlaPickerOpen(open) {
+        const picker = document.getElementById("slaPicker"),
+          button = document.getElementById("slaPickerBtn");
+        if (!picker || !button) return;
+        picker.classList.toggle("open", open);
+        button.setAttribute("aria-expanded", String(open));
+      }
+      function renderSlaPicker() {
+        const c = cases[selectedCase],
+          options = slaCaseOptions(),
+          button = document.getElementById("slaPickerBtn"),
+          menu = document.getElementById("slaPickerMenu");
+        if (!button || !menu) return;
+        button.innerHTML = `<div><b>${c.id} · ${c.title}</b><span>${c.status} · ${c.team} · SLA ${c.sla}</span></div><span>⌄</span>`;
+        menu.innerHTML = options.length
+          ? options
+              .map(
+                (x) =>
+                  `<button class="sla-picker-option ${x.id === c.id ? "on" : ""}" type="button" data-id="${x.id}"><span><b>${x.id} · ${x.title}</b><span>${x.status} · ${x.team}</span></span><span class="sla ${x.late ? "late" : ""}">${x.sla}</span></button>`,
+              )
+              .join("")
+          : '<div class="sla-picker-empty">Không có phiếu phù hợp.</div>';
+        document.querySelectorAll(".sla-picker-option").forEach(
+          (option) =>
+            (option.onclick = () => {
+              const next = cases.findIndex((x) => x.id === option.dataset.id);
+              if (next >= 0) selectCase(next);
+              setSlaPickerOpen(false);
+              switchView("sla");
+            }),
+        );
+      }
+      function openSlaDrawer(row) {
+        const c = cases[selectedCase],
+          [stateClass, stateText] = slaStateText(row),
+          reason = row.over
+            ? `Task vượt ngưỡng ${fmtSla(row.actual - row.budget)}, cần ưu tiên xử lý trong ca hiện tại.`
+            : row.near
+              ? "Task đã dùng trên 80% ngưỡng SLA, nên theo dõi sát để tránh quá hạn."
+              : row.actual
+                ? "Task đang nằm trong ngưỡng SLA đã cấu hình."
+                : "Task chưa phát sinh thời gian xử lý.";
+        closeDropdowns();
+        document.getElementById("drawerId").textContent = c.id;
+        document.getElementById("drawerTitle").textContent = "Chi tiết SLA";
+        document.getElementById("drawerSubtitle").textContent =
+          `Lane ${row.stage} · ${row.name}`;
+        document.getElementById("drawerBody").innerHTML =
+          `<div class="record-banner"><div><b>${row.name}</b><small>${c.id} · ${c.title}</small></div><span class="sla-state ${stateClass}">${stateText}</span></div><div class="df-fields"><div class="df-field"><label>Phiếu</label><b>${c.id}</b></div><div class="df-field"><label>Lane</label><b>${row.stage}</b></div><div class="df-field"><label>Đội xử lý</label><b>${row.owner}</b></div><div class="df-field"><label>Loại SLA</label><b><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></b></div><div class="df-field"><label>Ngưỡng</label><b>${fmtSla(row.budget)}</b></div><div class="df-field"><label>Thực tế</label><b>${fmtSla(row.actual)}</b></div><div class="df-field" style="grid-column:1/-1"><label>Nhận định</label><b>${reason}</b></div></div><div class="df-save"><small>${row.over ? "Cần xử lý ưu tiên" : row.near ? "Nên theo dõi trong ca hiện tại" : "Đang trong ngưỡng vận hành"}</small><button id="slaOpenStage" type="button">Xem trong tiến trình</button></div>`;
+        document.getElementById("drawerBack").classList.add("open");
+        document.getElementById("ticketDrawer").classList.add("open");
+        document
+          .getElementById("ticketDrawer")
+          .setAttribute("aria-hidden", "false");
+        document.getElementById("drawerClose").focus();
+        document.getElementById("slaOpenStage").onclick = () => {
+          closeDrawer();
+          selectedStage = row.stage - 1;
+          showAllSubtasks = true;
+          renderSubtasks();
+          renderSlaDetail();
+          switchView("overview");
+          document
+            .getElementById("caseDetail")
+            .scrollIntoView({ block: "nearest" });
+        };
+      }
+      function renderSlaDetail() {
+        const c = cases[selectedCase],
+          rows = filteredSlaRowsFor(c),
+          pages = Math.max(1, Math.ceil(rows.length / SLA_PAGE_SIZE)),
+          start = (Math.min(slaPage, pages) - 1) * SLA_PAGE_SIZE,
+          pageRows = rows.slice(start, start + SLA_PAGE_SIZE),
+          over = rows.filter((x) => x.over).length,
+          near = rows.filter((x) => x.near).length,
+          asyncCount = rows.filter((x) => x.type === "async").length,
+          humanCount = rows.length - asyncCount,
+          donePct = rows.length
+            ? Math.round(((rows.length - over) / rows.length) * 100)
+            : 0;
+        slaPage = Math.min(slaPage, pages);
+        renderSlaPicker();
+        document.getElementById("slaDetailSub").textContent =
+          `${c.id} · ${c.title} · ${rows.length} task phù hợp`;
+        if (selectedSlaId && !rows.some((x) => x.id === selectedSlaId))
+          selectedSlaId = null;
+        document.getElementById("slaDetailBody").innerHTML = pageRows.length
+          ? pageRows
+              .map((row) => {
+                const [stateClass, stateText] = slaStateText(row),
+                  ownerClass = SLA_OWNER_CLASS[row.owner] || "info",
+                  isSelected = row.id === selectedSlaId;
+                return `<tr class="${row.over ? "bad" : ""} ${isSelected ? "selected" : ""}" data-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}</td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
+              })
+              .join("")
+          : '<tr><td colspan="7" style="padding:28px;text-align:center;color:var(--muted)">Không có task phù hợp bộ lọc.</td></tr>';
+        document.querySelectorAll("#slaDetailBody tr[data-id]").forEach(
+          (row) =>
+            (row.onclick = () => {
+              selectedSlaId = row.dataset.id;
+              const selected = rows.find((x) => x.id === selectedSlaId);
+              renderSlaDetail();
+              openSlaDrawer(selected);
+            }),
+        );
+        document.getElementById("slaTableCount").textContent =
+          `Hiển thị ${pageRows.length} / ${rows.length} task SLA`;
+        document.getElementById("slaTableRange").textContent = rows.length
+          ? `${start + 1}-${start + pageRows.length} / ${rows.length}`
+          : "0 / 0";
+        document.getElementById("slaPagePrev").disabled = slaPage === 1;
+        document.getElementById("slaPageNext").disabled =
+          slaPage === pages || !rows.length;
+      }
+      let activeView = "overview";
+      function switchView(view) {
+        activeView = view;
+        document.querySelectorAll(".view-tab").forEach((tab) => {
+          const on = tab.dataset.view === view;
+          tab.classList.toggle("on", on);
+          tab.setAttribute("aria-selected", String(on));
+        });
+        document
+          .getElementById("overviewPane")
+          .classList.toggle("on", view === "overview");
+        document
+          .getElementById("slaPane")
+          .classList.toggle("on", view === "sla");
+        if (view === "sla") renderSlaDetail();
+      }
       let selectedCase = 0,
         selectedStage = 0,
-        showAllSubtasks = false;
+        showAllSubtasks = false,
+        openTaskField = null;
+      function taskFieldData(task, stageIndex, taskIndex, c) {
+        const [name, state, owner] = task,
+          isSystem =
+            /Gateway|Engine|WAY4|ĐVVC|Telco|CIC|AML|C06|Scoring|Rule|Hệ thống/.test(
+              owner,
+            ),
+          updateCount = state === "queued" ? 0 : isSystem ? 1 : 2,
+          checkCount = isSystem ? 5 : 2,
+          base = [
+            [
+              "Trạng thái xử lý",
+              state === "done"
+                ? "Hoàn tất"
+                : state === "queued"
+                  ? "Chờ"
+                  : "Đang theo dõi",
+              "update",
+            ],
+            ["Người xử lý", owner, "update"],
+            ["Mã phiếu", c.id, "check"],
+            ["Loại phiếu", c.type, "check"],
+            ["SLA task", `${name} · lane ${stageIndex + 1}`, "check"],
+            ["Khách hàng", c.requester, "check"],
+            ["Kênh tạo", "CEP Web", "check"],
+          ];
+        return {
+          updateCount,
+          checkCount,
+          update: base.filter((x) => x[2] === "update").slice(0, updateCount),
+          check: base.filter((x) => x[2] === "check").slice(0, checkCount),
+        };
+      }
+      function taskFieldRows(rows, mode) {
+        return rows
+          .map(
+            ([label, value]) =>
+              `<div class="df-field"><label>${label}</label><b>${value}</b><span class="status ${mode === "update" ? "info" : "ok"}">${mode === "update" ? "Ghi" : "Đọc"}</span><small style="display:block;margin-top:5px;color:#8b98ad">${mode === "update" ? "OUTPUT của task" : "Field Rule/API đọc"}</small></div>`,
+          )
+          .join("");
+      }
+      function ruleRows(fieldData, type) {
+        const sources = fieldData.check.map(([label]) => label).join(", "),
+          updates =
+            fieldData.update.map(([label]) => label).join(", ") ||
+            "Không ghi field",
+          trigger =
+            type === "api"
+              ? "API trả response hợp lệ"
+              : type === "callback"
+                ? "Callback xác nhận trạng thái mới"
+                : "Rule thỏa điều kiện";
+        return `<table class="rule-table"><thead><tr><th>Bước xử lý</th><th>Điều kiện / Mapping</th><th>Kết quả</th></tr></thead><tbody><tr><td>Đọc dữ liệu</td><td>${sources || "Không có field nguồn"}</td><td><span class="status ok">Sẵn sàng</span></td></tr><tr><td>Điều kiện chạy</td><td>${trigger}</td><td><span class="status ok">Đạt</span></td></tr><tr><td>Mapping update</td><td>${updates}</td><td><span class="status info">Ghi field</span></td></tr></tbody></table>`;
+      }
+      function callbackTimeline(type) {
+        const rows = [
+          "ACCEPTED",
+          "IN_TRANSIT",
+          "OUT_FOR_DELIVERY",
+          "DELIVERED",
+        ];
+        return `<div class="callback-timeline">${rows
+          .map(
+            (x, i) =>
+              `<div class="callback-step ${i > 1 ? "wait" : ""}"><span class="callback-dot">${i > 1 ? "·" : "✓"}</span><b>${x}</b><span>${i > 1 ? "Chờ" : "Đã nhận"}</span></div>`,
+          )
+          .join("")}</div>`;
+      }
+      function openTaskDrawer(taskIndex) {
+        const c = cases[selectedCase],
+          flow = (c.hasCustomer ? CARD_TASKS : GENERIC_TASKS)[selectedStage],
+          task = flow[1][taskIndex],
+          [name, state, owner, time] = task,
+          slaInfo = taskSla(task, selectedStage, taskIndex, c),
+          fieldData = taskFieldData(task, selectedStage, taskIndex, c),
+          type = taskType(task),
+          [stateClass, stateText] = slaStateText(slaInfo);
+        closeDropdowns();
+        document.getElementById("drawerId").textContent = c.id;
+        document.getElementById("drawerTitle").textContent = "Chi tiết task";
+        document.getElementById("drawerSubtitle").textContent =
+          `Lane ${selectedStage + 1} · ${flow[0]} · ${owner}`;
+        document.getElementById("drawerBody").innerHTML =
+          `<div class="record-banner"><div><b>${name}</b><small>${c.title} · ${time}</small></div><span class="status ${state === "warn" ? "warn" : stateClass}">${stateText}</span></div>${type === "api" || type === "callback" ? '<div class="drawer-actions"><button id="apiExportBtn" type="button">Xuất JSON</button></div>' : ""}<nav class="task-tabs"><button class="task-tab on" data-task-tab="overview">Tổng quan</button><button class="task-tab" data-task-tab="input">Field nguồn</button><button class="task-tab" data-task-tab="output">Field update</button><button class="task-tab" data-task-tab="rule">Rule/API</button></nav><section class="task-pane on" id="taskPane-overview"><div class="df-title"><h3>Tổng quan</h3><span>SLA & xử lý</span></div><div class="df-fields"><div class="df-field"><label>Loại task</label><b><span class="task-type ${type}">${TASK_TYPE_LABELS[type]}</span></b></div><div class="df-field"><label>Đội xử lý</label><b>${owner}</b></div><div class="df-field"><label>Trạng thái task</label><b>${state === "queued" ? "Chờ" : state === "done" ? "Hoàn tất" : "Đang theo dõi"}</b></div><div class="df-field"><label>Loại SLA</label><b><span class="sla-type ${slaInfo.type}">${SLA_TYPE_LABELS[slaInfo.type]}</span></b></div><div class="df-field"><label>SLA</label><b>${fmtSla(slaInfo.actual)} / ${fmtSla(slaInfo.budget)}</b></div><div class="df-field"><label>Task context</label><b>Lane ${selectedStage + 1} · ${flow[0]}</b></div></div>${type === "callback" ? `<div class="df-title" style="margin-top:14px"><h3>Callback timeline</h3><span>Webhook</span></div>${callbackTimeline(type)}` : ""}</section><section class="task-pane" id="taskPane-input"><div class="df-title"><h3>Field nguồn</h3><span>${fieldData.checkCount} field</span></div><div class="df-fields">${taskFieldRows(fieldData.check, "check") || '<div class="df-field empty"><label>Không có</label><b>—</b></div>'}</div></section><section class="task-pane" id="taskPane-output"><div class="df-title"><h3>Field update</h3><span>${fieldData.updateCount} field</span></div><div class="df-fields">${taskFieldRows(fieldData.update, "update") || '<div class="df-field empty"><label>Không có</label><b>—</b></div>'}</div></section><section class="task-pane" id="taskPane-rule"><div class="df-title"><h3>Logic xử lý</h3><span>${TASK_TYPE_LABELS[type]}</span></div>${ruleRows(fieldData, type)}${type === "api" || type === "callback" ? `<div class="df-title" style="margin-top:14px"><h3>API Request / Response</h3><span>${owner}</span></div><pre class="api-payload">${apiPayloadFor(task, c).replace(/</g, "&lt;")}</pre>` : ""}</section>`;
+        if (type === "api" || type === "callback")
+          document.getElementById("apiExportBtn").onclick = () =>
+            exportJson(
+              `${c.id}-${name.replace(/\s+/g, "-")}.json`,
+              apiPayloadFor(task, c),
+            );
+        function showTaskPane(name) {
+          document
+            .querySelectorAll(".task-tab")
+            .forEach((x) =>
+              x.classList.toggle("on", x.dataset.taskTab === name),
+            );
+          document
+            .querySelectorAll(".task-pane")
+            .forEach((x) =>
+              x.classList.toggle("on", x.id === `taskPane-${name}`),
+            );
+        }
+        document
+          .querySelectorAll(".task-tab")
+          .forEach((x) => (x.onclick = () => showTaskPane(x.dataset.taskTab)));
+        document.getElementById("drawerBack").classList.add("open");
+        document.getElementById("ticketDrawer").classList.add("open");
+        document
+          .getElementById("ticketDrawer")
+          .setAttribute("aria-hidden", "false");
+        document.getElementById("drawerClose").focus();
+      }
       function renderSubtasks() {
         const c = cases[selectedCase],
           flow = (c.hasCustomer ? CARD_TASKS : GENERIC_TASKS)[selectedStage],
           tasks = flow[1],
           visible = showAllSubtasks ? tasks : tasks.slice(0, 5);
         const icons = {
-          done: "✓",
-          active: "↻",
-          warn: "!",
-          blocked: "×",
-          queued: "·",
+          done: "check",
+          active: "loader-circle",
+          warn: "triangle-alert",
+          blocked: "x",
+          queued: "clock",
         };
         const panel = document.getElementById("subtasks");
         if (!panel) return;
-        panel.innerHTML = `<div class="subtask-head"><b>${flow[0]} · các việc cần theo dõi</b><span>${tasks.length} task</span></div>${visible.map(([name, state, owner, time]) => `<div class="subtask ${state}"><i class="sub-icon">${icons[state]}</i><div><b>${name}</b><small>${owner}</small></div><time>${time}</time></div>`).join("")}${tasks.length > 5 ? `<button class="subtask-toggle" id="subtaskToggle">${showAllSubtasks ? "Thu gọn" : `Xem thêm ${tasks.length - 5} việc`} ${showAllSubtasks ? "↑" : "↓"}</button>` : ""}`;
+        panel.innerHTML = `<div class="subtask-head"><b>${flow[0]} · các việc cần theo dõi</b><span>${tasks.length} task</span></div>${visible
+          .map((task, taskIndex) => {
+            const [name, state, owner, time] = task,
+              slaInfo = taskSla(task, selectedStage, taskIndex, c),
+              slaClass = slaInfo.over
+                ? "sla-over"
+                : slaInfo.near
+                  ? "sla-near"
+                  : "",
+              timeClass = slaInfo.over ? "over" : slaInfo.near ? "near" : "",
+              fieldData = taskFieldData(task, selectedStage, taskIndex, c),
+              type = taskType(task);
+            return `<div class="subtask-wrap"><div class="subtask ${state} ${slaClass}" data-task-index="${taskIndex}"><i class="sub-icon"><i data-lucide="${icons[state]}"></i></i><div><b>${name}</b><small><span class="task-type ${type}">${TASK_TYPE_LABELS[type]}</span> ${owner} · ${SLA_TYPE_LABELS[slaInfo.type]}</small><div class="task-fields"><button class="task-field-chip" type="button" data-task-index="${taskIndex}">${fieldData.checkCount} field nguồn</button><span>·</span><button class="task-field-chip" type="button" data-task-index="${taskIndex}">${fieldData.updateCount} field update</button></div></div><div class="subtask-sla"><time>${time}</time><span class="${timeClass}">${fmtSla(slaInfo.actual)} / ${fmtSla(slaInfo.budget)}</span></div></div></div>`;
+          })
+          .join(
+            "",
+          )}${tasks.length > 5 ? `<button class="subtask-toggle" id="subtaskToggle">${showAllSubtasks ? "Thu gọn" : `Xem thêm ${tasks.length - 5} việc`} ${showAllSubtasks ? "↑" : "↓"}</button>` : ""}`;
+        document
+          .querySelectorAll(".subtask[data-task-index]")
+          .forEach(
+            (row) =>
+              (row.onclick = () => openTaskDrawer(+row.dataset.taskIndex)),
+          );
+        document.querySelectorAll(".task-field-chip").forEach(
+          (button) =>
+            (button.onclick = (e) => {
+              e.stopPropagation();
+              openTaskDrawer(+button.dataset.taskIndex);
+            }),
+        );
         const toggle = document.getElementById("subtaskToggle");
         if (toggle)
           toggle.onclick = () => {
             showAllSubtasks = !showAllSubtasks;
             renderSubtasks();
           };
+        if (window.lucide) lucide.createIcons();
         document
           .querySelectorAll(".step")
           .forEach((x, n) => x.classList.toggle("active", n === selectedStage));
@@ -2683,31 +4476,45 @@
         selectedCase = i;
         selectedStage = Math.min(Math.max(cases[i].step - 1, 0), 4);
         showAllSubtasks = false;
+        openTaskField = null;
+        selectedSlaId = null;
+        slaPage = 1;
         const c = cases[i];
         document
           .querySelectorAll(".queue tbody tr[data-i]")
           .forEach((r) => r.classList.toggle("selected", +r.dataset.i === i));
-        const labels = [
-          "Tiếp nhận",
-          "Phân loại",
-          "Thẩm định",
-          "Phát hành",
-          "Hoàn tất",
-        ];
+        const flows = c.hasCustomer ? CARD_TASKS : GENERIC_TASKS;
         document.getElementById("caseDetail").innerHTML =
-          `<div class="case-identity"><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><div><span class="case-id">${c.id}</span><h2>${c.title}</h2><p>${c.type} · Yêu cầu bởi ${c.requester}</p></div></div><span class="status ${c.kind}">${c.status}</span></div><div class="workflow"><div class="flow-title">Tiến trình xử lý phiếu</div><div class="steps">${labels.map((x, n) => `<div class="step ${n < c.step - 1 ? "done" : ""} ${n === selectedStage ? "active" : ""}" data-stage="${n}"><div class="step-dot">${n < c.step - 1 ? "✓" : n + 1}</div><b>${x}</b><span>${n === c.step - 1 ? "Đang xử lý" : n < c.step - 1 ? "Hoàn tất" : "Chờ"}</span></div>`).join("")}</div></div><div class="subtasks" id="subtasks"></div><section class="result-card ${c.kind}"><div class="result-head"><b>Kết quả hồ sơ</b></div><div class="result-body"><div class="result-title"><i>${c.kind === "ok" ? "✓" : c.kind === "danger" ? "×" : "!"}</i><strong>${c.status}</strong></div><div class="result-row"><label>Lí do</label><span>${c.issue}</span></div><div class="result-row"><label>SLA</label><span class="${c.late ? "sla late" : "sla"}">${c.sla} · ${c.late ? "Cần ưu tiên xử lý" : "Trong ngưỡng"}</span></div></div><div class="result-action"><span>${c.kind === "ok" ? "Phiếu không còn thao tác bắt buộc." : "Hành động tiếp theo"}</span><button>${c.kind === "ok" ? "Xem lịch sử" : c.action} →</button></div></section>`;
+          `<div class="case-identity"><div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><div><span class="case-id">${c.id}</span><h2>${c.title}</h2><p>${c.type} · Yêu cầu bởi ${c.requester}</p></div></div><span class="status ${c.kind}">${c.status}</span></div><div class="workflow"><div class="flow-title">Tiến trình xử lý phiếu</div><div class="steps">${flows
+            .map((flow, n) => {
+              const hasOver = flow[1].some(
+                  (task, i2) => taskSla(task, n, i2, c).over,
+                );
+              return `<div class="step ${n < c.step - 1 ? "done" : ""} ${n === c.step - 1 ? "current" : ""} ${n === selectedStage ? "active" : ""} ${hasOver ? "sla-over" : ""}" data-stage="${n}"><div class="step-dot">${n < c.step - 1 ? "✓" : n + 1}</div><b>${flow[0]}</b><span>${flow[1].length} task · ${n === c.step - 1 ? "Đang xử lý" : n < c.step - 1 ? "Hoàn tất" : "Chờ"}</span><em>${laneResult(flow, n, c)}</em></div>`;
+            })
+            .join(
+              "",
+            )}</div></div><div class="subtasks" id="subtasks"></div><section class="result-card ${c.kind}"><div class="result-head"><b>Kết quả hồ sơ</b></div><div class="result-body"><div class="result-title"><i>${c.kind === "ok" ? "✓" : c.kind === "danger" ? "×" : "!"}</i><strong>${c.status}</strong></div><div class="result-row"><label>Lí do</label><span>${c.issue}</span></div><div class="result-row"><label>SLA</label><span class="${c.late ? "sla late" : "sla"}">${c.sla} · ${c.late ? "Cần ưu tiên xử lý" : "Trong ngưỡng"}</span></div><div class="result-row"><label>Fact</label><span>CIF: ${c.hasCustomer ? "Đã có" : "—"} · C06: ${c.hasCustomer ? "PASS" : "—"} · Phân loại: ${c.late ? "Ưu tiên" : "Chuẩn"}</span></div></div><div class="result-action"><span>${c.kind === "ok" ? "Phiếu không còn thao tác bắt buộc." : "Hành động tiếp theo"}</span><button id="caseActionBtn" type="button">${c.kind === "ok" ? "Xem lịch sử" : c.action}</button></div></section>`;
         document.querySelectorAll(".step").forEach(
           (x) =>
             (x.onclick = () => {
               selectedStage = +x.dataset.stage;
               showAllSubtasks = false;
+              openTaskField = null;
               renderSubtasks();
+              renderSlaDetail();
             }),
         );
+        document.getElementById("caseActionBtn").onclick = () =>
+          openDrawer(c.kind === "ok" ? "notice" : "required");
         renderSubtasks();
+        renderSlaDetail();
       }
       function field(label, value) {
         return `<div class="field"><label>${label}</label><b>${value}</b></div>`;
+      }
+      function ticketNoticeCount(c) {
+        return ticketNotifications(c).filter((x) => x.unread).length;
       }
       const CARD_GROUPS = [
         [
@@ -2819,7 +4626,6 @@
             ["ETA", "—", "empty"],
           ],
         ],
-        ["Thông báo", []],
       ];
       const TICKET_GROUPS = [
         [
@@ -2859,7 +4665,6 @@
             ["Lịch sử xử lý", "03 sự kiện"],
           ],
         ],
-        ["Thông báo", []],
       ];
       const editableLabels = new Set([
         "Kênh tiếp nhận",
@@ -2891,17 +4696,42 @@
         "Nội dung",
       ]);
       const selectOptions = {
-        "Kênh tiếp nhận": ["CEP Web", "Ứng dụng CEP", "Email", "Tổng đài", "Tại quầy"],
+        "Kênh tiếp nhận": [
+          "CEP Web",
+          "Ứng dụng CEP",
+          "Email",
+          "Tổng đài",
+          "Tại quầy",
+        ],
         "Loại thẻ đăng ký": ["Tín dụng", "Ghi nợ"],
-        "Sản phẩm thẻ": ["Mastercard Platinum", "Mastercard Gold", "Visa Platinum", "Visa Classic"],
+        "Sản phẩm thẻ": [
+          "Mastercard Platinum",
+          "Mastercard Gold",
+          "Visa Platinum",
+          "Visa Classic",
+        ],
         "Ngày sao kê": ["Ngày 5", "Ngày 10", "Ngày 15", "Ngày 20", "Ngày 25"],
         "Sở hữu nhà": ["Sở hữu", "Ở cùng gia đình", "Thuê nhà", "Khác"],
-        "Loại công việc": ["NV văn phòng", "Kinh doanh", "Tự doanh", "Công chức", "Khác"],
+        "Loại công việc": [
+          "NV văn phòng",
+          "Kinh doanh",
+          "Tự doanh",
+          "Công chức",
+          "Khác",
+        ],
         "Nhận lương": ["Chuyển khoản", "Tiền mặt"],
         "Phân loại khách": ["Standard", "Priority", "VIP"],
         "Hình thức nhận thẻ": ["Giao tận nhà", "Nhận tại chi nhánh"],
         "Mức ưu tiên": ["Bình thường", "Cao", "Khẩn"],
-        "Người xử lý": ["Trúc Vy", "Minh Khoa", "Anh Thư", "Quốc Huy", "Mỹ Duyên", "Hải Nam"],
+        "Người xử lý": [
+          "Trúc Vy",
+          "Minh Khoa",
+          "Anh Thư",
+          "Quốc Huy",
+          "Mỹ Duyên",
+          "Hải Nam",
+        ],
+        "TT giao nhận": ["Chưa phát hành", "Đang giao", "Giao thành công"],
       };
       let activeGroups = [],
         activeGroup = 0,
@@ -2910,6 +4740,7 @@
         openDropdownTrigger = null,
         openDropdownHome = null;
       const savedFields = {};
+      const readNotifications = new Set();
       function inputFor(label, value) {
         const val = String(value);
         if (selectOptions[label]) {
@@ -2922,17 +4753,21 @@
         const items = [];
         if (c.kind === "warn" || c.kind === "danger")
           items.push({
+            id: `${c.id}:leader`,
             type: "leader",
             icon: "!",
-            title: c.late ? "Cảnh báo SLA gửi đến trưởng nhóm" : "Phiếu cần được theo dõi",
+            title: c.late
+              ? "Cảnh báo SLA gửi đến trưởng nhóm"
+              : "Phiếu cần được theo dõi",
             text: c.late
               ? `Phiếu còn ${c.sla} trước hạn xử lý và đã được đưa vào danh sách ưu tiên.`
               : c.issue,
             time: "09:41",
-            unread: true,
+            unread: !readNotifications.has(`${c.id}:leader`),
           });
         if (c.status === "Cần bổ sung" || c.status === "Chờ phản hồi")
           items.push({
+            id: `${c.id}:customer`,
             type: "customer",
             icon: "✉",
             title: "Đã gửi thông báo đến người yêu cầu",
@@ -2945,6 +4780,7 @@
           });
         if (c.kind === "ok")
           items.push({
+            id: `${c.id}:done`,
             type: "customer",
             icon: "✓",
             title: "Đã gửi kết quả xử lý",
@@ -2954,18 +4790,57 @@
           });
         return items;
       }
-      function renderTicketNotifications(c) {
+      function renderTicketNotifications(c, compact = false) {
         const items = ticketNotifications(c);
-        return `<div class="df-title"><h3>Thông báo</h3><span>${items.length} thông báo</span></div>${
+        return `${compact ? "" : `<div class="df-title"><h3>Thông báo</h3><span>${items.length} thông báo</span></div>`}${
           items.length
             ? `<div class="ticket-notifications">${items
                 .map(
                   (item) =>
-                    `<article class="ticket-notification ${item.type === "leader" ? "leader" : ""} ${item.unread ? "unread" : ""}"><span class="ticket-notification-icon">${item.icon}</span><div><b>${item.title}</b><p>${item.text}</p></div><time>${item.time}</time></article>`,
+                    `<button class="ticket-notification ${item.type === "leader" ? "leader" : ""} ${item.unread ? "unread" : "read"}" type="button" data-notice-id="${item.id}"><span class="ticket-notification-icon">${item.icon}</span><div><b>${item.title}</b><p>${item.text}</p></div><time>${item.time}</time></button>`,
                 )
                 .join("")}</div>`
             : '<div class="ticket-notification-empty"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h14"></path><path d="M10 21h4"></path><path d="m3 3 18 18"></path></svg>Chưa có thông báo cho phiếu này</div>'
         }`;
+      }
+      function bindTicketNotifications(c) {
+        document.querySelectorAll("[data-notice-id]").forEach(
+          (item) =>
+            (item.onclick = () => {
+              readNotifications.add(item.dataset.noticeId);
+              const pane = document.getElementById("drawerPane-notice");
+              if (pane) pane.innerHTML = renderTicketNotifications(c);
+              const count = ticketNoticeCount(c),
+                badge = document.querySelector(".drawer-tab-count");
+              if (badge) {
+                if (count) badge.textContent = count;
+                else badge.remove();
+              }
+              renderQueue();
+              bindTicketNotifications(c);
+            }),
+        );
+      }
+      function renderNoticeStrip(c) {
+        const items = ticketNotifications(c),
+          leaders = items.filter((x) => x.type === "leader").length,
+          customers = items.filter((x) => x.type === "customer").length;
+        return `<div class="ticket-notice-strip" id="ticketNoticeStrip"><button class="ticket-notice-toggle" id="ticketNoticeToggle" type="button"><span>Thông báo gửi đi</span><span class="ticket-notice-count">${items.length} thông báo · KH ${customers} · Leader ${leaders}</span></button><div class="ticket-notice-body">${renderTicketNotifications(c, true)}</div></div>`;
+      }
+      function renderDrawerSla(c) {
+        const rows = slaRowsFor(c),
+          over = rows.filter((x) => x.over).length,
+          near = rows.filter((x) => x.near).length,
+          current = rows.filter((x) => x.stage === c.step),
+          priority = [...rows]
+            .sort((a, b) => Number(b.over) - Number(a.over) || Number(b.near) - Number(a.near) || b.actual - a.actual)
+            .slice(0, 6);
+        return `<div class="df-title"><h3>SLA của phiếu</h3><span>${rows.length} task SLA</span></div><div class="drawer-sla-grid"><div class="drawer-sla-card"><span>SLA phiếu</span><b class="${c.late ? "sla late" : "sla"}">${c.sla}</b></div><div class="drawer-sla-card"><span>Step hiện tại</span><b>${c.step}/5</b></div><div class="drawer-sla-card"><span>Quá hạn</span><b>${over}</b></div><div class="drawer-sla-card"><span>Cận hạn</span><b>${near}</b></div></div><table class="drawer-sla-table"><thead><tr><th>Lane</th><th>Task ưu tiên</th><th>Thực tế</th><th>Trạng thái</th></tr></thead><tbody>${priority
+          .map((row) => {
+            const [stateClass, stateText] = slaStateText(row);
+            return `<tr><td>${row.stage}</td><td>${row.name}</td><td>${fmtSla(row.actual)} / ${fmtSla(row.budget)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
+          })
+          .join("")}</tbody></table><div class="df-save"><small>${current.length} task ở step đang xử lý</small><button id="drawerOpenSlaDetail" type="button">Xem SLA chi tiết</button></div>`;
       }
       function renderDfGroup(groups, index) {
         closeDropdowns();
@@ -2989,7 +4864,8 @@
                 (typeof value === "function"
                   ? value(cases[selectedCase])
                   : value);
-              return `<div class="df-field ${state || ""}"><label>${label}</label>${editableLabels.has(label) ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
+              const needsInput = state === "empty" || v === "—";
+              return `<div class="df-field ${state || ""}"><label>${label}</label>${editableLabels.has(label) || needsInput ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
             })
             .join(
               "",
@@ -3046,15 +4922,57 @@
           renderDfGroup(activeGroups, activeGroup);
         }, 650);
       }
-      function openDrawer() {
+      function requiredGroups(groups) {
+        const items = groups.flatMap(([groupName, fields]) =>
+          fields
+            .filter(
+              ([, value, state]) =>
+                state === "empty" ||
+                state === "warn" ||
+                state === "danger" ||
+                value === "—",
+            )
+            .map(([label, value, state]) => [label, value, state, groupName]),
+        );
+        return items.length ? [["Field cần nhập / xem", items], ...groups] : groups;
+      }
+      function openDrawer(initial = "info") {
         draft = {};
         const c = cases[selectedCase],
-          groups = c.hasCustomer ? CARD_GROUPS : TICKET_GROUPS;
+          baseGroups = c.hasCustomer ? CARD_GROUPS : TICKET_GROUPS,
+          groups = requiredGroups(baseGroups),
+          openNotice = initial === "notice",
+          openSla = initial === "sla",
+          noticeCount = ticketNoticeCount(c);
         document.getElementById("drawerId").textContent = c.id;
+        document.getElementById("drawerTitle").textContent = c.title;
         document.getElementById("drawerSubtitle").textContent =
-          `${c.title} · ${c.status}`;
+          `${c.type} · ${c.status}`;
         document.getElementById("drawerBody").innerHTML =
-          `<div class="record-banner"><div><b>${c.title}</b><small>${c.type} · Yêu cầu bởi ${c.requester}</small></div><span class="status ${c.kind}">${c.status}</span></div><div class="df-workspace"><nav class="df-rail">${groups.map((g, i) => `<button class="df-tab ${i === 0 ? "on" : ""}" data-g="${i}"><span class="df-num">${i + 1}</span>${g[0]}</button>`).join("")}</nav><section class="df-content" id="dfDetail"></section></div>`;
+          `<nav class="drawer-tabs"><button class="drawer-tab ${!openNotice && !openSla ? "on" : ""}" type="button" data-drawer-tab="info">Thông tin phiếu</button><button class="drawer-tab ${openSla ? "on" : ""}" type="button" data-drawer-tab="sla">SLA</button><button class="drawer-tab ${openNotice ? "on" : ""}" type="button" data-drawer-tab="notice">Thông báo${noticeCount ? `<span class="drawer-tab-count">${noticeCount}</span>` : ""}</button></nav><section class="drawer-pane ${!openNotice && !openSla ? "on" : ""}" id="drawerPane-info"><div class="record-banner"><div><b>${c.title}</b><small>${c.type} · Yêu cầu bởi ${c.requester}</small></div><span class="status ${c.kind}">${c.status}</span></div><div class="df-workspace"><nav class="df-rail">${groups.map((g, i) => `<button class="df-tab ${i === 0 ? "on" : ""}" data-g="${i}">${g[0]}</button>`).join("")}</nav><section class="df-content" id="dfDetail"></section></div></section><section class="drawer-pane ${openSla ? "on" : ""}" id="drawerPane-sla">${renderDrawerSla(c)}</section><section class="drawer-pane ${openNotice ? "on" : ""}" id="drawerPane-notice">${renderTicketNotifications(c)}</section>`;
+        document.querySelectorAll(".drawer-tab").forEach(
+          (tab) =>
+            (tab.onclick = () => {
+              const name = tab.dataset.drawerTab;
+              document
+                .querySelectorAll(".drawer-tab")
+                .forEach((x) => x.classList.toggle("on", x === tab));
+              document
+                .querySelectorAll(".drawer-pane")
+                .forEach((x) =>
+                  x.classList.toggle("on", x.id === `drawerPane-${name}`),
+                );
+            }),
+        );
+        bindTicketNotifications(c);
+        const drawerOpenSlaDetail = document.getElementById("drawerOpenSlaDetail");
+        if (drawerOpenSlaDetail)
+          drawerOpenSlaDetail.onclick = () => {
+            closeDrawer();
+            selectedSlaId = null;
+            slaPage = 1;
+            switchView("sla");
+          };
         document
           .querySelectorAll(".df-tab")
           .forEach(
@@ -3067,16 +4985,15 @@
           .getElementById("ticketDrawer")
           .setAttribute("aria-hidden", "false");
         document.getElementById("drawerClose").focus();
+        if (initial === "required") {
+          const firstInput = document.querySelector("#dfDetail .df-input");
+          if (firstInput) firstInput.focus();
+        }
       }
       function openDropdown(trigger, menu) {
-        const rect = trigger.getBoundingClientRect();
         openDropdownMenu = menu;
         openDropdownTrigger = trigger;
         openDropdownHome = trigger.parentElement;
-        document.body.appendChild(menu);
-        menu.style.left = `${rect.left}px`;
-        menu.style.top = `${rect.bottom + 4}px`;
-        menu.style.width = `${rect.width}px`;
         menu.classList.add("open");
         trigger.classList.add("open");
         trigger.setAttribute("aria-expanded", "true");
@@ -3084,9 +5001,6 @@
       function closeDropdowns() {
         if (!openDropdownMenu) return;
         openDropdownMenu.classList.remove("open");
-        openDropdownMenu.removeAttribute("style");
-        if (openDropdownHome?.isConnected)
-          openDropdownHome.appendChild(openDropdownMenu);
         openDropdownTrigger?.classList.remove("open");
         openDropdownTrigger?.setAttribute("aria-expanded", "false");
         openDropdownMenu = null;
@@ -3136,6 +5050,7 @@
           closeDropdowns();
         if (!e.target.closest(".notification-wrap")) closeNotifications();
         if (!e.target.closest(".user-wrap")) closeUserMenu();
+        if (!e.target.closest(".sla-picker")) setSlaPickerOpen(false);
       });
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
@@ -3160,18 +5075,68 @@
         .getElementById("drawerBody")
         .addEventListener("scroll", closeDropdowns);
       window.addEventListener("resize", closeDropdowns);
+      document
+        .querySelectorAll(".view-tab")
+        .forEach((tab) => (tab.onclick = () => switchView(tab.dataset.view)));
+      document.getElementById("slaPickerBtn").onclick = (e) => {
+        e.stopPropagation();
+        const picker = document.getElementById("slaPicker");
+        setSlaPickerOpen(!picker.classList.contains("open"));
+      };
+      document.querySelectorAll("#slaQuickFilters .chip").forEach(
+        (chip) =>
+          (chip.onclick = () => {
+            slaCaseFilter = chip.dataset.slaFilter;
+            slaPage = 1;
+            document
+              .querySelectorAll("#slaQuickFilters .chip")
+              .forEach((x) => x.classList.remove("on"));
+            chip.classList.add("on");
+            const options = slaCaseOptions();
+            if (
+              options.length &&
+              !options.some((x) => x.id === cases[selectedCase].id)
+            ) {
+              selectCase(cases.findIndex((x) => x.id === options[0].id));
+            } else renderSlaDetail();
+          }),
+      );
+      document.getElementById("slaCaseSearch").oninput = (e) => {
+        slaCaseQuery = e.target.value;
+        slaPage = 1;
+        const options = slaCaseOptions();
+        if (
+          options.length &&
+          !options.some((x) => x.id === cases[selectedCase].id)
+        ) {
+          selectCase(cases.findIndex((x) => x.id === options[0].id));
+          switchView("sla");
+        } else renderSlaDetail();
+      };
+      document.getElementById("slaPagePrev").onclick = () => {
+        if (slaPage > 1) {
+          slaPage--;
+          renderSlaDetail();
+        }
+      };
+      document.getElementById("slaPageNext").onclick = () => {
+        if (slaPage * SLA_PAGE_SIZE < filteredSlaRowsFor(cases[selectedCase]).length) {
+          slaPage++;
+          renderSlaDetail();
+        }
+      };
       document.getElementById("queueSearch").oninput = (e) => {
         queueQuery = e.target.value;
         queuePage = 1;
         renderQueue();
       };
-      document.querySelectorAll(".chip").forEach(
+      document.querySelectorAll(".filters .chip").forEach(
         (x) =>
           (x.onclick = () => {
             queueFilter = x.dataset.filter;
             queuePage = 1;
             document
-              .querySelectorAll(".chip")
+              .querySelectorAll(".filters .chip")
               .forEach((y) => y.classList.remove("on"));
             x.classList.add("on");
             renderQueue();
@@ -3191,6 +5156,7 @@
       };
       renderQueue();
       selectCase(0);
+      if (window.lucide) lucide.createIcons();
     </script>
   </body>
 </html>
