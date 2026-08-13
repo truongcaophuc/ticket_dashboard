@@ -5649,9 +5649,9 @@
         document.querySelectorAll("[data-v2-sla-id]").forEach(
           (row) =>
             (row.onclick = () => {
-              const selected = rows.find((x) => x.id === row.dataset.v2SlaId);
-              selectedCase = v2Selected;
-              openSlaDrawer(selected);
+              document
+                .querySelectorAll("[data-v2-sla-id]")
+                .forEach((x) => x.classList.toggle("selected", x === row));
             }),
         );
         document.getElementById("v2SlaPagePrev").disabled = v2SlaPage === 1;
@@ -5754,16 +5754,15 @@
         document.querySelectorAll("[data-v2-task-index]").forEach(
           (x) =>
             (x.onclick = () => {
-              selectedCase = v2Selected;
-              selectedStage = v2Stage;
-              openTaskDrawer(+x.dataset.v2TaskIndex);
+              document
+                .querySelectorAll("[data-v2-task-index]")
+                .forEach((y) => y.classList.toggle("selected", y === x));
             }),
         );
         const action = document.getElementById("v2CaseActionBtn");
         if (action)
           action.onclick = () => {
-            selectedCase = v2Selected;
-            openDrawer(c.kind === "ok" ? "notice" : "required");
+            showV2InfoTab(c.kind === "ok" ? "notice" : "info", c);
           };
         if (window.lucide) lucide.createIcons();
       }
