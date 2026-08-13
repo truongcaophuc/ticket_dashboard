@@ -595,13 +595,18 @@
         justify-content: space-between;
         align-items: center;
         gap: 16px;
-        padding: 18px 20px 14px;
+        padding: 10px 20px 14px;
       }
       .v2-table-toolbar h1 {
         margin: 0;
         color: #17233b;
         font-size: 20px;
         line-height: 1.2;
+      }
+      .v2-table-toolbar p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 12px;
       }
       .v2-table-body {
         overflow: hidden;
@@ -684,6 +689,7 @@
       .v2-search {
         width: min(380px, 42vw);
         min-height: 36px;
+        margin-left: auto;
         border-radius: 9px;
         background: #fff;
       }
@@ -758,6 +764,9 @@
         margin: 0;
         padding: 0 0 14px;
       }
+      .v2-page-tabs {
+        margin-bottom: 17px;
+      }
       .drawer-tab .lucide {
         width: 14px;
         height: 14px;
@@ -771,14 +780,35 @@
       }
       #v2SlaDetailPane {
         display: none;
+        padding: 20px;
       }
       #v2SlaDetailPane.on {
         display: block;
       }
+      .v2-sla-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 16px;
+        margin-bottom: 14px;
+      }
+      .v2-sla-head h2 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .v2-sla-head p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      #v2SlaDetailPane > .sla-controls {
+        padding: 0;
+        margin-bottom: 12px;
+      }
       #v2SlaDetailPane .sla-table-wrap {
         max-height: min(620px, calc(100vh - 330px));
         overflow: auto;
-        padding: 0 20px 20px;
+        padding: 0;
       }
       #v2Info {
         flex: 1;
@@ -2136,6 +2166,28 @@
         gap: 6px;
         margin-top: 10px;
       }
+      .sla-mode {
+        display: inline-flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #eef3fb;
+      }
+      .sla-mode button {
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #66748e;
+        padding: 7px 11px;
+        font: 800 11px inherit;
+        cursor: pointer;
+      }
+      .sla-mode button.on {
+        background: #fff;
+        color: var(--blue);
+        box-shadow: 0 1px 3px rgba(23, 35, 59, 0.08);
+      }
       .sla-quick .chip {
         padding: 5px 8px;
       }
@@ -2252,10 +2304,11 @@
       }
       .sla-detail-table th:nth-child(1),
       .sla-detail-table th:nth-child(2),
+      .sla-detail-table th:nth-child(3),
       .sla-detail-table th:nth-child(4),
       .sla-detail-table th:nth-child(5),
       .sla-detail-table th:nth-child(6),
-      .sla-detail-table th:nth-child(7) {
+      .sla-detail-table th:nth-child(8) {
         text-align: center;
       }
       .sla-detail-table td {
@@ -2266,10 +2319,11 @@
       }
       .sla-detail-table td:nth-child(1),
       .sla-detail-table td:nth-child(2),
+      .sla-detail-table td:nth-child(3),
       .sla-detail-table td:nth-child(4),
       .sla-detail-table td:nth-child(5),
       .sla-detail-table td:nth-child(6),
-      .sla-detail-table td:nth-child(7) {
+      .sla-detail-table td:nth-child(8) {
         text-align: center;
       }
       .sla-detail-table tbody tr {
@@ -2288,6 +2342,22 @@
       }
       .sla-detail-table tr:last-child td {
         border-bottom: 0;
+      }
+      .sla-case-row {
+        background: #f8faff;
+        cursor: default !important;
+      }
+      .sla-case-row td {
+        text-align: left !important;
+      }
+      .sla-case-row b {
+        display: block;
+        font-size: 12px;
+      }
+      .sla-case-row small {
+        display: block;
+        margin-top: 3px;
+        color: var(--muted);
       }
       .sla-lane {
         font:
@@ -3518,7 +3588,7 @@
               aria-controls="slaPane"
               data-view="sla"
             >
-              <i data-lucide="timer"></i>SLA chi tiết
+              <i data-lucide="timer"></i>SLA
             </button>
           </div>
           <section
@@ -3766,20 +3836,19 @@
             >
               <div class="sla-detail-hd">
                 <div>
-                  <h2>SLA chi tiết theo tiến trình</h2>
+                  <h2>Giám sát SLA</h2>
                   <p id="slaDetailSub">
-                    Theo dõi ngưỡng xử lý cho từng task của phiếu đang chọn
+                    Theo dõi task quá hạn, cận hạn và tiến độ SLA theo phiếu
                   </p>
                   <div class="sla-controls">
                     <div>
-                      <div class="sla-picker" id="slaPicker">
-                        <button
-                          class="sla-picker-btn"
-                          id="slaPickerBtn"
-                          type="button"
-                          aria-expanded="false"
-                        ></button>
-                        <div class="sla-picker-menu" id="slaPickerMenu"></div>
+                      <div class="sla-mode" id="slaMode">
+                        <button class="on" type="button" data-sla-mode="priority">
+                          Ưu tiên xử lý
+                        </button>
+                        <button type="button" data-sla-mode="case">
+                          Theo phiếu
+                        </button>
                       </div>
                       <div class="sla-quick" id="slaQuickFilters">
                         <button
@@ -3820,16 +3889,13 @@
                   </div>
                 </div>
               </div>
-              <div class="sla-note">
-                SLA được tách theo 2 loại: chờ callback từ hệ thống ngoài và chờ
-                người xử lý thao tác trên UI.
-              </div>
               <div class="sla-workspace">
                 <div class="sla-table-wrap">
                   <table class="sla-detail-table">
                     <thead>
                       <tr>
                         <th>Lane</th>
+                        <th>Mã phiếu</th>
                         <th>Đội xử lý</th>
                         <th>Tác vụ</th>
                         <th>Loại SLA</th>
@@ -3871,24 +3937,28 @@
           </div>
           <div class="ui-shell" id="uiV2">
             <section class="v2-list-page" id="v2ListPage">
+              <nav class="view-tabs v2-page-tabs">
+                <button
+                  class="view-tab on"
+                  type="button"
+                  data-v2-list-tab="list"
+                >
+                  <i data-lucide="list"></i>Danh sách phiếu
+                </button>
+                <button
+                  class="view-tab"
+                  type="button"
+                  data-v2-list-tab="slaDetail"
+                >
+                  <i data-lucide="timer"></i>SLA
+                </button>
+              </nav>
               <section class="card v2-table-card">
                 <div class="v2-table-toolbar">
-                  <nav class="drawer-tabs v2-large-tabs">
-                    <button
-                      class="drawer-tab on"
-                      type="button"
-                      data-v2-list-tab="list"
-                    >
-                      <i data-lucide="list"></i>Danh sách phiếu
-                    </button>
-                    <button
-                      class="drawer-tab"
-                      type="button"
-                      data-v2-list-tab="slaDetail"
-                    >
-                      <i data-lucide="timer"></i>SLA chi tiết
-                    </button>
-                  </nav>
+                  <div>
+                    <h1>Danh sách phiếu</h1>
+                    <p>Theo dõi phiếu đang xử lý và trạng thái SLA hiện tại</p>
+                  </div>
                   <label class="queue-search v2-search"
                     >⌕<input
                       id="v2Search"
@@ -4594,26 +4664,87 @@
           ),
         );
       }
-      function filteredSlaRowsFor(c) {
-        const rows = slaRowsFor(c);
+      function allSlaRows() {
+        return cases.flatMap((c, caseIndex) =>
+          slaRowsFor(c).map((row) => ({ ...row, case: c, caseIndex })),
+        );
+      }
+      function slaRowMatchesFilter(row) {
         if (slaCaseFilter === "late")
-          return rows.filter((x) => x.near || x.over);
+          return row.near || row.over;
         if (slaCaseFilter === "supplement")
-          return rows.filter(
-            (x) =>
-              x.state === "warn" ||
-              x.state === "blocked" ||
-              /bổ sung|kiểm tra|xác minh/i.test(x.name),
+          return (
+            row.state === "warn" ||
+            row.state === "blocked" ||
+            /bổ sung|kiểm tra|xác minh/i.test(row.name)
           );
         if (slaCaseFilter === "integration")
-          return rows.filter(
-            (x) =>
-              x.type === "async" ||
-              /api|gateway|engine|way4|callback|đối tác|tích hợp/i.test(
-                `${x.name} ${x.owner}`,
-              ),
+          return (
+            row.type === "async" ||
+            /api|gateway|engine|way4|callback|đối tác|tích hợp/i.test(
+              `${row.name} ${row.owner}`,
+            )
           );
-        return rows;
+        return true;
+      }
+      function caseMatchesSlaQuery(c) {
+        const q = slaCaseQuery.trim().toLowerCase();
+        return (
+          !q ||
+          `${c.id} ${c.title} ${c.status} ${c.team} ${c.requester} ${c.type}`
+            .toLowerCase()
+            .includes(q)
+        );
+      }
+      function filteredSlaRowsFor() {
+        const q = slaCaseQuery.trim().toLowerCase();
+        return allSlaRows().filter((row) => {
+          const matchQuery =
+            !q ||
+            `${row.case.id} ${row.case.title} ${row.case.status} ${row.case.team} ${row.case.requester} ${row.case.type} ${row.name} ${row.owner}`
+              .toLowerCase()
+              .includes(q);
+          return matchQuery && slaRowMatchesFilter(row);
+        });
+      }
+      function slaPriority(row) {
+        return (
+          (row.over ? 5000 : 0) +
+          (row.near ? 3000 : 0) +
+          (row.state === "blocked" ? 900 : 0) +
+          (row.state === "warn" ? 700 : 0) +
+          (row.state === "active" ? 500 : 0) +
+          (row.case?.late ? 250 : 0) +
+          row.actual
+        );
+      }
+      function sortSlaRows(rows) {
+        return [...rows].sort(
+          (a, b) =>
+            slaPriority(b) - slaPriority(a) ||
+            a.case.id.localeCompare(b.case.id) ||
+            a.stage - b.stage,
+        );
+      }
+      function slaCaseGroups(rows) {
+        return cases
+          .map((c) => ({
+            case: c,
+            rows: rows.filter((row) => row.case.id === c.id),
+          }))
+          .filter((group) => group.rows.length && caseMatchesSlaQuery(group.case))
+          .sort((a, b) => {
+            const aOver = a.rows.filter((x) => x.over).length,
+              bOver = b.rows.filter((x) => x.over).length,
+              aNear = a.rows.filter((x) => x.near).length,
+              bNear = b.rows.filter((x) => x.near).length;
+            return (
+              bOver - aOver ||
+              bNear - aNear ||
+              Number(b.case.late) - Number(a.case.late) ||
+              a.case.id.localeCompare(b.case.id)
+            );
+          });
       }
       function fmtSla(minutes) {
         if (!minutes) return "—";
@@ -4631,8 +4762,10 @@
       let selectedSlaId = null;
       let slaCaseFilter = "all";
       let slaCaseQuery = "";
+      let slaMode = "priority";
       let slaPage = 1;
       const SLA_PAGE_SIZE = 8;
+      const SLA_CASE_PAGE_SIZE = 1;
       function slaCaseOptions() {
         return cases.filter((c) => {
           const q = slaCaseQuery.trim().toLowerCase();
@@ -4658,33 +4791,9 @@
         picker.classList.toggle("open", open);
         button.setAttribute("aria-expanded", String(open));
       }
-      function renderSlaPicker() {
-        const c = cases[selectedCase],
-          options = slaCaseOptions(),
-          button = document.getElementById("slaPickerBtn"),
-          menu = document.getElementById("slaPickerMenu");
-        if (!button || !menu) return;
-        button.innerHTML = `<div><b>${c.id} · ${c.title}</b><span>${c.status} · ${c.team} · SLA ${c.sla}</span></div><span>⌄</span>`;
-        menu.innerHTML = options.length
-          ? options
-              .map(
-                (x) =>
-                  `<button class="sla-picker-option ${x.id === c.id ? "on" : ""}" type="button" data-id="${x.id}"><span><b>${x.id} · ${x.title}</b><span>${x.status} · ${x.team}</span></span><span class="sla ${x.late ? "late" : ""}">${x.sla}</span></button>`,
-              )
-              .join("")
-          : '<div class="sla-picker-empty">Không có phiếu phù hợp.</div>';
-        document.querySelectorAll(".sla-picker-option").forEach(
-          (option) =>
-            (option.onclick = () => {
-              const next = cases.findIndex((x) => x.id === option.dataset.id);
-              if (next >= 0) selectCase(next);
-              setSlaPickerOpen(false);
-              switchView("sla");
-            }),
-        );
-      }
+      function renderSlaPicker() {}
       function openSlaDrawer(row) {
-        const c = cases[selectedCase],
+        const c = row.case || cases[selectedCase],
           [stateClass, stateText] = slaStateText(row),
           reason = row.over
             ? `Task vượt ngưỡng ${fmtSla(row.actual - row.budget)}, cần ưu tiên xử lý trong ca hiện tại.`
@@ -4708,6 +4817,7 @@
         document.getElementById("drawerClose").focus();
         document.getElementById("slaOpenStage").onclick = () => {
           closeDrawer();
+          selectedCase = row.caseIndex ?? selectedCase;
           selectedStage = row.stage - 1;
           showAllSubtasks = true;
           renderSubtasks();
@@ -4719,51 +4829,83 @@
         };
       }
       function renderSlaDetail() {
-        const c = cases[selectedCase],
-          rows = filteredSlaRowsFor(c),
-          pages = Math.max(1, Math.ceil(rows.length / SLA_PAGE_SIZE)),
-          start = (Math.min(slaPage, pages) - 1) * SLA_PAGE_SIZE,
-          pageRows = rows.slice(start, start + SLA_PAGE_SIZE),
-          over = rows.filter((x) => x.over).length,
-          near = rows.filter((x) => x.near).length,
-          asyncCount = rows.filter((x) => x.type === "async").length,
-          humanCount = rows.length - asyncCount,
-          donePct = rows.length
-            ? Math.round(((rows.length - over) / rows.length) * 100)
+        const filteredRows = filteredSlaRowsFor(),
+          rows = sortSlaRows(filteredRows),
+          caseGroups = slaCaseGroups(filteredRows),
+          casePages = Math.max(
+            1,
+            Math.ceil(caseGroups.length / SLA_CASE_PAGE_SIZE),
+          ),
+          taskPages = Math.max(1, Math.ceil(rows.length / SLA_PAGE_SIZE)),
+          pages = slaMode === "case" ? casePages : taskPages,
+          start =
+            (Math.min(slaPage, pages) - 1) *
+            (slaMode === "case" ? SLA_CASE_PAGE_SIZE : SLA_PAGE_SIZE),
+          pageGroups =
+            slaMode === "case"
+              ? caseGroups.slice(start, start + SLA_CASE_PAGE_SIZE)
+              : [],
+          pageRows =
+            slaMode === "case"
+              ? pageGroups.flatMap((group) => [
+                  { group: true, case: group.case, rows: group.rows },
+                  ...sortSlaRows(group.rows),
+                ])
+              : rows.slice(start, start + SLA_PAGE_SIZE),
+          over = filteredRows.filter((x) => x.over).length,
+          near = filteredRows.filter((x) => x.near).length,
+          asyncCount = filteredRows.filter((x) => x.type === "async").length,
+          humanCount = filteredRows.length - asyncCount,
+          donePct = filteredRows.length
+            ? Math.round(((filteredRows.length - over) / filteredRows.length) * 100)
             : 0;
         slaPage = Math.min(slaPage, pages);
-        renderSlaPicker();
         document.getElementById("slaDetailSub").textContent =
-          `${c.id} · ${c.title} · ${rows.length} task phù hợp`;
-        if (selectedSlaId && !rows.some((x) => x.id === selectedSlaId))
+          slaMode === "priority"
+            ? `${filteredRows.length} task phù hợp · ưu tiên xử lý theo mức khẩn cấp`
+            : `${caseGroups.length} phiếu phù hợp · hiển thị tối đa ${SLA_CASE_PAGE_SIZE} phiếu mỗi trang`;
+        if (selectedSlaId && !filteredRows.some((x) => x.id === selectedSlaId))
           selectedSlaId = null;
         document.getElementById("slaDetailBody").innerHTML = pageRows.length
           ? pageRows
               .map((row) => {
+                if (row.group) {
+                  const groupOver = row.rows.filter((x) => x.over).length,
+                    groupNear = row.rows.filter((x) => x.near).length;
+                  return `<tr class="sla-case-row"><td colspan="8"><b>${row.case.id} · ${row.case.title}</b><small>${row.case.status} · ${row.case.team} · SLA ${row.case.sla} · ${groupOver} quá hạn · ${groupNear} cận hạn · ${row.rows.length} task</small></td></tr>`;
+                }
                 const [stateClass, stateText] = slaStateText(row),
                   ownerClass = SLA_OWNER_CLASS[row.owner] || "info",
                   isSelected = row.id === selectedSlaId;
-                return `<tr class="${row.over ? "bad" : ""} ${isSelected ? "selected" : ""}" data-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}</td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
+                return `<tr class="${row.over ? "bad" : ""} ${isSelected ? "selected" : ""}" data-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="case-id">${row.case.id}</span></td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}<small style="display:block;margin-top:3px;color:var(--muted)">${row.case.title}</small></td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
               })
               .join("")
-          : '<tr><td colspan="7" style="padding:28px;text-align:center;color:var(--muted)">Không có task phù hợp bộ lọc.</td></tr>';
+          : '<tr><td colspan="8" style="padding:28px;text-align:center;color:var(--muted)">Không có task phù hợp bộ lọc.</td></tr>';
         document.querySelectorAll("#slaDetailBody tr[data-id]").forEach(
           (row) =>
             (row.onclick = () => {
               selectedSlaId = row.dataset.id;
-              const selected = rows.find((x) => x.id === selectedSlaId);
+              const selected = filteredRows.find((x) => x.id === selectedSlaId);
               renderSlaDetail();
               openSlaDrawer(selected);
             }),
         );
         document.getElementById("slaTableCount").textContent =
-          `Hiển thị ${pageRows.length} / ${rows.length} task SLA`;
-        document.getElementById("slaTableRange").textContent = rows.length
-          ? `${start + 1}-${start + pageRows.length} / ${rows.length}`
-          : "0 / 0";
+          slaMode === "priority"
+            ? `Hiển thị ${pageRows.length} / ${rows.length} task SLA`
+            : `Hiển thị ${pageGroups.length} / ${caseGroups.length} phiếu · ${pageRows.length} dòng`;
+        document.getElementById("slaTableRange").textContent =
+          slaMode === "priority"
+            ? rows.length
+              ? `${start + 1}-${start + pageRows.length} / ${rows.length}`
+              : "0 / 0"
+            : caseGroups.length
+              ? `${start + 1}-${start + pageGroups.length} / ${caseGroups.length}`
+              : "0 / 0";
         document.getElementById("slaPagePrev").disabled = slaPage === 1;
         document.getElementById("slaPageNext").disabled =
-          slaPage === pages || !rows.length;
+          slaPage === pages ||
+          (slaMode === "priority" ? !rows.length : !caseGroups.length);
       }
       let activeView = "overview";
       function switchView(view) {
@@ -5561,6 +5703,8 @@
         v2Stage = 0,
         v2InfoTab = "info",
         v2SlaPage = 1,
+        v2SlaMode = "priority",
+        v2SlaFilter = "all",
         v2Page = 1;
       function switchUi(ui) {
         activeUi = ui;
@@ -5657,19 +5801,53 @@
         );
       }
       function renderV2SlaDetail(c) {
-        const rows = slaRowsFor(c),
-          pages = Math.max(1, Math.ceil(rows.length / SLA_PAGE_SIZE)),
-          start = (Math.min(v2SlaPage, pages) - 1) * SLA_PAGE_SIZE,
-          pageRows = rows.slice(start, start + SLA_PAGE_SIZE);
+        const previousMode = slaMode,
+          previousFilter = slaCaseFilter,
+          previousQuery = slaCaseQuery;
+        slaMode = v2SlaMode;
+        slaCaseFilter = v2SlaFilter;
+        slaCaseQuery = v2Query;
+        const filteredRows = filteredSlaRowsFor(),
+          rows = sortSlaRows(filteredRows),
+          caseGroups = slaCaseGroups(filteredRows),
+          pages = Math.max(
+            1,
+            Math.ceil(
+              (v2SlaMode === "case" ? caseGroups.length : rows.length) /
+                (v2SlaMode === "case" ? SLA_CASE_PAGE_SIZE : SLA_PAGE_SIZE),
+            ),
+          ),
+          start =
+            (Math.min(v2SlaPage, pages) - 1) *
+            (v2SlaMode === "case" ? SLA_CASE_PAGE_SIZE : SLA_PAGE_SIZE),
+          pageGroups =
+            v2SlaMode === "case"
+              ? caseGroups.slice(start, start + SLA_CASE_PAGE_SIZE)
+              : [],
+          pageRows =
+            v2SlaMode === "case"
+              ? pageGroups.flatMap((group) => [
+                  { group: true, case: group.case, rows: group.rows },
+                  ...sortSlaRows(group.rows),
+                ])
+              : rows.slice(start, start + SLA_PAGE_SIZE);
+        slaMode = previousMode;
+        slaCaseFilter = previousFilter;
+        slaCaseQuery = previousQuery;
         v2SlaPage = Math.min(v2SlaPage, pages);
         document.getElementById("v2SlaDetailPane").innerHTML =
-          `<div class="sla-table-wrap"><table class="sla-detail-table"><thead><tr><th>Lane</th><th>Đội xử lý</th><th>Task</th><th>Loại</th><th>Ngưỡng</th><th>Thực tế</th><th>Trạng thái</th></tr></thead><tbody>${pageRows
+          `<div class="v2-sla-head"><div><h2>Giám sát SLA</h2><p>${v2SlaMode === "priority" ? `${filteredRows.length} task cần theo dõi theo mức khẩn cấp` : `${caseGroups.length} phiếu phù hợp · 1 phiếu mỗi trang`}</p></div><label class="queue-search v2-search">⌕<input id="v2SlaSearch" placeholder="Tìm mã phiếu, tiêu đề, đội xử lý..." value="${v2Query.replace(/"/g, "&quot;")}" /></label></div><div class="sla-controls"><div><div class="sla-mode" id="v2SlaMode"><button class="${v2SlaMode === "priority" ? "on" : ""}" type="button" data-v2-sla-mode="priority">Ưu tiên xử lý</button><button class="${v2SlaMode === "case" ? "on" : ""}" type="button" data-v2-sla-mode="case">Theo phiếu</button></div><div class="sla-quick" id="v2SlaQuickFilters"><button class="chip ${v2SlaFilter === "all" ? "on" : ""}" type="button" data-v2-sla-filter="all">Tất cả</button><button class="chip ${v2SlaFilter === "late" ? "on" : ""}" type="button" data-v2-sla-filter="late">Sắp trễ</button><button class="chip ${v2SlaFilter === "supplement" ? "on" : ""}" type="button" data-v2-sla-filter="supplement">Cần bổ sung</button><button class="chip ${v2SlaFilter === "integration" ? "on" : ""}" type="button" data-v2-sla-filter="integration">Lỗi tích hợp</button></div></div></div><div class="sla-table-wrap"><table class="sla-detail-table"><thead><tr><th>Lane</th><th>Mã phiếu</th><th>Đội xử lý</th><th>Task</th><th>Loại</th><th>Ngưỡng</th><th>Thực tế</th><th>Trạng thái</th></tr></thead><tbody>${pageRows
             .map((row) => {
+              if (row.group) {
+                const groupOver = row.rows.filter((x) => x.over).length,
+                  groupNear = row.rows.filter((x) => x.near).length;
+                return `<tr class="sla-case-row"><td colspan="8"><b>${row.case.id} · ${row.case.title}</b><small>${row.case.status} · ${row.case.team} · SLA ${row.case.sla} · ${groupOver} quá hạn · ${groupNear} cận hạn · ${row.rows.length} task</small></td></tr>`;
+              }
               const [stateClass, stateText] = slaStateText(row),
                 ownerClass = SLA_OWNER_CLASS[row.owner] || "info";
-              return `<tr data-v2-sla-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}</td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
+              return `<tr data-v2-sla-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="case-id">${row.case.id}</span></td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}<small style="display:block;margin-top:3px;color:var(--muted)">${row.case.title}</small></td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
             })
-            .join("")}</tbody></table><div class="queue-foot sla-foot"><span>Hiển thị ${pageRows.length} / ${rows.length} task SLA</span><div class="queue-pager"><button class="page-btn" id="v2SlaPagePrev" type="button" aria-label="Trang SLA trước">‹</button><span>${rows.length ? `${start + 1}-${start + pageRows.length} / ${rows.length}` : "0 / 0"}</span><button class="page-btn" id="v2SlaPageNext" type="button" aria-label="Trang SLA sau">›</button></div></div></div>`;
+            .join("")}</tbody></table><div class="queue-foot sla-foot"><span>${v2SlaMode === "priority" ? `Hiển thị ${pageRows.length} / ${rows.length} task SLA` : `Hiển thị ${pageGroups.length} / ${caseGroups.length} phiếu · ${pageRows.length} dòng`}</span><div class="queue-pager"><button class="page-btn" id="v2SlaPagePrev" type="button" aria-label="Trang SLA trước">‹</button><span>${v2SlaMode === "priority" ? (rows.length ? `${start + 1}-${start + pageRows.length} / ${rows.length}` : "0 / 0") : caseGroups.length ? `${start + 1}-${start + pageGroups.length} / ${caseGroups.length}` : "0 / 0"}</span><button class="page-btn" id="v2SlaPageNext" type="button" aria-label="Trang SLA sau">›</button></div></div></div>`;
         document.querySelectorAll("[data-v2-sla-id]").forEach(
           (row) =>
             (row.onclick = () => {
@@ -5678,9 +5856,15 @@
                 .forEach((x) => x.classList.toggle("selected", x === row));
             }),
         );
+        document.getElementById("v2SlaSearch").oninput = (e) => {
+          v2Query = e.target.value;
+          v2SlaPage = 1;
+          renderV2SlaDetail(c);
+        };
         document.getElementById("v2SlaPagePrev").disabled = v2SlaPage === 1;
         document.getElementById("v2SlaPageNext").disabled =
-          v2SlaPage === pages || !rows.length;
+          v2SlaPage === pages ||
+          (v2SlaMode === "case" ? !caseGroups.length : !rows.length);
         document.getElementById("v2SlaPagePrev").onclick = () => {
           if (v2SlaPage > 1) {
             v2SlaPage--;
@@ -5688,11 +5872,30 @@
           }
         };
         document.getElementById("v2SlaPageNext").onclick = () => {
-          if (v2SlaPage * SLA_PAGE_SIZE < rows.length) {
+          const total = v2SlaMode === "case" ? caseGroups.length : rows.length,
+            pageSize =
+              v2SlaMode === "case" ? SLA_CASE_PAGE_SIZE : SLA_PAGE_SIZE;
+          if (v2SlaPage * pageSize < total) {
             v2SlaPage++;
             renderV2SlaDetail(c);
           }
         };
+        document.querySelectorAll("[data-v2-sla-mode]").forEach(
+          (button) =>
+            (button.onclick = () => {
+              v2SlaMode = button.dataset.v2SlaMode;
+              v2SlaPage = 1;
+              renderV2SlaDetail(c);
+            }),
+        );
+        document.querySelectorAll("[data-v2-sla-filter]").forEach(
+          (button) =>
+            (button.onclick = () => {
+              v2SlaFilter = button.dataset.v2SlaFilter;
+              v2SlaPage = 1;
+              renderV2SlaDetail(c);
+            }),
+        );
       }
       function showV2ListTab(name) {
         document
@@ -5702,6 +5905,9 @@
           );
         document
           .querySelector(".v2-table-body")
+          .classList.toggle("is-temp-hidden", name !== "list");
+        document
+          .querySelector(".v2-table-toolbar")
           .classList.toggle("is-temp-hidden", name !== "list");
         document
           .querySelector(".v2-table-card > .filters")
@@ -5910,11 +6116,13 @@
       document
         .querySelectorAll(".view-tab")
         .forEach((tab) => (tab.onclick = () => switchView(tab.dataset.view)));
-      document.getElementById("slaPickerBtn").onclick = (e) => {
-        e.stopPropagation();
-        const picker = document.getElementById("slaPicker");
-        setSlaPickerOpen(!picker.classList.contains("open"));
-      };
+      const slaPickerBtn = document.getElementById("slaPickerBtn");
+      if (slaPickerBtn)
+        slaPickerBtn.onclick = (e) => {
+          e.stopPropagation();
+          const picker = document.getElementById("slaPicker");
+          setSlaPickerOpen(!picker.classList.contains("open"));
+        };
       document.querySelectorAll("#slaQuickFilters .chip").forEach(
         (chip) =>
           (chip.onclick = () => {
@@ -5924,26 +6132,24 @@
               .querySelectorAll("#slaQuickFilters .chip")
               .forEach((x) => x.classList.remove("on"));
             chip.classList.add("on");
-            const options = slaCaseOptions();
-            if (
-              options.length &&
-              !options.some((x) => x.id === cases[selectedCase].id)
-            ) {
-              selectCase(cases.findIndex((x) => x.id === options[0].id));
-            } else renderSlaDetail();
+            renderSlaDetail();
+          }),
+      );
+      document.querySelectorAll("#slaMode button").forEach(
+        (button) =>
+          (button.onclick = () => {
+            slaMode = button.dataset.slaMode;
+            slaPage = 1;
+            document
+              .querySelectorAll("#slaMode button")
+              .forEach((x) => x.classList.toggle("on", x === button));
+            renderSlaDetail();
           }),
       );
       document.getElementById("slaCaseSearch").oninput = (e) => {
         slaCaseQuery = e.target.value;
         slaPage = 1;
-        const options = slaCaseOptions();
-        if (
-          options.length &&
-          !options.some((x) => x.id === cases[selectedCase].id)
-        ) {
-          selectCase(cases.findIndex((x) => x.id === options[0].id));
-          switchView("sla");
-        } else renderSlaDetail();
+        renderSlaDetail();
       };
       document.getElementById("slaPagePrev").onclick = () => {
         if (slaPage > 1) {
@@ -5952,7 +6158,14 @@
         }
       };
       document.getElementById("slaPageNext").onclick = () => {
-        if (slaPage * SLA_PAGE_SIZE < filteredSlaRowsFor(cases[selectedCase]).length) {
+        const rows = filteredSlaRowsFor(),
+          total =
+            slaMode === "case"
+              ? slaCaseGroups(rows).length
+              : rows.length;
+        const pageSize =
+          slaMode === "case" ? SLA_CASE_PAGE_SIZE : SLA_PAGE_SIZE;
+        if (slaPage * pageSize < total) {
           slaPage++;
           renderSlaDetail();
         }
@@ -5992,7 +6205,10 @@
       document.getElementById("v2Search").oninput = (e) => {
         v2Query = e.target.value;
         v2Page = 1;
+        v2SlaPage = 1;
         renderV2List();
+        if (document.getElementById("v2SlaDetailPane").classList.contains("on"))
+          renderV2SlaDetail(cases[v2Selected]);
       };
       document.querySelectorAll("[data-v2-list-tab]").forEach(
         (x) =>
