@@ -43,6 +43,10 @@
         min-height: 100vh;
         display: grid;
         grid-template-columns: 248px 1fr;
+        transition: grid-template-columns 0.18s ease;
+      }
+      .app.sidebar-collapsed {
+        grid-template-columns: 72px 1fr;
       }
       .sidebar {
         background: var(--navy);
@@ -56,6 +60,16 @@
         height: 100vh;
         align-self: start;
         overflow-y: auto;
+      }
+      .sidebar,
+      .brand,
+      .nav button {
+        transition:
+          padding 0.18s ease,
+          gap 0.18s ease;
+      }
+      .sidebar-collapsed .sidebar {
+        padding-inline: 10px;
       }
       .brand {
         display: flex;
@@ -85,6 +99,16 @@
         font-size: 10px;
         margin-top: 1px;
       }
+      .sidebar-collapsed .brand {
+        justify-content: center;
+        padding-inline: 0;
+      }
+      .sidebar-collapsed .brand b,
+      .sidebar-collapsed .brand small,
+      .sidebar-collapsed .nav button span,
+      .sidebar-collapsed .side-foot div {
+        display: none;
+      }
       .nav-label {
         padding: 0 10px;
         font-size: 10px;
@@ -110,6 +134,10 @@
         display: flex;
         align-items: center;
         gap: 10px;
+      }
+      .sidebar-collapsed .nav button {
+        justify-content: center;
+        padding-inline: 0;
       }
       .nav button:hover,
       .nav button.active {
@@ -157,6 +185,10 @@
         color: #90a0ba;
         margin-top: 2px;
       }
+      .sidebar-collapsed .side-foot {
+        justify-content: center;
+        padding-inline: 0;
+      }
       .main {
         min-width: 0;
       }
@@ -171,6 +203,29 @@
         position: sticky;
         top: 0;
         z-index: 5;
+      }
+      .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #fff;
+        color: #40506a;
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+        flex: none;
+      }
+      .sidebar-toggle:hover,
+      .sidebar-toggle[aria-expanded="false"] {
+        color: var(--blue);
+        border-color: #cbd8f5;
+        background: var(--blue-soft);
+      }
+      .sidebar-toggle .lucide {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
       }
       .crumb {
         font-size: 12px;
@@ -425,8 +480,9 @@
         padding-top: 10px;
       }
       .content {
-        padding: 27px 30px 42px;
+        padding: 27px 30px;
         max-width: 1660px;
+        min-height: calc(100vh - 72px);
         margin: auto;
       }
       .intro {
@@ -517,6 +573,257 @@
       }
       .view-pane.on {
         display: block;
+      }
+      .ui-shell {
+        display: none;
+      }
+      .ui-shell.on {
+        display: block;
+      }
+      .v2-list {
+        display: grid;
+        gap: 0;
+      }
+      .v2-table-card {
+        border: 0;
+        box-shadow: none;
+        background: transparent;
+        padding: 0;
+      }
+      .v2-table-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 20px 14px;
+      }
+      .v2-table-toolbar h1 {
+        margin: 0;
+        color: #17233b;
+        font-size: 20px;
+        line-height: 1.2;
+      }
+      .v2-table-body {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 0;
+        background: #fff;
+      }
+      .v2-table-card > .filters {
+        padding: 0 20px 16px;
+      }
+      .v2-table-head,
+      .v2-ticket {
+        display: grid;
+        grid-template-columns: 56px minmax(320px, 1fr) 170px 190px 112px;
+        gap: 16px;
+        align-items: center;
+      }
+      .v2-table-head {
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--line);
+        background: #f8fafd;
+        color: #8490a6;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .v2-ticket {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #eff2f6;
+        border-radius: 0;
+        background: #fff;
+        padding: 15px 18px;
+        text-align: left;
+        font: inherit;
+        cursor: pointer;
+      }
+      .v2-ticket:last-child {
+        border-bottom: 0;
+      }
+      .v2-ticket:hover,
+      .v2-ticket.selected {
+        background: #f4f7ff;
+      }
+      .v2-index {
+        color: #7a879b;
+        font-size: 12px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .v2-ticket-main {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+      }
+      .v2-ticket-main .person-avatar {
+        flex: none;
+        width: 34px;
+        height: 34px;
+        font-size: 11px;
+      }
+      .v2-ticket-copy {
+        min-width: 0;
+      }
+      .v2-ticket-main h3 {
+        margin: 4px 0 3px;
+        font-size: 14px;
+      }
+      .v2-ticket-main p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .v2-team {
+        color: #17233b;
+        font-size: 12px;
+      }
+      .v2-search {
+        width: min(380px, 42vw);
+        min-height: 36px;
+        border-radius: 9px;
+        background: #fff;
+      }
+      .v2-detail-page {
+        min-height: calc(100vh - 126px);
+        display: flex;
+        flex-direction: column;
+      }
+      .v2-detail-page[hidden] {
+        display: none;
+      }
+      .v2-detail-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 17px;
+      }
+      .v2-back {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        color: #52627a;
+        padding: 8px 10px;
+        font: 800 11px inherit;
+        cursor: pointer;
+      }
+      .v2-detail-card {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+        min-height: calc(100vh - 238px);
+      }
+      .v2-detail-layout {
+        flex: 1;
+        display: grid;
+        grid-template-columns: minmax(460px, 0.95fr) minmax(520px, 1.05fr);
+        border-top: 1px solid var(--line);
+        height: auto;
+        min-height: 460px;
+      }
+      .v2-panel {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+        padding: 16px;
+      }
+      .v2-panel + .v2-panel {
+        border-left: 1px solid var(--line);
+      }
+      .v2-panel-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .v2-panel-title h3 {
+        margin: 0;
+        font-size: 14px;
+      }
+      .v2-panel-title span {
+        display: none;
+      }
+      .v2-info-tabs {
+        flex: none;
+        margin-bottom: 14px;
+      }
+      .v2-large-tabs {
+        margin: 0;
+        padding: 0 0 14px;
+      }
+      .drawer-tab .lucide {
+        width: 14px;
+        height: 14px;
+        margin-right: 6px;
+        stroke-width: 2.2;
+        vertical-align: -2px;
+      }
+      #v2Info,
+      #v2Workflow {
+        min-height: 0;
+      }
+      #v2SlaDetailPane {
+        display: none;
+      }
+      #v2SlaDetailPane.on {
+        display: block;
+      }
+      #v2SlaDetailPane .sla-table-wrap {
+        max-height: min(620px, calc(100vh - 330px));
+        overflow: auto;
+        padding: 0 20px 20px;
+      }
+      #v2Info {
+        flex: 1;
+      }
+      #v2Info .df-workspace {
+        height: 100%;
+        min-height: 0;
+      }
+      #v2Info .df-rail,
+      #v2Info .df-content,
+      #v2Info .drawer-sla-table,
+      #v2Info .ticket-notification-list {
+        min-height: 0;
+        overflow: auto;
+      }
+      #v2Workflow {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+      }
+      #v2Workflow .workflow {
+        flex: none;
+      }
+      #v2Workflow .subtasks {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+      }
+      #v2Workflow .subtask-head {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+      }
+      @media (max-width: 1400px) {
+        .v2-detail-layout {
+          height: auto;
+          grid-template-columns: 1fr;
+        }
+        .v2-panel + .v2-panel {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+      }
+      .v2-flow-card {
+        overflow: hidden;
       }
       .kpis {
         display: grid;
@@ -755,6 +1062,9 @@
         display: inline-flex;
         align-items: center;
         gap: 5px;
+        justify-self: start;
+        width: fit-content;
+        max-width: 100%;
         border-radius: 999px;
         padding: 4px 8px;
         font-size: 10px;
@@ -1092,6 +1402,35 @@
       .task-type.human {
         background: #fff7ed;
         color: #9a5b12;
+      }
+      .field-origin {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 2px 7px;
+        font-size: 9px;
+        font-weight: 900;
+        line-height: 1.25;
+      }
+      .field-origin.api {
+        background: var(--blue-soft);
+        color: var(--blue);
+      }
+      .field-origin.human {
+        background: #fff7ed;
+        color: #9a5b12;
+      }
+      .field-origin.read {
+        background: var(--mint-soft);
+        color: #07875d;
+      }
+      .df-field:has(.field-origin) label,
+      .df-field:has(.field-origin) b {
+        padding-right: 82px;
       }
       .drawer-actions {
         display: flex;
@@ -2967,42 +3306,33 @@
     </style>
   </head>
   <body>
-    <div class="app">
-      <aside class="sidebar">
+    <div class="app" id="appShell">
+      <aside class="sidebar" id="sidebar">
         <div class="brand">
           <div class="mark">C</div>
           <div><b>CEP</b><small>OPERATION CENTER</small></div>
         </div>
         <div>
-          <div class="nav-label">ĐIỀU HÀNH</div>
           <nav class="nav">
-            <button class="active">
-              <i class="ico">▦</i><span>Tổng quan vận hành</span></button
-            ><button>
-              <i class="ico">◫</i><span>Hồ sơ cần xử lý</span
-              ><b class="badge">24</b></button
-            ><button><i class="ico">◷</i><span>SLA & ngoại lệ</span></button>
-          </nav>
-        </div>
-        <div>
-          <div class="nav-label">NGHIỆP VỤ</div>
-          <nav class="nav">
-            <button><i class="ico">⌘</i><span>Điều phối công việc</span></button
-            ><button><i class="ico">◎</i><span>Khách hàng</span></button
-            ><button><i class="ico">↗</i><span>Chiến dịch & kênh</span></button
-            ><button><i class="ico">▤</i><span>Báo cáo</span></button>
-          </nav>
-        </div>
-        <div>
-          <div class="nav-label">HỆ THỐNG</div>
-          <nav class="nav">
-            <button><i class="ico">⌁</i><span>Tích hợp API</span></button
-            ><button><i class="ico">⚙</i><span>Cấu hình</span></button>
+            <button class="active" type="button" data-ui="v1">
+              <i class="ico">▦</i><span>UI v1</span></button
+            ><button type="button" data-ui="v2">
+              <i class="ico">◫</i><span>UI v2</span></button>
           </nav>
         </div>
       </aside>
       <main class="main">
         <header class="topbar">
+          <button
+            class="sidebar-toggle"
+            id="sidebarToggle"
+            type="button"
+            aria-label="Thu gọn sidebar"
+            aria-controls="sidebar"
+            aria-expanded="true"
+          >
+            <i data-lucide="panel-left-close"></i>
+          </button>
           <div class="crumb">
             Operation Center <span> / </span> <b>Tổng quan vận hành</b>
           </div>
@@ -3101,6 +3431,7 @@
               Cập nhật lúc <b>09:42 · Thứ hai, 11 tháng 8</b>
             </div>
           </div>
+          <div class="ui-shell on" id="uiV1">
           <div class="kpis is-temp-hidden">
             <div class="kpi highlight">
               <div class="kpi-head">
@@ -3508,6 +3839,125 @@
               </div>
             </section>
           </section>
+          </div>
+          <div class="ui-shell" id="uiV2">
+            <section class="v2-list-page" id="v2ListPage">
+              <section class="card v2-table-card">
+                <div class="v2-table-toolbar">
+                  <nav class="drawer-tabs v2-large-tabs">
+                    <button
+                      class="drawer-tab on"
+                      type="button"
+                      data-v2-list-tab="list"
+                    >
+                      <i data-lucide="list"></i>Danh sách phiếu
+                    </button>
+                    <button
+                      class="drawer-tab"
+                      type="button"
+                      data-v2-list-tab="slaDetail"
+                    >
+                      <i data-lucide="timer"></i>SLA chi tiết
+                    </button>
+                  </nav>
+                  <label class="queue-search v2-search"
+                    >⌕<input
+                      id="v2Search"
+                      placeholder="Tìm mã phiếu, tiêu đề, người yêu cầu..."
+                  /></label>
+                </div>
+                <div class="filters">
+                  <button class="chip on" data-v2-filter="all">Tất cả</button
+                  ><button class="chip" data-v2-filter="late">Sắp trễ</button
+                  ><button class="chip" data-v2-filter="supplement">
+                    Cần bổ sung</button
+                  ><button class="chip" data-v2-filter="integration">
+                    Lỗi tích hợp
+                  </button>
+                </div>
+                <div class="v2-table-body">
+                  <div class="v2-table-head">
+                    <span>STT</span>
+                    <span>Phiếu / người yêu cầu</span>
+                    <span>Trạng thái</span>
+                    <span>Đội xử lý</span>
+                    <span>SLA</span>
+                  </div>
+                  <div class="v2-list" id="v2List"></div>
+                  <div class="queue-foot">
+                    <span id="v2ListCount">Hiển thị 0 / 0 phiếu</span>
+                    <div class="queue-pager">
+                      <button
+                        class="page-btn"
+                        id="v2PagePrev"
+                        type="button"
+                        aria-label="Trang danh sách trước"
+                      >
+                        ‹</button
+                      ><span id="v2ListRange">0 / 0</span
+                      ><button
+                        class="page-btn"
+                        id="v2PageNext"
+                        type="button"
+                        aria-label="Trang danh sách sau"
+                      >
+                        ›
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <section id="v2SlaDetailPane"></section>
+              </section>
+            </section>
+            <section class="v2-detail-page" id="v2DetailPage" hidden>
+              <div class="v2-detail-head">
+                <button class="v2-back" id="v2Back" type="button">← Danh sách phiếu</button>
+                <span class="status" id="v2DetailStatus"></span>
+              </div>
+              <section class="card v2-detail-card">
+                <div class="case-identity" id="v2Identity"></div>
+                <div class="v2-detail-layout">
+                  <section class="v2-panel">
+                    <div class="v2-panel-title">
+                      <h3>Thông tin phiếu</h3>
+                      <span id="v2InfoCount"></span>
+                    </div>
+                    <nav class="drawer-tabs v2-info-tabs">
+                      <button
+                        class="drawer-tab on"
+                        type="button"
+                        data-v2-info-tab="info"
+                      >
+                        <i data-lucide="file-text"></i>Thông tin phiếu
+                      </button>
+                      <button
+                        class="drawer-tab"
+                        type="button"
+                        data-v2-info-tab="sla"
+                      >
+                        <i data-lucide="clock-3"></i>SLA
+                      </button>
+                      <button
+                        class="drawer-tab"
+                        type="button"
+                        data-v2-info-tab="notice"
+                      >
+                        <i data-lucide="bell"></i>Thông báo
+                      </button>
+                    </nav>
+                    <div id="v2Info"></div>
+                  </section>
+                  <section class="v2-panel">
+                    <div class="v2-panel-title">
+                      <h3>Workflow</h3>
+                      <span id="v2WorkflowCount"></span>
+                    </div>
+                    <div id="v2Workflow"></div>
+                  </section>
+                </div>
+              </section>
+            </section>
+          </div>
         </section>
       </main>
     </div>
@@ -4312,9 +4762,26 @@
             /Gateway|Engine|WAY4|ĐVVC|Telco|CIC|AML|C06|Scoring|Rule|Hệ thống/.test(
               owner,
             ),
-          updateCount = state === "queued" ? 0 : isSystem ? 1 : 2,
-          checkCount = isSystem ? 5 : 2,
-          base = [
+          updateOrigin = isSystem ? "api" : "human",
+          updateCount = state === "queued" ? 0 : isSystem ? 10 : 12,
+          checkCount = isSystem ? 12 : 10,
+          checkBase = [
+            ["Mã phiếu", c.id],
+            ["Loại phiếu", c.type],
+            ["Tên phiếu", c.title],
+            ["Người yêu cầu", c.requester],
+            ["Đội phụ trách", c.team],
+            ["Kênh tạo", "CEP Web"],
+            ["Step hiện tại", `Lane ${stageIndex + 1}`],
+            ["Task hiện tại", name],
+            ["Chủ sở hữu task", owner],
+            ["SLA task", `${name} · lane ${stageIndex + 1}`],
+            ["Trạng thái phiếu", c.status],
+            ["Cờ quá hạn", c.late ? "Có" : "Không"],
+            ["Thời điểm nhận", "09:12"],
+            ["Mức ưu tiên", c.late ? "Ưu tiên" : "Bình thường"],
+          ],
+          updateBase = [
             [
               "Trạng thái xử lý",
               state === "done"
@@ -4322,27 +4789,32 @@
                 : state === "queued"
                   ? "Chờ"
                   : "Đang theo dõi",
-              "update",
+              updateOrigin,
             ],
-            ["Người xử lý", owner, "update"],
-            ["Mã phiếu", c.id, "check"],
-            ["Loại phiếu", c.type, "check"],
-            ["SLA task", `${name} · lane ${stageIndex + 1}`, "check"],
-            ["Khách hàng", c.requester, "check"],
-            ["Kênh tạo", "CEP Web", "check"],
+            ["Người xử lý", owner, "human"],
+            ["Thời gian bắt đầu", "09:12", updateOrigin],
+            ["Thời gian hoàn tất", state === "done" ? "09:40" : "—", updateOrigin],
+            ["Kết quả task", state === "done" ? "Pass" : "Đang xử lý", updateOrigin],
+            ["Mã lỗi API", isSystem ? "200" : "—", "api"],
+            ["Response ID", isSystem ? `RES-${stageIndex + 1}${taskIndex + 1}08` : "—", "api"],
+            ["Ghi chú xử lý", state === "warn" ? "Cần bổ sung dữ liệu" : "Đã kiểm tra", "human"],
+            ["Field bổ sung", state === "warn" ? "Thiếu chứng từ" : "—", "human"],
+            ["SLA thực tế", fmtSla(taskSla(task, stageIndex, taskIndex, c).actual), updateOrigin],
+            ["Người duyệt", isSystem ? "System Rule" : "Trưởng nhóm", updateOrigin],
+            ["Audit log", `AUD-${c.id.slice(-3)}-${stageIndex + 1}${taskIndex + 1}`, updateOrigin],
           ];
         return {
           updateCount,
           checkCount,
-          update: base.filter((x) => x[2] === "update").slice(0, updateCount),
-          check: base.filter((x) => x[2] === "check").slice(0, checkCount),
+          update: updateBase.slice(0, updateCount),
+          check: checkBase.slice(0, checkCount),
         };
       }
       function taskFieldRows(rows, mode) {
         return rows
           .map(
-            ([label, value]) =>
-              `<div class="df-field"><label>${label}</label><b>${value}</b><span class="status ${mode === "update" ? "info" : "ok"}">${mode === "update" ? "Ghi" : "Đọc"}</span><small style="display:block;margin-top:5px;color:#8b98ad">${mode === "update" ? "OUTPUT của task" : "Field Rule/API đọc"}</small></div>`,
+            ([label, value, origin]) =>
+              `<div class="df-field"><label>${label}</label><b>${value}</b>${mode === "update" ? `<span class="field-origin ${origin === "api" ? "api" : "human"}">${origin === "api" ? "API update" : "Người nhập"}</span>` : '<span class="field-origin read">Đọc</span>'}<small style="display:block;margin-top:5px;color:#8b98ad">${mode === "update" ? "Field được cập nhật khi task chạy" : "Field nguồn task đọc để xử lý"}</small></div>`,
           )
           .join("");
       }
@@ -4526,6 +4998,24 @@
             ["Trạng thái", "Cần bổ sung", "warn"],
             ["Đội phụ trách", "CSKH"],
             ["Hạn SLA", "00:18", "danger"],
+            ["Tiêu đề phiếu", "Đăng ký phát hành thẻ tín dụng"],
+            ["Nhóm nghiệp vụ", "Dịch vụ thẻ"],
+            ["Chi nhánh tiếp nhận", "CN Hồ Chí Minh 01"],
+            ["Khu vực", "Miền Nam"],
+            ["Mã khách hàng", "CIF-192084"],
+            ["Tên khách hàng", "Nguyễn Gia Hân"],
+            ["Số điện thoại", "0908 244 681"],
+            ["Email", "han.nguyen@example.vn"],
+            ["Mức ưu tiên", "Cao", "warn"],
+            ["Người xử lý hiện tại", "Trúc Vy"],
+            ["Người phê duyệt", "Nguyễn Hoài An"],
+            ["Ngày tạo", "11/08/2024 09:12"],
+            ["Cập nhật gần nhất", "11/08/2024 09:41"],
+            ["Nguồn dữ liệu", "CEP Workflow"],
+            ["Mã chiến dịch", "CARD-PLATINUM-Q3"],
+            ["Kênh thông báo", "SMS + Email"],
+            ["Mức rủi ro", "Thấp", "good"],
+            ["Ghi chú vận hành", "Cần bổ sung vận đơn trước phát hành"],
           ],
         ],
         [
@@ -4637,6 +5127,24 @@
             ["Đội phụ trách", (c) => c.team],
             ["Người xử lý", (c) => c.owner],
             ["Mức ưu tiên", (c) => (c.late ? "Cao" : "Bình thường")],
+            ["Tiêu đề phiếu", (c) => c.title],
+            ["Kênh tạo", "CEP Web"],
+            ["Nguồn tiếp nhận", "Operation Center"],
+            ["Mã quy trình", (c) => `WF-${c.id.slice(-3)}`],
+            ["Step hiện tại", (c) => `${c.step}/5`],
+            ["SLA còn lại", (c) => c.sla, "danger"],
+            ["Trạng thái", (c) => c.status, "warn"],
+            ["Mã khách hàng", (c) => (c.hasCustomer ? "CIF-192084" : "—"), (c) => (c.hasCustomer ? "good" : "empty")],
+            ["Chi nhánh", (c) => c.requester.includes("Chi nhánh") ? c.requester : "CN Hồ Chí Minh 01"],
+            ["Khu vực", "Miền Nam"],
+            ["Người tạo", (c) => c.requester],
+            ["Người duyệt", "Nguyễn Hoài An"],
+            ["Ngày tạo", "11/08/2024 09:12"],
+            ["Cập nhật gần nhất", "11/08/2024 09:41"],
+            ["Kênh thông báo", "Email nội bộ"],
+            ["Mức rủi ro", (c) => (c.late ? "Theo dõi" : "Thấp")],
+            ["Ghi chú vận hành", (c) => c.issue],
+            ["Tệp liên quan", "02 tệp"],
           ],
         ],
         [
@@ -4840,7 +5348,7 @@
             const [stateClass, stateText] = slaStateText(row);
             return `<tr><td>${row.stage}</td><td>${row.name}</td><td>${fmtSla(row.actual)} / ${fmtSla(row.budget)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
           })
-          .join("")}</tbody></table><div class="df-save"><small>${current.length} task ở step đang xử lý</small><button id="drawerOpenSlaDetail" type="button">Xem SLA chi tiết</button></div>`;
+          .join("")}</tbody></table>`;
       }
       function renderDfGroup(groups, index) {
         closeDropdowns();
@@ -4859,13 +5367,15 @@
           `<div class="df-title"><h3>${name}</h3><span>${items.length} trường dữ liệu</span></div><div class="df-fields">${items
             .map(([label, value, state]) => {
               const v =
-                draft[label] ??
-                savedFields[`${cases[selectedCase].id}:${label}`] ??
-                (typeof value === "function"
-                  ? value(cases[selectedCase])
-                  : value);
+                  draft[label] ??
+                  savedFields[`${cases[selectedCase].id}:${label}`] ??
+                  (typeof value === "function"
+                    ? value(cases[selectedCase])
+                    : value),
+                fieldState =
+                  typeof state === "function" ? state(cases[selectedCase]) : state;
               const needsInput = state === "empty" || v === "—";
-              return `<div class="df-field ${state || ""}"><label>${label}</label>${editableLabels.has(label) || needsInput ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
+              return `<div class="df-field ${fieldState || ""}"><label>${label}</label>${editableLabels.has(label) || needsInput ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
             })
             .join(
               "",
@@ -5015,6 +5525,256 @@
           .getElementById("ticketDrawer")
           .setAttribute("aria-hidden", "true");
       }
+      let activeUi = "v1",
+        v2Filter = "all",
+        v2Query = "",
+        v2Selected = 0,
+        v2Stage = 0,
+        v2InfoTab = "info",
+        v2SlaPage = 1,
+        v2Page = 1;
+      function switchUi(ui) {
+        activeUi = ui;
+        document
+          .querySelectorAll(".nav [data-ui]")
+          .forEach((x) => x.classList.toggle("active", x.dataset.ui === ui));
+        document.getElementById("uiV1").classList.toggle("on", ui === "v1");
+        document.getElementById("uiV2").classList.toggle("on", ui === "v2");
+        if (ui === "v2") renderV2List();
+      }
+      function v2FilteredCases() {
+        const query = v2Query.trim().toLocaleLowerCase("vi");
+        return cases
+          .map((c, i) => ({ c, i }))
+          .filter(
+            ({ c }) =>
+              (v2Filter === "all" ||
+                (v2Filter === "late" && c.late) ||
+                (v2Filter === "supplement" && c.status === "Cần bổ sung") ||
+                (v2Filter === "integration" &&
+                  (c.team === "Tích hợp API" ||
+                    c.type.includes("Tích hợp")))) &&
+              (!query ||
+                [c.id, c.title, c.requester, c.team, c.type].some((value) =>
+                  value.toLocaleLowerCase("vi").includes(query),
+                )),
+          );
+      }
+      function renderV2List() {
+        const filtered = v2FilteredCases(),
+          pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        v2Page = Math.min(v2Page, pages);
+        const start = (v2Page - 1) * PAGE_SIZE,
+          rows = filtered.slice(start, start + PAGE_SIZE);
+        document.getElementById("v2List").innerHTML = rows.length
+          ? rows
+              .map(
+                ({ c, i }, index) =>
+                  `<button class="v2-ticket ${i === v2Selected ? "selected" : ""}" type="button" data-v2-i="${i}"><span class="v2-index">${start + index + 1}</span><div class="v2-ticket-main"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><div class="v2-ticket-copy"><span class="case-id">${c.id}</span><h3>${c.title}</h3><p>${c.type} · Yêu cầu bởi ${c.requester}</p></div></div><span class="status ${c.kind}">${c.status}</span><span class="v2-team">${c.team}</span><span class="sla ${c.late ? "late" : ""}">${c.sla}</span></button>`,
+              )
+              .join("")
+          : '<div class="ticket-notification-empty">Không có phiếu phù hợp bộ lọc.</div>';
+        document.getElementById("v2ListCount").textContent =
+          `Hiển thị ${rows.length} / ${filtered.length} phiếu`;
+        document.getElementById("v2ListRange").textContent = rows.length
+          ? `${start + 1}-${start + rows.length} / ${filtered.length}`
+          : `0 / ${filtered.length}`;
+        document.getElementById("v2PagePrev").disabled = v2Page === 1;
+        document.getElementById("v2PageNext").disabled =
+          v2Page === pages || !filtered.length;
+        document.querySelectorAll("[data-v2-i]").forEach(
+          (row) => (row.onclick = () => openV2Detail(+row.dataset.v2I)),
+        );
+      }
+      function bindDfControls(scope, groups, index, c) {
+        scope
+          .querySelectorAll(".df-tab")
+          .forEach((x) => x.classList.toggle("on", +x.dataset.g === index));
+        scope.querySelectorAll(".js-drop").forEach(
+          (trigger) =>
+            (trigger.onclick = () => {
+              const menu = trigger.nextElementSibling,
+                isOpen = menu === openDropdownMenu;
+              closeDropdowns();
+              if (!isOpen) openDropdown(trigger, menu);
+            }),
+        );
+      }
+      function showV2InfoTab(name, c) {
+        v2InfoTab = name;
+        document
+          .querySelectorAll("[data-v2-info-tab]")
+          .forEach((x) =>
+            x.classList.toggle("on", x.dataset.v2InfoTab === name),
+          );
+        if (name === "sla") {
+          document.getElementById("v2InfoCount").textContent =
+            `${slaRowsFor(c).length} task SLA`;
+          document.getElementById("v2Info").innerHTML = renderDrawerSla(c);
+          return;
+        }
+        if (name === "notice") {
+          document.getElementById("v2InfoCount").textContent =
+            `${ticketNoticeCount(c)} thông báo`;
+          document.getElementById("v2Info").innerHTML =
+            renderTicketNotifications(c);
+          bindTicketNotifications(c);
+          return;
+        }
+        renderV2InfoGroup(
+          requiredGroups(c.hasCustomer ? CARD_GROUPS : TICKET_GROUPS),
+          0,
+          c,
+        );
+      }
+      function renderV2SlaDetail(c) {
+        const rows = slaRowsFor(c),
+          pages = Math.max(1, Math.ceil(rows.length / SLA_PAGE_SIZE)),
+          start = (Math.min(v2SlaPage, pages) - 1) * SLA_PAGE_SIZE,
+          pageRows = rows.slice(start, start + SLA_PAGE_SIZE);
+        v2SlaPage = Math.min(v2SlaPage, pages);
+        document.getElementById("v2SlaDetailPane").innerHTML =
+          `<div class="sla-table-wrap"><table class="sla-detail-table"><thead><tr><th>Lane</th><th>Đội xử lý</th><th>Task</th><th>Loại</th><th>Ngưỡng</th><th>Thực tế</th><th>Trạng thái</th></tr></thead><tbody>${pageRows
+            .map((row) => {
+              const [stateClass, stateText] = slaStateText(row),
+                ownerClass = SLA_OWNER_CLASS[row.owner] || "info";
+              return `<tr data-v2-sla-id="${row.id}"><td class="sla-lane">${row.stage}</td><td><span class="sla-owner ${ownerClass}">${row.owner}</span></td><td>${row.name}</td><td><span class="sla-type ${row.type}">${SLA_TYPE_LABELS[row.type]}</span></td><td class="sla-num">${fmtSla(row.budget)}</td><td class="sla-num">${fmtSla(row.actual)}</td><td><span class="sla-state ${stateClass}">${stateText}</span></td></tr>`;
+            })
+            .join("")}</tbody></table><div class="queue-foot sla-foot"><span>Hiển thị ${pageRows.length} / ${rows.length} task SLA</span><div class="queue-pager"><button class="page-btn" id="v2SlaPagePrev" type="button" aria-label="Trang SLA trước">‹</button><span>${rows.length ? `${start + 1}-${start + pageRows.length} / ${rows.length}` : "0 / 0"}</span><button class="page-btn" id="v2SlaPageNext" type="button" aria-label="Trang SLA sau">›</button></div></div></div>`;
+        document.querySelectorAll("[data-v2-sla-id]").forEach(
+          (row) =>
+            (row.onclick = () => {
+              const selected = rows.find((x) => x.id === row.dataset.v2SlaId);
+              selectedCase = v2Selected;
+              openSlaDrawer(selected);
+            }),
+        );
+        document.getElementById("v2SlaPagePrev").disabled = v2SlaPage === 1;
+        document.getElementById("v2SlaPageNext").disabled =
+          v2SlaPage === pages || !rows.length;
+        document.getElementById("v2SlaPagePrev").onclick = () => {
+          if (v2SlaPage > 1) {
+            v2SlaPage--;
+            renderV2SlaDetail(c);
+          }
+        };
+        document.getElementById("v2SlaPageNext").onclick = () => {
+          if (v2SlaPage * SLA_PAGE_SIZE < rows.length) {
+            v2SlaPage++;
+            renderV2SlaDetail(c);
+          }
+        };
+      }
+      function showV2ListTab(name) {
+        document
+          .querySelectorAll("[data-v2-list-tab]")
+          .forEach((x) =>
+            x.classList.toggle("on", x.dataset.v2ListTab === name),
+          );
+        document
+          .querySelector(".v2-table-body")
+          .classList.toggle("is-temp-hidden", name !== "list");
+        document
+          .querySelector(".v2-table-card > .filters")
+          .classList.toggle("is-temp-hidden", name !== "list");
+        document
+          .getElementById("v2Search")
+          .closest(".queue-search")
+          .classList.toggle("is-temp-hidden", name !== "list");
+        document
+          .getElementById("v2SlaDetailPane")
+          .classList.toggle("on", name === "slaDetail");
+      }
+      function renderV2InfoGroup(groups, index, c) {
+        closeDropdowns();
+        const scope = document.getElementById("v2Info"),
+          [name, items] = groups[index],
+          total = groups.reduce((sum, [, fields]) => sum + fields.length, 0);
+      
+        scope.innerHTML =
+          `<div class="df-workspace"><nav class="df-rail">${groups.map((g, i) => `<button class="df-tab ${i === index ? "on" : ""}" type="button" data-g="${i}">${g[0]}</button>`).join("")}</nav><section class="df-content"><div class="df-title"><h3>${name}</h3><span>${items.length} trường dữ liệu</span></div><div class="df-fields">${items
+            .map(([label, value, state]) => {
+              const saved = savedFields[`${c.id}:${label}`],
+                v = saved ?? (typeof value === "function" ? value(c) : value),
+                fieldState = typeof state === "function" ? state(c) : state,
+                needsInput = fieldState === "empty" || v === "—";
+              return `<div class="df-field ${fieldState || ""}"><label>${label}</label>${editableLabels.has(label) || needsInput ? inputFor(label, v) : `<b>${v}</b>`}</div>`;
+            })
+            .join("")}</div></section></div>`;
+        scope
+          .querySelectorAll(".df-tab")
+          .forEach(
+            (x) =>
+              (x.onclick = () => renderV2InfoGroup(groups, +x.dataset.g, c)),
+          );
+        bindDfControls(scope, groups, index, c);
+      }
+      function renderV2Workflow(c) {
+        const flows = c.hasCustomer ? CARD_TASKS : GENERIC_TASKS,
+          stage = Math.min(Math.max(v2Stage, 0), flows.length - 1),
+          flow = flows[stage],
+          icons = {
+            done: "check",
+            active: "loader-circle",
+            warn: "triangle-alert",
+            blocked: "x",
+            queued: "clock",
+          };
+        return `<div class="workflow v2-flow-card"><div class="flow-title">Tiến trình xử lý phiếu</div><div class="steps">${flows
+          .map(
+            (x, n) =>
+              `<div class="step ${n < c.step - 1 ? "done" : ""} ${n === c.step - 1 ? "current" : ""} ${n === stage ? "active" : ""}" data-v2-stage="${n}"><div class="step-dot">${n < c.step - 1 ? "✓" : n + 1}</div><b>${x[0]}</b><span>${x[1].length} task · ${n === c.step - 1 ? "Đang xử lý" : n < c.step - 1 ? "Hoàn tất" : "Chờ"}</span><em>${laneResult(x, n, c)}</em></div>`,
+          )
+          .join("")}</div></div><div class="subtasks v2-subtasks"><div class="subtask-head"><b>${flow[0]} · workflow task</b><span>${flow[1].length} task</span></div>${flow[1]
+          .map((task, taskIndex) => {
+            const [name, state, owner, time] = task,
+              slaInfo = taskSla(task, stage, taskIndex, c),
+              fieldData = taskFieldData(task, stage, taskIndex, c),
+              type = taskType(task),
+              timeClass = slaInfo.over ? "over" : slaInfo.near ? "near" : "";
+            return `<div class="subtask-wrap"><div class="subtask ${state}" data-v2-task-index="${taskIndex}"><i class="sub-icon"><i data-lucide="${icons[state]}"></i></i><div><b>${name}</b><small><span class="task-type ${type}">${TASK_TYPE_LABELS[type]}</span> ${owner} · ${SLA_TYPE_LABELS[slaInfo.type]}</small><div class="task-fields"><span>${fieldData.checkCount} field nguồn</span><span>·</span><span>${fieldData.updateCount} field update</span></div></div><div class="subtask-sla"><time>${time}</time><span class="${timeClass}">${fmtSla(slaInfo.actual)} / ${fmtSla(slaInfo.budget)}</span></div></div></div>`;
+          })
+          .join("")}</div>`;
+      }
+      function renderV2WorkflowPanel() {
+        const c = cases[v2Selected];
+        document.getElementById("v2Workflow").innerHTML = renderV2Workflow(c);
+        document.querySelectorAll("[data-v2-stage]").forEach(
+          (x) =>
+            (x.onclick = () => {
+              v2Stage = +x.dataset.v2Stage;
+              renderV2WorkflowPanel();
+            }),
+        );
+        document.querySelectorAll("[data-v2-task-index]").forEach(
+          (x) =>
+            (x.onclick = () => {
+              selectedCase = v2Selected;
+              selectedStage = v2Stage;
+              openTaskDrawer(+x.dataset.v2TaskIndex);
+            }),
+        );
+        if (window.lucide) lucide.createIcons();
+      }
+      function openV2Detail(index) {
+        v2Selected = index;
+        const c = cases[index];
+        v2Stage = Math.min(Math.max(c.step - 1, 0), 4);
+        v2InfoTab = "info";
+        document.getElementById("v2ListPage").hidden = true;
+        document.getElementById("v2DetailPage").hidden = false;
+        document.getElementById("v2DetailStatus").className = `status ${c.kind}`;
+        document.getElementById("v2DetailStatus").textContent = c.status;
+        document.getElementById("v2Identity").innerHTML =
+          `<div class="person"><span class="person-avatar" style="${avatarStyle(c.requester)}">${initials(c.requester)}</span><div><span class="case-id">${c.id}</span><h2>${c.title}</h2><p>${c.type} · Yêu cầu bởi ${c.requester}</p></div></div>`;
+        document.querySelectorAll("[data-v2-info-tab]").forEach(
+          (x) =>
+            (x.onclick = () => showV2InfoTab(x.dataset.v2InfoTab, c)),
+        );
+        showV2InfoTab("info", c);
+        renderV2WorkflowPanel();
+        if (window.lucide) lucide.createIcons();
+      }
       document.getElementById("drawerClose").onclick = closeDrawer;
       document.getElementById("drawerBack").onclick = closeDrawer;
 
@@ -5142,6 +5902,66 @@
             renderQueue();
           }),
       );
+      document
+        .querySelectorAll(".nav [data-ui]")
+        .forEach((x) => (x.onclick = () => switchUi(x.dataset.ui)));
+      const appShell = document.getElementById("appShell"),
+        sidebarToggle = document.getElementById("sidebarToggle");
+      sidebarToggle.onclick = () => {
+        const collapsed = appShell.classList.toggle("sidebar-collapsed");
+        sidebarToggle.setAttribute("aria-expanded", String(!collapsed));
+        sidebarToggle.setAttribute(
+          "aria-label",
+          collapsed ? "Mở rộng sidebar" : "Thu gọn sidebar",
+        );
+        sidebarToggle.innerHTML = `<i data-lucide="${collapsed ? "panel-left-open" : "panel-left-close"}"></i>`;
+        if (window.lucide) lucide.createIcons();
+      };
+      document.getElementById("v2Search").oninput = (e) => {
+        v2Query = e.target.value;
+        v2Page = 1;
+        renderV2List();
+      };
+      document.querySelectorAll("[data-v2-list-tab]").forEach(
+        (x) =>
+          (x.onclick = () => {
+            if (x.dataset.v2ListTab === "slaDetail") {
+              v2SlaPage = 1;
+              renderV2SlaDetail(cases[v2Selected]);
+            }
+            showV2ListTab(x.dataset.v2ListTab);
+          }),
+      );
+      document.querySelectorAll("[data-v2-filter]").forEach(
+        (x) =>
+          (x.onclick = () => {
+            v2Filter = x.dataset.v2Filter;
+            v2Page = 1;
+            document
+              .querySelectorAll("[data-v2-filter]")
+              .forEach((y) => y.classList.remove("on"));
+            x.classList.add("on");
+            renderV2List();
+          }),
+      );
+      document.getElementById("v2PagePrev").onclick = () => {
+        if (v2Page > 1) {
+          v2Page--;
+          renderV2List();
+        }
+      };
+      document.getElementById("v2PageNext").onclick = () => {
+        if (v2Page * PAGE_SIZE < v2FilteredCases().length) {
+          v2Page++;
+          renderV2List();
+        }
+      };
+      document.getElementById("v2Back").onclick = () => {
+        document.getElementById("v2DetailPage").hidden = true;
+        document.getElementById("v2ListPage").hidden = false;
+        showV2ListTab("list");
+        renderV2List();
+      };
       document.getElementById("pagePrev").onclick = () => {
         if (queuePage > 1) {
           queuePage--;
