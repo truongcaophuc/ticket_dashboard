@@ -803,9 +803,14 @@
         flex: none;
       }
       #v2Workflow .subtasks {
-        flex: 1;
+        flex: none;
+        max-height: min(360px, calc(100vh - 430px));
         min-height: 0;
         overflow: auto;
+      }
+      #v2Workflow .result-card {
+        flex: none;
+        margin: 14px 0 0;
       }
       #v2Workflow .subtask-head {
         position: sticky;
@@ -5734,7 +5739,7 @@
               timeClass = slaInfo.over ? "over" : slaInfo.near ? "near" : "";
             return `<div class="subtask-wrap"><div class="subtask ${state}" data-v2-task-index="${taskIndex}"><i class="sub-icon"><i data-lucide="${icons[state]}"></i></i><div><b>${name}</b><small><span class="task-type ${type}">${TASK_TYPE_LABELS[type]}</span> ${owner} · ${SLA_TYPE_LABELS[slaInfo.type]}</small><div class="task-fields"><span>${fieldData.checkCount} field nguồn</span><span>·</span><span>${fieldData.updateCount} field update</span></div></div><div class="subtask-sla"><time>${time}</time><span class="${timeClass}">${fmtSla(slaInfo.actual)} / ${fmtSla(slaInfo.budget)}</span></div></div></div>`;
           })
-          .join("")}</div>`;
+          .join("")}</div><section class="result-card ${c.kind}"><div class="result-head"><b>Kết quả hồ sơ</b></div><div class="result-body"><div class="result-title"><i>${c.kind === "ok" ? "✓" : c.kind === "danger" ? "×" : "!"}</i><strong>${c.status}</strong></div><div class="result-row"><label>Lí do</label><span>${c.issue}</span></div><div class="result-row"><label>SLA</label><span class="${c.late ? "sla late" : "sla"}">${c.sla} · ${c.late ? "Cần ưu tiên xử lý" : "Trong ngưỡng"}</span></div><div class="result-row"><label>Fact</label><span>CIF: ${c.hasCustomer ? "Đã có" : "—"} · C06: ${c.hasCustomer ? "PASS" : "—"} · Phân loại: ${c.late ? "Ưu tiên" : "Chuẩn"}</span></div></div><div class="result-action"><span>${c.kind === "ok" ? "Phiếu không còn thao tác bắt buộc." : "Hành động tiếp theo"}</span><button id="v2CaseActionBtn" type="button">${c.kind === "ok" ? "Xem lịch sử" : c.action}</button></div></section>`;
       }
       function renderV2WorkflowPanel() {
         const c = cases[v2Selected];
@@ -5754,6 +5759,12 @@
               openTaskDrawer(+x.dataset.v2TaskIndex);
             }),
         );
+        const action = document.getElementById("v2CaseActionBtn");
+        if (action)
+          action.onclick = () => {
+            selectedCase = v2Selected;
+            openDrawer(c.kind === "ok" ? "notice" : "required");
+          };
         if (window.lucide) lucide.createIcons();
       }
       function openV2Detail(index) {
