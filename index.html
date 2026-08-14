@@ -6024,6 +6024,9 @@
               document
                 .querySelectorAll("[data-v2-task-index]")
                 .forEach((y) => y.classList.toggle("selected", y === x));
+              selectedCase = v2Selected;
+              selectedStage = v2Stage;
+              openTaskDrawer(+x.dataset.v2TaskIndex);
             }),
         );
         const action = document.getElementById("v2CaseActionBtn");
