@@ -1,8 +1,7 @@
-<!doctype html>
-<html lang="vi">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+<!DOCTYPE html>
+<html lang="vi"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>CEP · Operation Center</title>
     <style>
       :root {
@@ -42,22 +41,23 @@
       @supports (-moz-appearance: none) {
         * {
           scrollbar-width: thin;
-          scrollbar-color: #aeb8c8 transparent;
+          scrollbar-color: var(--blue) var(--blue-soft);
         }
       }
       ::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
+        /* Cùng độ dày với thanh cuộn ngang của dải tab. */
+        width: 3px;
+        height: 3px;
       }
       ::-webkit-scrollbar-track {
-        background: transparent;
+        background: var(--blue-soft);
       }
       ::-webkit-scrollbar-thumb {
-        border-radius: 999px;
-        background-color: #aeb8c8;
+        border-radius: 0;
+        background: var(--blue);
       }
       ::-webkit-scrollbar-thumb:hover {
-        background-color: #8f9aaa;
+        background: #1f4fd8;
       }
       ::-webkit-scrollbar-corner {
         background: transparent;
@@ -798,6 +798,20 @@
       .v2-panel-title span {
         display: none;
       }
+      /* Icon xoay trong lúc "đang tính". Dùng lại @keyframes spin có sẵn. */
+      .mini-btn.busy .lucide {
+        animation: spin 0.7s linear infinite;
+      }
+      /* Field công thức vừa được tính lại: nháy nền một nhịp cho thấy cái gì đổi. */
+      .df-field.recalc {
+        animation: recalcFlash 1.3s ease;
+      }
+      @keyframes recalcFlash {
+        0%,
+        45% {
+          background: var(--blue-soft);
+        }
+      }
       .v2-info-tabs {
         flex: none;
         margin-bottom: 14px;
@@ -895,13 +909,8 @@
         flex: 1;
         flex-direction: column;
       }
-      #v2Workflow::after {
-        content: "";
-        flex: 0 0 18px;
-      }
       #v2Workflow .workflow {
         flex: none;
-        padding-inline: 0;
       }
       #v2Workflow .subtasks {
         flex: none;
@@ -914,7 +923,7 @@
          chuyển lên wrapper để hai phần vẫn nhìn như một hộp. */
       .wf-list-box {
         flex: none;
-        margin: 4px 0 15px;
+        margin: 4px 17px 15px;
         border: 1px solid var(--line);
         border-radius: 9px;
       }
@@ -3522,16 +3531,13 @@
         max-height: calc(100vh - 250px);
         overflow: auto;
       }
-      /* Khoảng thở cuối cột: padding-bottom của chính khung cuộn không đáng tin ở đây,
-         vì khi cuộn hết nội dung có thể nằm sát mép dưới vùng padding. Dùng phần tử cuối
-         trong dòng chảy nội dung thì browser tính vào scroll range ổn hơn.
-         Ghi chú cũ:
-         1) padding-bottom của chính khung cuộn — trình duyệt không tính nó vào
-            vùng cuộn, cuộn hết là nội dung nằm đè lên dải padding.
-         2) margin ngoài khung scroll cũng không tạo thêm vùng cuộn. */
-      #v2Info::after {
+      /* Khoảng thở cuối cột phải là một flex item, không phải padding-bottom:
+         padding của khung cuộn bị bỏ qua ở cuối vùng cuộn nên nội dung dính sát
+         đáy khi cuộn hết. Spacer thì luôn được tính. */
+      .v3-col.on:after {
         content: "";
         display: block;
+        flex: none;
         height: 18px;
       }
       .v3-col.on.lead {
@@ -3665,14 +3671,10 @@
       }
       /* Thanh cuộn của dải tab mảnh hơn thanh chung một chút, track chìm vào nền tab. */
       .v2-info-tabs::-webkit-scrollbar {
-        height: 4px;
+        height: 3px;
       }
       .v2-info-tabs::-webkit-scrollbar-track {
         background: transparent;
-      }
-      .v2-info-tabs::-webkit-scrollbar-thumb {
-        border-radius: 999px;
-        background-color: #aeb8c8;
       }
       .v2-info-tabs .drawer-tab {
         flex: none;
@@ -3957,21 +3959,6 @@
         box-shadow: 0 10px 26px rgba(26, 29, 46, 0.14);
         padding: 5px;
       }
-      .wf-menu.floating {
-        position: fixed;
-        top: var(--wf-menu-top);
-        left: var(--wf-menu-left);
-        right: auto;
-        bottom: auto;
-        z-index: 1000;
-      }
-      .wf-menu.floating,
-      .wf-menu.floating.up {
-        transform: none;
-      }
-      .wf-menu.floating[hidden] {
-        display: none;
-      }
       .wf-menu button {
         display: flex;
         align-items: center;
@@ -4005,10 +3992,6 @@
       .wf-menu.up {
         top: auto;
         bottom: calc(100% + 4px);
-      }
-      .wf-menu.floating.up {
-        top: var(--wf-menu-top);
-        bottom: auto;
       }
       .wf-menu-sep {
         height: 1px;
@@ -4257,13 +4240,13 @@
         align-items: center;
         padding: 0 6px;
         border-radius: 4px;
-        background: var(--vf-c, var(--blue));
+        background: var(--blue);
       }
       .vf-g-bar.done {
-        background: color-mix(in srgb, var(--vf-c, #22c55e) 86%, #ffffff);
+        background: #22c55e;
       }
       .vf-g-bar.queued {
-        background: color-mix(in srgb, var(--vf-c, #64748b) 62%, #dbe3ef);
+        background: #b7c2d4;
       }
       .vf-g-bar.near {
         background: #f59e0b;
@@ -4947,43 +4930,21 @@
       </aside>
       <main class="main">
         <header class="topbar">
-          <button
-            class="sidebar-toggle"
-            id="sidebarToggle"
-            type="button"
-            aria-label="Thu gọn sidebar"
-            aria-controls="sidebar"
-            aria-expanded="true"
-          >
-            <i data-lucide="panel-left-close"></i>
+          <button class="sidebar-toggle" id="sidebarToggle" type="button" aria-label="Thu gọn sidebar" aria-controls="sidebar" aria-expanded="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="panel-left-close" aria-hidden="true" class="lucide lucide-panel-left-close"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
           </button>
           <div class="crumb">
             Operation Center <span> / </span> <b>Tổng quan vận hành</b>
           </div>
           <div class="live"><i class="pulse"></i> Hệ thống ổn định</div>
           <div class="notification-wrap">
-            <button
-              class="bell"
-              id="notificationBell"
-              type="button"
-              aria-label="Thông báo"
-              aria-haspopup="true"
-              aria-expanded="false"
-              aria-controls="notificationPanel"
-            >
+            <button class="bell" id="notificationBell" type="button" aria-label="Thông báo" aria-haspopup="true" aria-expanded="false" aria-controls="notificationPanel">
               <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
-                ></path>
+                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
                 <path d="M10 21h4"></path>
               </svg>
             </button>
-            <div
-              class="notification-panel"
-              id="notificationPanel"
-              role="region"
-              aria-label="Thông báo của bạn"
-            >
+            <div class="notification-panel" id="notificationPanel" role="region" aria-label="Thông báo của bạn">
               <div class="notification-head">
                 <b>Thông báo</b><span>4 chưa đọc</span>
               </div>
@@ -5022,14 +4983,7 @@
             </div>
           </div>
           <div class="user-wrap">
-            <button
-              class="user"
-              id="userMenuButton"
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded="false"
-              aria-controls="userMenu"
-            >
+            <button class="user" id="userMenuButton" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="userMenu">
               <span class="avatar">A</span>
               <span>admin-01</span>
             </button>
@@ -5058,19 +5012,11 @@
           <div class="ui-shell on" id="uiV2">
             <section class="v2-list-page" id="v2ListPage">
               <nav class="view-tabs v2-page-tabs">
-                <button
-                  class="view-tab on"
-                  type="button"
-                  data-v2-list-tab="list"
-                >
-                  <i data-lucide="list"></i>Danh sách phiếu
+                <button class="view-tab on" type="button" data-v2-list-tab="list">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="list" aria-hidden="true" class="lucide lucide-list"><path d="M3 5h.01"></path><path d="M3 12h.01"></path><path d="M3 19h.01"></path><path d="M8 5h13"></path><path d="M8 12h13"></path><path d="M8 19h13"></path></svg>Danh sách phiếu
                 </button>
-                <button
-                  class="view-tab"
-                  type="button"
-                  data-v2-list-tab="slaDetail"
-                >
-                  <i data-lucide="timer"></i>SLA
+                <button class="view-tab" type="button" data-v2-list-tab="slaDetail">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="timer" aria-hidden="true" class="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"></line><circle cx="12" cy="14" r="8"></circle></svg>SLA
                 </button>
               </nav>
               <section class="card v2-table-card">
@@ -5079,18 +5025,11 @@
                     <h1>Danh sách phiếu</h1>
                     <p>Theo dõi phiếu đang xử lý và trạng thái SLA hiện tại</p>
                   </div>
-                  <label class="queue-search v2-search"
-                    >⌕<input
-                      id="v2Search"
-                      placeholder="Tìm mã phiếu, tiêu đề, người yêu cầu..."
-                  /></label>
+                  <label class="queue-search v2-search">⌕<input id="v2Search" placeholder="Tìm mã phiếu, tiêu đề, người yêu cầu..."></label>
                 </div>
                 <div class="filters">
-                  <button class="chip on" data-v2-filter="all">Tất cả</button
-                  ><button class="chip" data-v2-filter="late">Sắp trễ</button
-                  ><button class="chip" data-v2-filter="supplement">
-                    Cần bổ sung</button
-                  ><button class="chip" data-v2-filter="integration">
+                  <button class="chip on" data-v2-filter="all">Tất cả</button><button class="chip" data-v2-filter="late">Sắp trễ</button><button class="chip" data-v2-filter="supplement">
+                    Cần bổ sung</button><button class="chip" data-v2-filter="integration">
                     Lỗi tích hợp
                   </button>
                 </div>
@@ -5102,24 +5041,12 @@
                     <span>Đội xử lý</span>
                     <span>SLA</span>
                   </div>
-                  <div class="v2-list" id="v2List"></div>
+                  <div class="v2-list" id="v2List"><button class="v2-ticket selected" type="button" data-v2-i="0"><span class="v2-index">1</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#10b981;color:#fff">GH</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-018</span><h3>Đăng ký phát hành thẻ tín dụng</h3><p>Dịch vụ thẻ · Hồ sơ khách hàng · Người tạo: Nguyễn Gia Hân</p></div></div><span class="status warn">Cần bổ sung</span><span class="v2-team">Dịch vụ thẻ</span><span class="sla late">00:18</span></button><button class="v2-ticket " type="button" data-v2-i="1"><span class="v2-index">2</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#0ea5e9;color:#fff">AG</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-041</span><h3>Sự cố đồng bộ đối tác</h3><p>Hệ thống · Tích hợp API · Người tạo: API Gateway</p></div></div><span class="status danger">Lỗi đối tác</span><span class="v2-team">Tích hợp API</span><span class="sla late">00:32</span></button><button class="v2-ticket " type="button" data-v2-i="2"><span class="v2-index">3</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#f59e0b;color:#fff">PM</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-037</span><h3>Phê duyệt chi phí chiến dịch</h3><p>Chiến dịch · Đề xuất ngân sách · Người tạo: Phòng Marketing</p></div></div><span class="status info">Chờ phê duyệt</span><span class="v2-team">Ban điều hành</span><span class="sla ">01:14</span></button><button class="v2-ticket " type="button" data-v2-i="3"><span class="v2-index">4</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#f59e0b;color:#fff">nN</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-026</span><h3>Hỗ trợ cấu hình form yêu cầu</h3><p>Nội bộ · Dynamic Form · Người tạo: Chi nhánh Đà Nẵng</p></div></div><span class="status warn">Chờ phản hồi</span><span class="v2-team">Hỗ trợ hệ thống</span><span class="sla ">02:46</span></button><button class="v2-ticket " type="button" data-v2-i="4"><span class="v2-index">5</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#14b8a6;color:#fff">ks</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-012</span><h3>Ghi nhận phản hồi sau dịch vụ</h3><p>CSKH · Chăm sóc sau bán · Người tạo: Tự động từ khảo sát</p></div></div><span class="status ok">Hoàn tất</span><span class="v2-team">CSKH</span><span class="sla ">Đúng hạn</span></button><button class="v2-ticket " type="button" data-v2-i="5"><span class="v2-index">6</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#f59e0b;color:#fff">MQ</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-009</span><h3>Điều chỉnh thông tin người thụ hưởng</h3><p>Dữ liệu · Cập nhật hồ sơ · Người tạo: Trần Minh Quân</p></div></div><span class="status info">Đang xử lý</span><span class="v2-team">Kiểm soát dữ liệu</span><span class="sla ">03:08</span></button><button class="v2-ticket " type="button" data-v2-i="6"><span class="v2-index">7</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#ef4444;color:#fff">TT</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-033</span><h3>Tra soát giao dịch chưa ghi nhận</h3><p>Giao dịch · Tra soát · Người tạo: Lê Thu Trang</p></div></div><span class="status warn">Chờ phản hồi</span><span class="v2-team">Vận hành giao dịch</span><span class="sla late">00:54</span></button><button class="v2-ticket " type="button" data-v2-i="7"><span class="v2-index">8</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#8b5cf6;color:#fff">Tc</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-029</span><h3>Cấp quyền truy cập báo cáo</h3><p>Nội bộ · Phân quyền · Người tạo: Phòng Tài chính</p></div></div><span class="status info">Chờ phê duyệt</span><span class="v2-team">Quản trị hệ thống</span><span class="sla ">04:20</span></button><button class="v2-ticket " type="button" data-v2-i="8"><span class="v2-index">9</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#2f6bff;color:#fff">NM</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-021</span><h3>Cập nhật địa chỉ nhận thông báo</h3><p>CSKH · Thay đổi thông tin · Người tạo: Phạm Ngọc Mai</p></div></div><span class="status info">Đang xử lý</span><span class="v2-team">CSKH</span><span class="sla ">02:15</span></button><button class="v2-ticket " type="button" data-v2-i="9"><span class="v2-index">10</span><div class="v2-ticket-main"><span class="person-avatar" style="background:#10b981;color:#fff">Tđ</span><div class="v2-ticket-copy"><span class="case-id">YC-240811-006</span><h3>Đối soát dữ liệu cuối ngày</h3><p>Hệ thống · Đối soát · Người tạo: Tác vụ tự động</p></div></div><span class="status ok">Hoàn tất</span><span class="v2-team">Dữ liệu</span><span class="sla ">Đúng hạn</span></button></div>
                   <div class="queue-foot">
-                    <span id="v2ListCount">Hiển thị 0 / 0 phiếu</span>
+                    <span id="v2ListCount">Hiển thị 10 / 24 phiếu</span>
                     <div class="queue-pager">
-                      <button
-                        class="page-btn"
-                        id="v2PagePrev"
-                        type="button"
-                        aria-label="Trang danh sách trước"
-                      >
-                        ‹</button
-                      ><span id="v2ListRange">0 / 0</span
-                      ><button
-                        class="page-btn"
-                        id="v2PageNext"
-                        type="button"
-                        aria-label="Trang danh sách sau"
-                      >
+                      <button class="page-btn" id="v2PagePrev" type="button" aria-label="Trang danh sách trước" disabled="">
+                        ‹</button><span id="v2ListRange">1-10 / 24</span><button class="page-btn" id="v2PageNext" type="button" aria-label="Trang danh sách sau">
                         ›
                       </button>
                     </div>
@@ -5128,19 +5055,19 @@
                 <section id="v2SlaDetailPane"></section>
               </section>
             </section>
-            <section class="v2-detail-page" id="v2DetailPage" hidden>
+            <section class="v2-detail-page" id="v2DetailPage" hidden="">
               <div class="v2-detail-head">
                 <button class="v2-back" id="v2Back" type="button">← Danh sách phiếu</button>
                 <div class="v3-toggle" id="v3Toggle">
                   <div class="v3-seg">
                     <button type="button" data-v3-col="customer" class="on">
-                      <i data-lucide="user-round"></i>Khách hàng
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-round" aria-hidden="true" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>Khách hàng
                     </button>
                     <button type="button" data-v3-col="cust" class="on">
-                      <i data-lucide="user-round"></i>Phiếu
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="user-round" aria-hidden="true" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>Phiếu
                     </button>
                     <button type="button" data-v3-col="flow" class="on">
-                      <i data-lucide="git-branch"></i>Công việc
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="git-branch" aria-hidden="true" class="lucide lucide-git-branch"><path d="M15 6a9 9 0 0 0-9 9V3"></path><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle></svg>Công việc
                     </button>
                   </div>
                 </div>
@@ -5159,49 +5086,31 @@
                     <div class="v2-panel-title">
                       <h3>Hồ sơ &amp; phiếu</h3>
                       <span id="v2InfoCount"></span>
+                      <!-- CEP: <a onclick="ReCalTicketFields()"> nằm chung dải tab
+                           nhưng KHÔNG mở pane nào — chỉ tính lại field công thức.
+                           Nên ở đây là nút, không phải tab thứ 7. -->
+                      <button class="mini-btn" type="button" id="v2RecalcBtn" title="Tính lại các trường công thức">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="refresh-cw" aria-hidden="true" class="lucide lucide-refresh-cw"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>Chạy công thức
+                      </button>
                     </div>
                     <nav class="drawer-tabs v2-info-tabs">
-                      <button
-                        class="drawer-tab on"
-                        type="button"
-                        data-v2-info-tab="info"
-                      >
-                        <i data-lucide="file-text"></i>Thông tin phiếu
+                      <button class="drawer-tab on" type="button" data-v2-info-tab="info">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-text" aria-hidden="true" class="lucide lucide-file-text"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>Thông tin phiếu
                       </button>
-                      <button
-                        class="drawer-tab"
-                        type="button"
-                        data-v2-info-tab="sla"
-                      >
-                        <i data-lucide="clock-3"></i>SLA
+                      <button class="drawer-tab" type="button" data-v2-info-tab="sla">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="clock-3" aria-hidden="true" class="lucide lucide-clock-3"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path></svg>SLA
                       </button>
-                      <button
-                        class="drawer-tab"
-                        type="button"
-                        data-v2-info-tab="history"
-                      >
-                        <i data-lucide="history"></i>Lịch sử
+                      <button class="drawer-tab" type="button" data-v2-info-tab="history">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="history" aria-hidden="true" class="lucide lucide-history"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>Lịch sử
                       </button>
-                      <button
-                        class="drawer-tab"
-                        type="button"
-                        data-v2-info-tab="link"
-                      >
-                        <i data-lucide="link"></i>Liên kết
+                      <button class="drawer-tab" type="button" data-v2-info-tab="link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="link" aria-hidden="true" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>Liên kết
                       </button>
-                      <button
-                        class="drawer-tab"
-                        type="button"
-                        data-v2-info-tab="doc"
-                      >
-                        <i data-lucide="file-search"></i>Chứng từ
+                      <button class="drawer-tab" type="button" data-v2-info-tab="doc">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="file-search" aria-hidden="true" class="lucide lucide-file-search"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><circle cx="11.5" cy="14.5" r="2.5"></circle><path d="M13.3 16.3 15 18"></path></svg>Chứng từ
                       </button>
-                      <button
-                        class="drawer-tab"
-                        type="button"
-                        data-v2-info-tab="notice"
-                      >
-                        <i data-lucide="bell"></i>Thông báo
+                      <button class="drawer-tab" type="button" data-v2-info-tab="notice">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="bell" aria-hidden="true" class="lucide lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>Thông báo
                       </button>
                     </nav>
                     <div id="v2Info"></div>
@@ -5241,11 +5150,7 @@
           <h2 id="drawerTitle">Thông tin phiếu</h2>
           <p id="drawerSubtitle"></p>
         </div>
-        <button
-          class="drawer-x"
-          id="drawerClose"
-          aria-label="Đóng thông tin phiếu"
-        >
+        <button class="drawer-x" id="drawerClose" aria-label="Đóng thông tin phiếu">
           ×
         </button>
       </div>
@@ -5255,13 +5160,7 @@
          cũ ở chân danh sách task — ba kiểu thêm là ba việc ngang hàng, không nên
          giấu hai cái sau một nút vô danh. -->
     <div class="wiz-back" id="wizBack"></div>
-    <section
-      class="wiz"
-      id="taskWizard"
-      role="dialog"
-      aria-modal="true"
-      aria-hidden="true"
-    >
+    <section class="wiz" id="taskWizard" role="dialog" aria-modal="true" aria-hidden="true">
       <div class="wiz-hd">
         <div>
           <b id="wizTitle">Thêm tác vụ</b>
@@ -5274,14 +5173,7 @@
     <!-- Hộp xác nhận dùng chung, thay confirm() của trình duyệt. Mượn nguyên khung
          .wiz-back/.wiz cho khỏi dựng thêm một bộ modal thứ hai. -->
     <div class="wiz-back" id="cfmBack"></div>
-    <section
-      class="wiz sm"
-      id="cfmBox"
-      role="alertdialog"
-      aria-modal="true"
-      aria-hidden="true"
-      aria-labelledby="cfmTitle"
-    >
+    <section class="wiz sm" id="cfmBox" role="alertdialog" aria-modal="true" aria-hidden="true" aria-labelledby="cfmTitle">
       <div class="wiz-hd">
         <div>
           <b id="cfmTitle">Xác nhận</b>
@@ -6721,6 +6613,35 @@
         "Mức rủi ro",
         "Cập nhật gần nhất",
       ]);
+      /* CEP bấm là gọi server rồi đổ lại giá trị vào form. Mock giả độ trễ đó rồi
+         nháy đúng mấy field công thức — không nháy cả bảng cho khỏi rối mắt. */
+      function runRecalc(c) {
+        const button = document.getElementById("v2RecalcBtn");
+        if (button.disabled) return;
+        button.disabled = true;
+        button.classList.add("busy");
+        button.lastChild.textContent = "Đang tính...";
+        setTimeout(() => {
+          /* Luôn về tab thông tin nhóm đầu — mấy field công thức nằm ở đó, đang
+             đứng nhóm khác mà bấm thì chẳng thấy gì đổi. */
+          showV2InfoTab("info", c);
+          const fields = [
+            ...document.querySelectorAll("#v2Info .df-field"),
+          ].filter((x) => CALC_FIELDS.has(x.querySelector("label").textContent));
+          fields.forEach((x) => {
+            x.classList.remove("recalc");
+            void x.offsetWidth;
+            x.classList.add("recalc");
+          });
+          button.classList.remove("busy");
+          button.disabled = false;
+          button.lastChild.textContent = `Đã tính ${fields.length} field`;
+          setTimeout(
+            () => (button.lastChild.textContent = "Chạy công thức"),
+            2200,
+          );
+        }, 700);
+      }
       function renderV2InfoGroup(groups, index, c) {
         closeDropdowns();
         const scope = document.getElementById("v2Info"),
@@ -7096,10 +7017,9 @@
             .map(({ task, len, sla }, i) => {
               const left = (cursor / total) * 100,
                 width = (len / total) * 100,
-                [, color] = VF_ICON[taskType(task)],
                 tone = sla.over ? "over" : sla.near ? "near" : task[1] === "done" ? "done" : task[1] === "queued" ? "queued" : "";
               cursor += len;
-              return `<div class="vf-g-row ${i === v2TaskSel ? "selected" : ""}" data-v2-task-index="${i}"><div class="vf-g-lbl"><b>${task[0]}</b><small>${task[2]}</small></div><div class="vf-g-track"><span class="vf-g-bar ${tone}" style="left:${left}%;width:${Math.max(width, 3)}%;--vf-c:${color}"><em>${fmtSla(len)}</em></span></div></div>`;
+              return `<div class="vf-g-row ${i === v2TaskSel ? "selected" : ""}" data-v2-task-index="${i}"><div class="vf-g-lbl"><b>${task[0]}</b><small>${task[2]}</small></div><div class="vf-g-track"><span class="vf-g-bar ${tone}" style="left:${left}%;width:${Math.max(width, 3)}%"><em>${fmtSla(len)}</em></span></div></div>`;
             })
             .join(""),
           ticks = [0, 0.25, 0.5, 0.75, 1]
@@ -7212,24 +7132,6 @@
         );
         /* Một handler chung cho mọi dropdown trong panel workflow: nút mang
            data-wf-menu="<id>" mở đúng .wf-menu đó và đóng các menu còn lại. */
-        function placeWorkflowMenu(button, menu) {
-          menu.classList.add("floating");
-          menu.hidden = false;
-          const buttonRect = button.getBoundingClientRect(),
-            menuRect = menu.getBoundingClientRect(),
-            gap = 4,
-            viewportGap = 8,
-            top =
-              buttonRect.bottom + gap + menuRect.height > window.innerHeight - viewportGap
-                ? Math.max(viewportGap, buttonRect.top - gap - menuRect.height)
-                : buttonRect.bottom + gap,
-            left = Math.min(
-              Math.max(viewportGap, buttonRect.right - menuRect.width),
-              window.innerWidth - menuRect.width - viewportGap,
-            );
-          menu.style.setProperty("--wf-menu-top", `${top}px`);
-          menu.style.setProperty("--wf-menu-left", `${left}px`);
-        }
         document.querySelectorAll("[data-wf-menu]").forEach(
           (button) =>
             (button.onclick = (event) => {
@@ -7237,16 +7139,8 @@
               const menu = document.getElementById(button.dataset.wfMenu);
               document
                 .querySelectorAll(".wf-menu")
-                .forEach((x) => {
-                  if (x !== menu) {
-                    x.hidden = true;
-                    x.classList.remove("floating");
-                  }
-                });
-              const willOpen = menu.hidden;
-              menu.hidden = true;
-              menu.classList.remove("floating");
-              if (willOpen) placeWorkflowMenu(button, menu);
+                .forEach((x) => x !== menu && (x.hidden = true));
+              menu.hidden = !menu.hidden;
             }),
         );
         document.querySelectorAll("[data-v2-task-act]").forEach(
@@ -7360,6 +7254,7 @@
             }),
         );
         showV2InfoTab("info", c);
+        document.getElementById("v2RecalcBtn").onclick = () => runRecalc(c);
         renderCustomerCol();
         renderV2WorkflowPanel();
         if (window.lucide) lucide.createIcons();
@@ -7659,10 +7554,7 @@
           closeDropdowns();
         if (!e.target.closest(".notification-wrap")) closeNotifications();
         if (!e.target.closest(".wf-btn-group"))
-          document.querySelectorAll(".wf-menu").forEach((m) => {
-            m.hidden = true;
-            m.classList.remove("floating");
-          });
+          document.querySelectorAll(".wf-menu").forEach((m) => (m.hidden = true));
         if (!e.target.closest(".user-wrap")) closeUserMenu();
       });
       document.addEventListener("keydown", (e) => {
@@ -7804,5 +7696,6 @@
       renderV2List();
       if (window.lucide) lucide.createIcons();
     </script>
-  </body>
-</html>
+  
+
+</body></html>
